@@ -1,49 +1,60 @@
-/* eslint no-param-reassign: ["error", { "props": false }] */
-const { spawn } = require('child_process');
+const fs = require('fs');
+const { execFileSync } = require('child_process');
 const path = require('path');
 const file = require('./file');
+const ttml2ass = require('./ttml2ass');
 
-const downloadVideo = ({
-  downloadDir, downloadCommand, destinationDir,
-}, video, callback) => {
-  video.downloading = true;
+process.on('message', ({ config: { downloadDir, downloadCommand, destinationDir }, video }) => {
+  console.log('downloadVideo started');
+
   const url = 'https://www.youtube.com/watch?v=H3t6ZXW63c0';
-  console.log(`Video download ${video.url} started.`);
-
-  const downloadProcess = spawn(downloadCommand, [
+  const args = [
     '--quiet',
     '--sub-lang',
     'en',
     '--write-sub',
     '--output',
     `${downloadDir}/${video.filename}.mp4`,
-    url,
-  ]);
+    process.env.NODE_ENV === 'production' ? video.url : url,
+  ];
 
-  downloadProcess.stderr.on('data', (data) => {
-    console.error(`stderr: ${data}`);
-  });
+  try {
+    console.log(`Download started: ${video.url}`);
+    execFileSync(downloadCommand, args);
+    console.log('Download finished successfully');
+    video.downloaded = true;
+  } catch (error) {
+    console.log(error.status); // Might be 127 in your example.
+    console.log(error.message); // Holds the message you typically want.
+    console.log(error.stderr); // Holds the stderr output. Use `.toString()`.
+    console.log(error.stdout); // Holds the stdout output. Use `.toString()`.
+  }
 
-  downloadProcess.on('error', (err) => {
-    console.log(`Failed to start download process for ${video.url}, error ${err}`);
-  });
+  // Move downloads into right folder
+  const finalDestination = path.join(destinationDir, video.programme);
+  file.moveVideo(downloadDir, finalDestination, video.filename, 'mp4');
 
-  downloadProcess.on('close', (code) => {
-    console.log(`Video download ${video.url} finished with code ${code}`);
+  // Convert & move subtitle file
+  const subFile = path.join(downloadDir, `${video.filename}.en.ttml`);
+  const convertedSubFile = path.join(downloadDir, `${video.filename}.en.ass`);
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Copying fake subtitle file...');
 
-    if (code === 0) {
-      // All was fine
-      video.downloading = undefined;
-      video.downloaded = true;
-      console.log(downloadDir, destinationDir, video.filename);
-      const finalDestination = path.join(destinationDir, video.programme);
-      const fn = `${video.filename}.mp4`;
-      file.moveVideo(downloadDir, finalDestination, fn);
-      callback();
-    }
-  });
+    fs.copyFileSync(path.join(__dirname, '..', '..', 'data', 'demo.en.ttml'), subFile);
+  }
 
-  return downloadProcess;
-};
+  if (fs.existsSync(subFile)) {
+    console.log('Converting TTML 2 ASS');
+    const ttml = fs.readFileSync(subFile).toString();
+    const ass = ttml2ass(ttml, video.episodeTitle);
+    fs.writeFileSync(convertedSubFile, ass);
+    file.moveVideo(downloadDir, finalDestination, video.filename, 'en.ttml');
+    file.moveVideo(downloadDir, finalDestination, video.filename, 'en.ass');
+  }
 
-module.exports = downloadVideo;
+  const message = `Downloaded ${video.url} -> ${path.join(finalDestination, video.filename)}`;
+  console.log(message);
+
+  console.log(JSON.stringify(video));
+  process.send(video);
+});

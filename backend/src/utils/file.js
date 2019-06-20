@@ -6,6 +6,7 @@ const Video = require('./video');
 
 const configFilename = path.join(__dirname, '..', '..', 'data', 'config.json');
 const videosFilename = path.join(__dirname, '..', '..', 'data', 'videos.json');
+const logFilename = path.join(__dirname, '..', '..', 'data', 'bbcloader.log');
 
 const loadConfig = () => {
   try {
@@ -38,10 +39,8 @@ const saveVideos = (videos) => {
   fs.writeFileSync(videosFilename, data);
 };
 
-const createVideo = (url) => {
-  const videos = loadVideos();
+const createVideo = (videos, url) => {
   const video = new Video(url);
-
   const existing = videos.find(v => v.url === url);
 
   if (existing) {
@@ -51,17 +50,20 @@ const createVideo = (url) => {
   tagVideo(video);
   videos.push(video);
   saveVideos(videos);
+  console.log(`${url} added`);
   return true;
 };
 
-const moveVideo = (sourceDir, destinationDir, filename) => {
-  console.log(`Creating folder '${destinationDir}'`);
-  fs.mkdir(destinationDir, { recursive: true }, (err) => {
-    if (err) throw err;
+const moveVideo = (sourceDir, destinationDir, filename, ext) => {
+  if (!fs.existsSync(destinationDir)) {
+    console.log(`Creating folder '${destinationDir}'`);
+    fs.mkdirSync(destinationDir, { recursive: true });
+  }
 
-    console.log(`Renaming file ${filename}`);
-    fs.renameSync(path.join(sourceDir, filename), path.join(destinationDir, filename));
-  });
+  const fromFile = path.join(sourceDir, `${filename}.${ext}`);
+  const toFile = path.join(destinationDir, `${filename}.${ext}`);
+
+  fs.renameSync(fromFile, toFile);
 };
 
 module.exports = {

@@ -6,10 +6,10 @@ class Video {
     this.episodeNumber = -1;
     this.episodeTitle = '';
     this.filename = '';
-    this.tagged = false;
-    this.downloaded = false;
-    this.subtitle_converted = false;
-    this.sorted = false;
+    // this.tagged = false;
+    // this.downloaded = false;
+    // this.subtitle_converted = false;
+    // this.sorted = false;
   }
 }
 
