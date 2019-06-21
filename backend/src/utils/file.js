@@ -14,10 +14,10 @@ const loadConfig = () => {
     return JSON.parse(buffer.toString());
   } catch (error) {
     const config = {
+      destinationDir: '/mnt/d/MKData/Videos/Incoming/TVShows',
       downloadCommand: '/mnt/c/ProgramData/chocolatey/bin/youtube-dl.exe',
       downloadDir: 'D:/MKData/Videos/Incoming',
       port: 5000,
-      targetDir: '/mnt/d/MKData/Videos/Incoming/TVShows',
     };
     fs.writeFileSync(configFilename, JSON.stringify(config));
     return config;
@@ -34,7 +34,7 @@ const loadVideos = () => {
   }
 };
 
-const saveVideos = (videos) => {
+const saveVideos = videos => {
   const data = JSON.stringify(videos);
   fs.writeFileSync(videosFilename, data);
 };

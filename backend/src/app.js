@@ -82,6 +82,6 @@ app.post('/videos', (req, res) => {
   }
 });
 
-app.listen(config.port, () => {
+app.listen(config.port, '0.0.0.0', () => {
   console.log(`Server is up on port ${config.port}`);
 });
