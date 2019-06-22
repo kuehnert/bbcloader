@@ -1,6 +1,7 @@
 const request = require('request');
 const _ = require('lodash');
 
+// Find episodes in series URL, like:
 // /iplayer/episode/m00062r1/thatcher-a-very-british-revolution-series-1-5-downfall
 const parseEpisodes = (url, callback) => {
   request.get({ url }, (error, { body }) => {

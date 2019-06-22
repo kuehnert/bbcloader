@@ -6,7 +6,13 @@ const Video = require('./video');
 
 const configFilename = path.join(__dirname, '..', '..', 'data', 'config.json');
 const videosFilename = path.join(__dirname, '..', '..', 'data', 'videos.json');
-const logFilename = path.join(__dirname, '..', '..', 'data', 'bbcloader.log');
+const completedFilename = path.join(__dirname, '..', '..', 'data', 'videosDone.json');
+// const logFilename = path.join(__dirname, '..', '..', 'data', 'bbcloader.log');
+
+const saveVideos = (videos, completed) => {
+  fs.writeFileSync(videosFilename, JSON.stringify(videos));
+  fs.writeFileSync(completedFilename, JSON.stringify(completed));
+};
 
 const loadConfig = () => {
   try {
@@ -28,15 +34,39 @@ const loadVideos = () => {
   try {
     const buffer = fs.readFileSync(videosFilename);
     const videos = JSON.parse(buffer.toString());
+
+    let tagged = false;
+    for (let i = 0; i < videos.length; i += 1) {
+      if (!videos[i].tagged) {
+        videos[i] = tagVideo(videos[i]);
+        // console.log('file videos[i]: ', videos[i]);
+        if (videos[i].tagged) {
+          tagged = true;
+        }
+      }
+    }
+
+    // console.log('file tagged: ', tagged);
+
+    if (tagged) {
+      saveVideos(videos);
+    }
+
     return videos;
   } catch (error) {
     return [];
   }
 };
 
-const saveVideos = videos => {
-  const data = JSON.stringify(videos);
-  fs.writeFileSync(videosFilename, data);
+const loadCompleted = () => {
+  try {
+    const buffer = fs.readFileSync(completedFilename);
+    const completed = JSON.parse(buffer.toString());
+
+    return completed;
+  } catch (error) {
+    return [];
+  }
 };
 
 const createVideo = (videos, url) => {
@@ -68,6 +98,7 @@ const moveVideo = (sourceDir, destinationDir, filename, ext) => {
 
 module.exports = {
   loadConfig,
+  loadCompleted,
   loadVideos,
   saveVideos,
   createVideo,

@@ -28,6 +28,7 @@ process.on('message', ({ config: { downloadDir, downloadCommand, destinationDir 
     console.log(error.message); // Holds the message you typically want.
     console.log(error.stderr); // Holds the stderr output. Use `.toString()`.
     console.log(error.stdout); // Holds the stdout output. Use `.toString()`.
+    process.send({error});
   }
 
   // Move downloads into right folder
@@ -55,6 +56,6 @@ process.on('message', ({ config: { downloadDir, downloadCommand, destinationDir 
   const message = `Downloaded ${video.url} -> ${path.join(finalDestination, video.filename)}`;
   console.log(message);
 
-  console.log(JSON.stringify(video));
-  process.send(video);
+  // console.log(JSON.stringify(video));
+  process.send({video});
 });

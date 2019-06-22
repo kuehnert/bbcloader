@@ -13,9 +13,7 @@ class AddVideo extends Component {
 
   onDragEnter = event => {
     event.stopPropagation();
-    this.setState({ message: 'Drop here.', bgcolor: 'yellow' });
-    const data = event.dataTransfer.getData('text');
-    console.log('AddVideo data: ', data);
+    this.setState({ message: 'Drop here.', bgcolor: '#ffffdd' });
   };
 
   onDrop = async event => {
@@ -28,8 +26,13 @@ class AddVideo extends Component {
     if (validator.isURL(data) && data.match(/bbc\.co\.uk/)) {
       console.log('AddVideo data: ', data);
       const result = await backend.post('/videos', { url: data });
+      console.log("AddVideo result: ", result);
 
-      this.setState({ message: 'Video(s) added.', bgcolor: 'lightgreen' });
+      this.setState({ message: 'Video(s) added.', bgcolor: '#ccffcc' });
+      this.props.callBack();
+      setTimeout(() => {
+        this.setState({ message: 'Drop URL here.', bgcolor: '#ebebeb' });
+      }, 1000);
     } else {
       this.setState({ message: 'URL not usuable', bgcolor: 'red' });
     }

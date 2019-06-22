@@ -9,6 +9,7 @@ const startDownload = require('./utils/startDownload');
 
 const app = express();
 const config = file.loadConfig();
+const completed = file.loadCompleted();
 let videos = file.loadVideos();
 let busy = false;
 
@@ -18,19 +19,24 @@ const downloadFinished = (video) => {
 
   // Remove video
   videos = videos.filter(v => v !== video);
-  file.saveVideos(videos);
+  completed.unshift(video);
+  file.saveVideos(videos, completed);
 };
 
 // Start download
-console.log('Looking for downloads');
-const download = videos.find(v => v.tagged && !v.downloaded);
-if (!download) {
-  console.log('No download in list');
-} else {
-  console.log('Download found, starting...');
-  busy = true;
-  startDownload(config, download, downloadFinished);
-}
+const startInitialDownload = () => {
+  console.log('Looking for downloads');
+  const download = videos.find(v => v.tagged && !v.downloaded);
+  if (!download) {
+    console.log('No download in list');
+  } else {
+    console.log('Download found, starting...');
+    busy = true;
+    startDownload(config, download, downloadFinished);
+  }
+};
+
+startInitialDownload();
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -39,6 +45,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/videos', (req, res) => {
   res.send(videos);
+});
+
+app.get('/completed', (req, res) => {
+  res.send(completed);
 });
 
 app.post('/videos', (req, res) => {
@@ -50,8 +60,8 @@ app.post('/videos', (req, res) => {
       console.log(urls);
       res.send(urls);
 
-      urls.forEach((url) => {
-        file.createVideo(videos, url);
+      urls.forEach((u) => {
+        file.createVideo(videos, u);
       });
 
       if (!busy) {

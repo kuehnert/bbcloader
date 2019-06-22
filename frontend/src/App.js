@@ -2,26 +2,41 @@ import React, { Component } from 'react';
 import backend from './api/backend';
 import AddVideo from './components/AddVideo';
 import VideoList from './components/VideoList';
+import './App.css';
 
 class App extends Component {
-  state = { videos: [] };
+  state = { videos: [], completed: [] };
 
-  componentDidMount = async () => {
-    const res = await backend.get('/videos');
-    console.log('videos: ', res.data);
-    this.setState({ videos: res.data });
-  }
+  reloadVideos = async () => {
+    const resVideos = await backend.get('/videos');
+    const resCompleted = await backend.get('/completed');
+    this.setState({ videos: resVideos.data, completed: resCompleted.data });
+  };
+
+  componentDidMount = () => {
+    this.reloadVideos();
+  };
 
   render() {
     return (
-      <div className="ui container" style={{ marginTop: '20px' }}>
-        <h1>BBC-Downloader</h1>
+      <div className="ui container vertically divided">
+        <div className="row">
+          <h1>BBC-Downloader</h1>
+        </div>
 
-        <p>Status message here</p>
+        <div className="row">
+          <AddVideo callBack={this.reloadVideos} />
+        </div>
 
-        <AddVideo />
+        <div className="row">
+          <h2>Download list</h2>
+          <VideoList videos={this.state.videos} />
+        </div>
 
-        <VideoList videos={this.state.videos} />
+        <div className="row">
+          <h2>Finished videos</h2>
+          <VideoList videos={this.state.completed} />
+        </div>
       </div>
     );
   }

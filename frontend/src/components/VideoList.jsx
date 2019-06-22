@@ -10,17 +10,23 @@ const VideoList = ({ videos }) => {
     });
 
     return (
-      <div>
-        <table>
+      <div className="VideoList">
+        <table className="ui striped table">
           <thead>
             <tr>
               <th>Programme</th>
               <th>Series</th>
               <th>Episode</th>
               <th>Title</th>
+              <th>Tagged?</th>
             </tr>
           </thead>
           <tbody>{videoRows}</tbody>
+          <tfoot>
+            <tr>
+              <th colSpan={5}><b>{videos.length}</b> Videos on download list</th>
+            </tr>
+          </tfoot>
         </table>
       </div>
     );
