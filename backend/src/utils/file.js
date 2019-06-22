@@ -11,7 +11,10 @@ const completedFilename = path.join(__dirname, '..', '..', 'data', 'videosDone.j
 
 const saveVideos = (videos, completed) => {
   fs.writeFileSync(videosFilename, JSON.stringify(videos));
-  fs.writeFileSync(completedFilename, JSON.stringify(completed));
+
+  if (completed) {
+    fs.writeFileSync(completedFilename, JSON.stringify(completed));
+  }
 };
 
 const loadConfig = () => {
@@ -39,14 +42,11 @@ const loadVideos = () => {
     for (let i = 0; i < videos.length; i += 1) {
       if (!videos[i].tagged) {
         videos[i] = tagVideo(videos[i]);
-        // console.log('file videos[i]: ', videos[i]);
         if (videos[i].tagged) {
           tagged = true;
         }
       }
     }
-
-    // console.log('file tagged: ', tagged);
 
     if (tagged) {
       saveVideos(videos);

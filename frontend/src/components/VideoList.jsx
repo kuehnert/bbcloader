@@ -19,12 +19,13 @@ const VideoList = ({ videos }) => {
               <th>Episode</th>
               <th>Title</th>
               <th>Tagged?</th>
+              <th>Attempts</th>
             </tr>
           </thead>
           <tbody>{videoRows}</tbody>
           <tfoot>
             <tr>
-              <th colSpan={5}><b>{videos.length}</b> Videos on download list</th>
+              <th colSpan={6}><b>{videos.length}</b> Videos on download list</th>
             </tr>
           </tfoot>
         </table>

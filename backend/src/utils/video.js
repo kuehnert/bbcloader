@@ -6,6 +6,7 @@ class Video {
     this.episodeNumber = -1;
     this.episodeTitle = '';
     this.filename = '';
+    this.attempts = 0;
     // this.tagged = false;
     // this.downloaded = false;
     // this.subtitle_converted = false;

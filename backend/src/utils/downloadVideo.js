@@ -28,7 +28,7 @@ process.on('message', ({ config: { downloadDir, downloadCommand, destinationDir 
     console.log(error.message); // Holds the message you typically want.
     console.log(error.stderr); // Holds the stderr output. Use `.toString()`.
     console.log(error.stdout); // Holds the stdout output. Use `.toString()`.
-    process.send({ error });
+    process.send({ video, error });
   }
 
   // Move downloads into right folder

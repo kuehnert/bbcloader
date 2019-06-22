@@ -13,30 +13,44 @@ const completed = file.loadCompleted();
 let videos = file.loadVideos();
 let busy = false;
 
-const downloadFinished = (video) => {
-  console.log('downloadFinished:', JSON.stringify(video));
-  busy = false;
+console.log('videos in queue: ', videos.length);
+console.log('previously downloaded videos: ', completed.length);
 
-  // Remove video
-  videos = videos.filter(v => v !== video);
-  completed.unshift(video);
+const downloadFinished = ({ video, error }) => {
+  busy = false;
+  console.log('downloadFinished:', JSON.stringify(video));
+
+  if (!error) {
+    // Remove video
+    videos = videos.filter(v => v !== video);
+    completed.unshift(video);
+  }
+
   file.saveVideos(videos, completed);
 };
 
 // Start download
-const startInitialDownload = () => {
-  console.log('Looking for downloads');
-  const download = videos.find(v => v.tagged && !v.downloaded);
-  if (!download) {
-    console.log('No download in list');
+const startNextDownload = () => {
+  if (!busy) {
+    console.log('Looking for downloads');
+    const download = videos.find(v => v.tagged && !v.downloaded && v.attempts < 5);
+    if (!download) {
+      console.log('No download in list');
+      busy = false;
+    } else {
+      console.log('Download found, starting...');
+      busy = true;
+      startDownload(config, download, downloadFinished);
+    }
   } else {
-    console.log('Download found, starting...');
-    busy = true;
-    startDownload(config, download, downloadFinished);
+    console.log('Download is busy');
   }
 };
 
-startInitialDownload();
+startNextDownload();
+setInterval(() => {
+  startNextDownload();
+}, 5 * 60 * 1000); // Every 5 minutes
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -64,17 +78,8 @@ app.post('/videos', (req, res) => {
         file.createVideo(videos, u);
       });
 
-      if (!busy) {
-        // Start download
-        const download = videos.find(v => v.tagged && !v.downloaded);
-        if (download) {
-          busy = true;
-          console.log(`Trying to dl ${download}`);
-          startDownload(config, download, downloadFinished);
-        } else {
-          console.log('No dl');
-        }
-      }
+      // Start download
+      startNextDownload();
     });
   } else {
     // Individual video
@@ -83,11 +88,7 @@ app.post('/videos', (req, res) => {
 
     if (video) {
       res.send(`video url added: ${url}!`);
-
-      if (!busy && video.tagged) {
-        // Start download
-        startDownload(config, video, downloadFinished);
-      }
+      startNextDownload();
     } else {
       res.send('Error: Video already in queue');
     }
