@@ -1,21 +1,35 @@
-import { GET_VIDEOS, GET_VIDEO, UPDATE_VIDEO, DELETE_VIDEO } from './types';
+import { GET_STATUS, GET_VIDEOS, GET_VIDEO, UPDATE_VIDEO, DELETE_VIDEO } from './types';
+import backend from '../api/backend';
 
-export const getVideos = (payload) => ({
-    type: GET_VIDEOS,
-    payload
-})
+export const getStatus = () => async dispatch => {
+	const response = await backend.get('/status');
 
-export const getVideo = (payload) => ({
-    type: GET_VIDEO,
-    payload
-})
+	dispatch({
+		type: GET_STATUS,
+		payload: response.data,
+	});
+};
 
-export const updateVideo = (payload) => ({
-    type: UPDATE_VIDEO,
-    payload
-})
+export const getVideos = () => async dispatch => {
+	const response = await backend.get('/videos');
 
-export const deleteVideo = (payload) => ({
-    type: DELETE_VIDEO,
-    payload
-})
+	dispatch({
+		type: GET_VIDEOS,
+		payload: response.data,
+	});
+};
+
+export const getVideo = payload => ({
+	type: GET_VIDEO,
+	payload,
+});
+
+export const updateVideo = payload => ({
+	type: UPDATE_VIDEO,
+	payload,
+});
+
+export const deleteVideo = payload => ({
+	type: DELETE_VIDEO,
+	payload,
+});
