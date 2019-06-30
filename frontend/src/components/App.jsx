@@ -1,56 +1,24 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-
-import AddVideo from './AddVideo';
-import VideoList from './VideoList';
-import Status from './Status';
+import { Router, Route } from 'react-router-dom';
 import './App.css';
-import { getStatus, getVideos } from '../actions';
+import history from '../history';
+import VideosPage from './VideosPage'
+import EditVideo from './EditVideo'
 
 class App extends Component {
-	componentDidMount() {
-		this.props.getStatus();
-		this.props.getVideos();
-	}
-
 	render() {
 		return (
-			<div className="ui container vertically divided">
-				<div className="row">
-					<h1>BBC-Downloader</h1>
-				</div>
-
-				<div className="row">
-					<h2>Service Status</h2>
-					<Status />
-				</div>
-
-				<div className="row">
-					<h2>Add new download</h2>
-					<AddVideo callBack={this.reloadVideos} />
-				</div>
-
-				<div className="row">
-					<h2>Download list</h2>
-					<VideoList />
-				</div>
-
-				{/* <div className="row">
-					<h2>Finished videos</h2>
-					<VideoList videos={this.props.completed} />
-				</div> */}
+			<div className="ui container">
+				<Router history={history}>
+					<div>
+						<Route path="/" exact component={VideosPage} />
+						<Route path="/videos/:id/edit" componnet={EditVideo} />
+						<Route path="/videos/:id/delete" componnet={null} />
+					</div>
+				</Router>
 			</div>
 		);
 	}
 }
 
-const mapStateToProps = state => {
-	return {
-		videos: state.videos,
-	};
-};
-
-export default connect(
-	mapStateToProps,
-	{ getStatus, getVideos }
-)(App);
+export default App;

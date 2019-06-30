@@ -4,7 +4,9 @@ import { getVideos } from '../actions';
 import Video from './Video';
 
 class VideoList extends Component {
-	componentDidMount() {}
+	componentDidMount() {
+		this.props.getVideos();
+	}
 
 	render() {
 		const { videos } = this.props;

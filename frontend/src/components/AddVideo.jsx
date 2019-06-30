@@ -53,3 +53,4 @@ class AddVideo extends Component {
 }
 
 export default AddVideo;
+// TODO: change to use redux!
