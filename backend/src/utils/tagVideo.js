@@ -1,7 +1,5 @@
-/* eslint no-param-reassign: ["error", { "props": true,
-"ignorePropertyModificationsFor": ["video"] }] */
 const parser = require('fast-html-parser');
-const request = require('request');
+const axios = require('axios');
 
 function sentenceCase(str) {
   if (str === null || str === '') return false;
@@ -19,26 +17,31 @@ function dd(number) {
 }
 
 async function getYearForFilm(url) {
-  const response = await axios.get(url);
-  //const response = request.get({ url });
-  console.log('tagVideo response.body: ', response.body);
-  const root = parser.parse(response.body);
-  const dateInfo = root.querySelector('.episode-metadata').childNodes[1].childNodes[1].rawText;
-  const year = dateInfo.match(/\d{4}/)[0];
-  console.log('tagVideo year: ', year);
-  return year;
+  try {
+    console.log(`trying to find year for ${url}`);
 
+    const response = await axios.get(url);
+    const root = parser.parse(response.data);
 
+    const dateInfo = root.querySelector('.episode-metadata').childNodes[1].childNodes[1].rawText;
+    const year = dateInfo.match(/\d{4}/)[0];
+    console.log('tagVideo year: ', url, year);
+    return year;
+  } catch (error) {
+    console.error('tagVideo year not found for', url);
+    return -1;
+  }
 }
 
-const tagVideo = async (video) => {
-  if (video.tagged) {
-    return false;
+const tagVideo = async (videoParam, cb) => {
+  if (videoParam.tagged) {
+    return;
   }
 
-  console.log('tagging video:', video.url);
+  const video = JSON.parse(JSON.stringify(videoParam));
   const { url } = video;
   const match = url.match(/\/([\w-]+)-series-(\d+)-(\d+)-(.+)$/);
+
   if (match) {
     // Match /(killing-eve)-series-(2)-(7)-(wide-awake)
     [, video.programme, video.series, video.episodeNumber, video.episodeTitle] = match;
@@ -60,7 +63,8 @@ const tagVideo = async (video) => {
       video.episodeTitle
     }`;
 
-    return video;
+    cb(video);
+    return;
   }
 
   const match3 = url.match(/\/([^/]+)$/);
@@ -69,20 +73,20 @@ const tagVideo = async (video) => {
     video.programme = sentenceCase(match3[1].replace(/-/g, ' '));
 
     const year = await getYearForFilm(url);
-    const year = null;
+
     if (year) {
       video.year = year;
-      video.programme = `${video.programme} (${video.year})`;
+      if (year > -1) {
+        video.programme = `${video.programme} (${video.year})`;
+      }
       video.tagged = true;
     } else {
       video.tagged = false;
     }
     video.filename = video.programme;
     // console.log('tagVideo video: ', video);
-    return video;
+    cb(video);
   }
-
-  return null;
 };
 
 module.exports = tagVideo;

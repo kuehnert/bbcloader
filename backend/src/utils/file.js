@@ -11,7 +11,6 @@ const completedFilename = path.join(__dirname, '..', '..', 'data', 'videosDone.j
 
 const saveVideos = (videos, completed) => {
   fs.writeFileSync(videosFilename, JSON.stringify(videos));
-
   if (completed) {
     fs.writeFileSync(completedFilename, JSON.stringify(completed));
   }
@@ -33,37 +32,19 @@ const loadConfig = () => {
   }
 };
 
-const loadVideos = async () => {
+const loadVideos = () => {
   try {
     const buffer = fs.readFileSync(videosFilename);
-    const videos = JSON.parse(buffer.toString());
-
-    let tagged = false;
-    for (let i = 0; i < videos.length; i += 1) {
-      if (!videos[i].tagged) {
-        videos[i] = tagVideo(videos[i]);
-        if (videos[i].tagged) {
-          tagged = true;
-      }
-    }
-    }
-
-    if (tagged) {
-      saveVideos(videos);
-    }
-
-    return videos;
+    return JSON.parse(buffer.toString());
   } catch (error) {
-    return [];
+    return {};
   }
 };
 
 const loadCompleted = () => {
   try {
     const buffer = fs.readFileSync(completedFilename);
-    const completed = JSON.parse(buffer.toString());
-
-    return completed;
+    return JSON.parse(buffer.toString());
   } catch (error) {
     return [];
   }
