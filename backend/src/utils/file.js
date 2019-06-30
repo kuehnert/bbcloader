@@ -33,7 +33,7 @@ const loadConfig = () => {
   }
 };
 
-const loadVideos = () => {
+const loadVideos = async () => {
   try {
     const buffer = fs.readFileSync(videosFilename);
     const videos = JSON.parse(buffer.toString());
@@ -44,8 +44,8 @@ const loadVideos = () => {
         videos[i] = tagVideo(videos[i]);
         if (videos[i].tagged) {
           tagged = true;
-        }
       }
+    }
     }
 
     if (tagged) {
@@ -69,7 +69,7 @@ const loadCompleted = () => {
   }
 };
 
-const createVideo = (videos, url) => {
+const createVideo = async (videos, url) => {
   const video = new Video(url);
   const existing = videos.find(v => v.url === url);
 
@@ -77,7 +77,7 @@ const createVideo = (videos, url) => {
     return false;
   }
 
-  tagVideo(video);
+  await tagVideo(video);
   videos.push(video);
   saveVideos(videos);
   console.log(`${url} added`);

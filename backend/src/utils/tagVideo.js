@@ -18,8 +18,9 @@ function dd(number) {
   return number;
 }
 
-function getYearForFilm(url) {
-  const response = request.get({ url });
+async function getYearForFilm(url) {
+  const response = await axios.get(url);
+  //const response = request.get({ url });
   console.log('tagVideo response.body: ', response.body);
   const root = parser.parse(response.body);
   const dateInfo = root.querySelector('.episode-metadata').childNodes[1].childNodes[1].rawText;
@@ -27,15 +28,10 @@ function getYearForFilm(url) {
   console.log('tagVideo year: ', year);
   return year;
 
-  // return axios.get(url).then((response) => {
-  //   const root = parser.parse(response.data);
-  //   const dateInfo = root.querySelector('.episode-metadata').childNodes[1].childNodes[1].rawText;
-  //   const year = dateInfo.match(/\d{4}/)[0];
-  //   return year;
-  // });
+
 }
 
-const tagVideo = (video) => {
+const tagVideo = async (video) => {
   if (video.tagged) {
     return false;
   }
@@ -72,7 +68,7 @@ const tagVideo = (video) => {
     // Match films: /iplayer/episode/b0078rmt/lucky-jim
     video.programme = sentenceCase(match3[1].replace(/-/g, ' '));
 
-    // const year = getYearForFilm(url);
+    const year = await getYearForFilm(url);
     const year = null;
     if (year) {
       video.year = year;

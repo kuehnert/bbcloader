@@ -40,6 +40,7 @@ const startNextDownload = () => {
     } else {
       console.log('Download found, starting...');
       busy = true;
+      download.attempts += 1;
       startDownload(config, download, downloadFinished);
     }
   } else {
@@ -75,7 +76,7 @@ app.post('/videos', (req, res) => {
       res.send(urls);
 
       urls.forEach((u) => {
-        file.createVideo(videos, u);
+        await file.createVideo(videos, u);
       });
 
       // Start download

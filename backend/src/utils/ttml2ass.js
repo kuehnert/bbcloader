@@ -36,8 +36,8 @@ Style: s0,sansSerif,16,&H00FFFFFF,&H0300FFFF,&H00000000,&H02000000,0,0,0,0,100,1
 Format: Layer, Start, End, Style, Actor, MarginL, MarginR, MarginV, Effect, Text
 `;
 
-  let out = "" + preamble;
-  lines = ttml.match(/<p .+<\/p>/g);
+  let out = `${preamble}`;
+  const lines = ttml.match(/<p .+<\/p>/g);
 
   console.log(`${lines.length} lines found.`);
 

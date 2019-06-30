@@ -4,8 +4,17 @@ const path = require('path');
 const file = require('./file');
 const ttml2ass = require('./ttml2ass');
 
-process.on('message', ({ config: { downloadDir, downloadCommand, destinationDir }, video }) => {
+process.on('message', ({ msgTyp, config: { downloadDir, downloadCommand, destinationDir }, video: inputVideo }) => {
   console.log('downloadVideo started');
+
+/*if (msgTyp === '') {
+https://github.com/ar-comlog/syncrequest
+https://stackoverflow.com/questions/8775262/synchronous-requests-in-node-js
+http://www.acuriousanimal.com/2018/02/15/express-async-middleware.html
+https://medium.com/@Abazhenov/using-async-await-in-express-with-node-8-b8af872c0016
+}*/
+
+  const video = JSON.parse(JSON.stringify(inputVideo));
 
   const url = 'https://www.youtube.com/watch?v=H3t6ZXW63c0';
   const args = [
@@ -20,7 +29,9 @@ process.on('message', ({ config: { downloadDir, downloadCommand, destinationDir 
 
   try {
     console.log(`Download started: ${video.url}`);
-    execFileSync(downloadCommand, args);
+    execFileSync(downloadCommand, args, (log) => {
+      process.send('message', log)
+    });
     console.log('Download finished successfully');
     video.downloaded = true;
   } catch (error) {
