@@ -50,7 +50,7 @@ const startNextDownload = async () => {
       console.log('No download in list');
     } else {
       console.log(`Starting download ${currentVideo.url}...`);
-      currentVideo.attempts += 1;
+      currentVideo.attempts = parseInt(currentVideo.attempts) + 1;
 
       forked = fork('./src/utils/downloadVideo.js');
       forked.send({ messageType: START_DOWNLOAD, config, video: currentVideo });
