@@ -3,7 +3,7 @@ import { GET_STATUS } from '../actions/types';
 const initialState = {
 	externalIP: null,
 	isOnline: null,
-	currentDownload: null,
+	currentVideo: null,
 	lastCheck: null,
 };
 

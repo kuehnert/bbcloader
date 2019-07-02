@@ -1,5 +1,6 @@
 class Video {
   constructor(url) {
+    [, this.id] = url.match(/episode\/(\w+)\//);
     this.url = url;
     this.programme = '';
     this.series = -1;

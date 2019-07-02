@@ -35,23 +35,23 @@ async function getYearForFilm(url) {
 
 const tagVideo = async (videoParam, cb) => {
   if (videoParam.tagged) {
-    return;
+    return null;
   }
 
   const video = JSON.parse(JSON.stringify(videoParam));
   const { url } = video;
-  const match = url.match(/\/([\w-]+)-series-(\d+)-(\d+)-(.+)$/);
+  const match = url.match(/episode\/(\w+)\/([\w-]+)-series-(\d+)-(\d+)-(.+)$/);
 
   if (match) {
     // Match /(killing-eve)-series-(2)-(7)-(wide-awake)
-    [, video.programme, video.series, video.episodeNumber, video.episodeTitle] = match;
+    [, video.id, video.programme, video.series, video.episodeNumber, video.episodeTitle] = match;
     video.tagged = true;
   }
 
-  const match2 = url.match(/\/([\w-]+)-series-(\d+)-episode-(\d+)/);
+  const match2 = url.match(/episode\/(\w+)\/([\w-]+)-series-(\d+)-episode-(\d+)/);
   if (match2) {
     // Match /(21-again)-series-(1)-episode-(4)
-    [, video.programme, video.series, video.episodeNumber] = match2;
+    [, video.id, video.programme, video.series, video.episodeNumber] = match2;
     video.episodeTitle = `Episode ${video.episodeNumber}`;
     video.tagged = true;
   }
@@ -63,14 +63,15 @@ const tagVideo = async (videoParam, cb) => {
       video.episodeTitle
     }`;
 
-    cb(video);
-    return;
+    if (cb) cb(video);
+    return video;
   }
 
-  const match3 = url.match(/\/([^/]+)$/);
+  const match3 = url.match(/episode\/(\w+)\/([^/]+)$/);
   if (match3) {
     // Match films: /iplayer/episode/b0078rmt/lucky-jim
-    video.programme = sentenceCase(match3[1].replace(/-/g, ' '));
+    [, video.id, video.programme] = match3;
+    video.programme = sentenceCase(video.programme.replace(/-/g, ' '));
 
     const year = await getYearForFilm(url);
 
@@ -79,14 +80,14 @@ const tagVideo = async (videoParam, cb) => {
       if (year > -1) {
         video.programme = `${video.programme} (${video.year})`;
       }
-      video.tagged = true;
-    } else {
-      video.tagged = false;
     }
     video.filename = video.programme;
-    // console.log('tagVideo video: ', video);
-    cb(video);
+
+    if (cb) cb(video);
+    return video;
   }
+
+  return null;
 };
 
 module.exports = tagVideo;

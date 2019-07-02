@@ -1,56 +1,55 @@
 import React, { Component } from 'react';
 import validator from 'validator';
-import backend from '../api/backend';
+import { connect } from 'react-redux';
 import './AddVideo.css';
+import { createVideo } from '../actions';
 
 class AddVideo extends Component {
-  state = { message: 'Drop URL here.', bgcolor: '#ebebeb' };
+	state = { message: 'Drop URL here.', bgcolor: '#ebebeb' };
 
-  onDragOver = event => {
-    event.preventDefault();
-    event.stopPropagation();
-  };
+	onDragOver = event => {
+		event.preventDefault();
+		event.stopPropagation();
+	};
 
-  onDragEnter = event => {
-    event.stopPropagation();
-    this.setState({ message: 'Drop here.', bgcolor: '#ffffdd' });
-  };
+	onDragEnter = event => {
+		event.stopPropagation();
+		this.setState({ message: 'Drop here.', bgcolor: '#ffffdd' });
+	};
 
-  onDrop = async event => {
-    event.preventDefault();
-    event.stopPropagation();
-    console.log('onFileDrop');
+	onDrop = async event => {
+		event.preventDefault();
+		event.stopPropagation();
 
-    const data = event.dataTransfer.getData('text');
+		const url = event.dataTransfer.getData('text');
 
-    if (validator.isURL(data) && data.match(/bbc\.co\.uk/)) {
-      console.log('AddVideo data: ', data);
-      const result = await backend.post('/videos', { url: data });
-      console.log("AddVideo result: ", result);
+		if (validator.isURL(url) && url.match(/bbc\.co\.uk/)) {
+			this.props.createVideo(url);
 
-      this.setState({ message: 'Video(s) added.', bgcolor: '#ccffcc' });
-      this.props.callBack();
-      setTimeout(() => {
-        this.setState({ message: 'Drop URL here.', bgcolor: '#ebebeb' });
-      }, 1000);
-    } else {
-      this.setState({ message: 'URL not usuable', bgcolor: 'red' });
-    }
-  };
+			this.setState({ message: 'Video(s) added.', bgcolor: '#ccffcc' });
+			setTimeout(() => {
+				this.setState({ message: 'Drop URL here.', bgcolor: '#ebebeb' });
+			}, 1000);
+		} else {
+			this.setState({ message: 'URL not usuable', bgcolor: 'red' });
+		}
+	};
 
-  render() {
-    return (
-      <div
-        className="dropzone"
-        onDragEnter={this.onDragEnter}
-        onDragOver={this.onDragOver}
-        onDrop={this.onDrop}
-        style={{ backgroundColor: this.state.bgcolor }}>
-        {this.state.message}
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div
+				className="dropzone"
+				onDragEnter={this.onDragEnter}
+				onDragOver={this.onDragOver}
+				onDrop={this.onDrop}
+				style={{ backgroundColor: this.state.bgcolor }}>
+				{this.state.message}
+			</div>
+		);
+	}
 }
 
-export default AddVideo;
-// TODO: change to use redux!
+export default connect(
+	null,
+	{ createVideo }
+)(AddVideo);

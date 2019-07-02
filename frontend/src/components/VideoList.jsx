@@ -15,7 +15,7 @@ class VideoList extends Component {
 			return <div>Currently, there are no videos in the download queue.</div>;
 		} else {
 			const videoRows = videos.map(video => {
-				return <Video video={video} key={video.url} />;
+				return <Video video={video} key={video.id} />;
 			});
 
 			return (
@@ -29,12 +29,13 @@ class VideoList extends Component {
 								<th>Title</th>
 								<th>Tagged?</th>
 								<th>Attempts</th>
+								<th>Actions</th>
 							</tr>
 						</thead>
 						<tbody>{videoRows}</tbody>
 						<tfoot>
 							<tr>
-								<th colSpan={6}>
+								<th colSpan={7}>
 									<b>{videos.length}</b> Videos on download list
 								</th>
 							</tr>
