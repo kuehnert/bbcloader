@@ -7,7 +7,7 @@ export default function VideosPage() {
 	return (
 		<div className="ui container vertically divided">
 			<div className="row">
-				<h1>BBC-Downloader</h1>
+				<h1>BBC-Downloader {process.env.NODE_ENV}</h1>
 			</div>
 
 			<div className="row">
