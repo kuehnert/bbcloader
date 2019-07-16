@@ -4,36 +4,37 @@ import history from '../history';
 import './Video.css';
 import { connect } from 'react-redux';
 import { deleteVideo } from '../actions';
+import { TableRow, TableCell, Button } from '@material-ui/core';
 
 class Video extends Component {
 	renderSeriesEpisode({ id, programme, series, episodeNumber, episodeTitle, url }) {
 		if (programme && series >= 0) {
 			return (
 				<>
-					<td>
+					<TableCell>
 						<a href={url} target="new" onClick={e => e.stopPropagation()}>
 							{programme}
 						</a>
-					</td>
-					<td className="right">{series}</td>
-					<td className="right">{episodeNumber}</td>
-					<td>{episodeTitle}</td>
+					</TableCell>
+					<TableCell className="right">{series}</TableCell>
+					<TableCell className="right">{episodeNumber}</TableCell>
+					<TableCell>{episodeTitle}</TableCell>
 				</>
 			);
 		} else if (programme) {
 			return (
 				<>
-					<td colSpan={4}>
+					<TableCell colSpan={4}>
 						<Link to={`/videos/edit/${id}`}>{programme}</Link>
-					</td>
+					</TableCell>
 				</>
 			);
 		} else {
 			return (
 				<>
-					<td colSpan={4}>
+					<TableCell colSpan={4}>
 						<Link to={`/videos/edit/${id}`}>{url}</Link>
-					</td>
+					</TableCell>
 				</>
 			);
 		}
@@ -42,19 +43,19 @@ class Video extends Component {
 	render() {
 		const { id, attempts, tagged } = this.props.video;
 		return (
-			<tr onClick={() => history.push(`/videos/edit/${id}`)}>
+			<TableRow onClick={() => history.push(`/videos/edit/${id}`)}>
 				{this.renderSeriesEpisode(this.props.video)}
-				<td>{tagged ? '✔' : '❌'}</td>
-				<td className="right">{attempts}</td>
-				<td>
-					<button className="ui button red" onClick={(event) => {
+				<TableCell>{tagged ? '✔' : '❌'}</TableCell>
+				<TableCell className="right">{attempts}</TableCell>
+				<TableCell>
+					<Button variant="contained" color="secondary" size="small" onClick={(event) => {
 						event.stopPropagation()
 						this.props.deleteVideo(id)
 					}}>
 						Delete
-					</button>
-				</td>
-			</tr>
+					</Button>
+				</TableCell>
+			</TableRow>
 		);
 	}
 }
