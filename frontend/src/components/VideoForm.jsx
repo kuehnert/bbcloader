@@ -4,7 +4,21 @@ import history from '../history';
 import { TextField, Button, Card, CardContent, CardActions, CardHeader, Grid, FormControlLabel, Checkbox } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 
+
 class VideoForm extends Component {
+  autoFilename({ programme, series, episodeNumber, episodeTitle }) {
+    return `${programme.trim()} S${series.toString().padStart(2, '0')}E${episodeNumber.toString().padStart(2, '0')} ${episodeTitle.trim()}`;
+  }
+
+  onChange = event => {
+    this.props.change('filename', this.autoFilename({ ...this.props, [event.target.name]: event.target.value }));
+  };
+
+	onSubmit = formValues => {
+		Object.keys(formValues).map(k => formValues[k] = formValues[k].toString().trim());
+    this.props.onSubmit(formValues);
+  };
+
   renderCheckbox({ input, label }) {
     return (
       <div>
