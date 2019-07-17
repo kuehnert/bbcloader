@@ -17,8 +17,8 @@ class AddVideo extends Component {
     return false;
   };
 
-	onDragEnter = event => {
-		this.setState({ message: 'Drop here!', bgcolor: '#4448', border: '8px dashed red' });
+  onDragEnter = event => {
+    this.setState({ message: 'Drop here!', bgcolor: '#4448', border: '8px dashed red' });
   };
 
   onDragLeave = event => {
@@ -37,10 +37,10 @@ class AddVideo extends Component {
       this.setState({ message: 'URL not usuable', bgcolor: '#f228' });
     }
 
-		setTimeout(() => {
-			this.setState(this.initialState);
-		}, 2000);
-};
+    setTimeout(() => {
+      this.setState(this.initialState);
+    }, 2000);
+  };
 
   render() {
     const { classes } = this.props;
@@ -53,7 +53,7 @@ class AddVideo extends Component {
         onDragOver={this.onDragOver}
         onDrop={this.onDrop}
         style={{ backgroundColor: this.state.bgcolor, border: this.state.border }}>
-        <Typography variant="h5" component="h2" color="primary">
+				<Typography variant="h5" component="h2" color="primary" align="center">
           {this.state.message}
         </Typography>
       </Paper>
@@ -63,14 +63,16 @@ class AddVideo extends Component {
 
 const styles = theme => ({
   dropzone: {
-    width: '50%',
-    height: '120px',
+    padding: theme.spacing(3, 2),
+    height: '100px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
     marginTop: '20px',
     marginBottom: '20px',
     marginLeft: 'auto',
     marginRight: 'auto',
-    padding: theme.spacing(3, 2),
-  },
+	},
 });
 
 export default connect(

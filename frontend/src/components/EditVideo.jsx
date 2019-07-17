@@ -3,57 +3,59 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getVideo, updateVideo } from '../actions';
 import VideoForm from './VideoForm';
+import history from '../history';
 
 class EditVideo extends Component {
-	componentDidMount() {
-		const { id } = this.props.match.params;
-		this.props.getVideo(id);
-	}
+  componentDidMount() {
+    const { id } = this.props.match.params;
+    this.props.getVideo(id);
+  }
 
-	onSubmit = formValues => {
-		const { id } = this.props.match.params;
-		this.props.updateVideo(id, _.omit(formValues, 'id'));
-	};
+  handleSubmit = formValues => {
+    const { id } = this.props.match.params;
+    this.props.updateVideo(id, _.omit(formValues, 'id'));
+  };
 
-	render() {
-		const { video } = this.props;
+  render() {
+    if (this.props.errors.length > 0) {
+      history.push('/');
+    }
 
-		if (!video) {
-			return <div>Loading...</div>;
-		}
+    const { video } = this.props;
+    if (!video) {
+      return <div>Loading...</div>;
+    }
 
-		return (
-			<div>
-				<h2>Edit Video</h2>
-				<VideoForm
-					onSubmit={this.onSubmit}
-					initialValues={_.pick(
-						video,
-						'id',
-						'url',
-						'programme',
-						'series',
-						'episodeNumber',
-						'episodeTitle',
-						'filename',
-						'attempts',
-						'tagged'
-					)}
-				/>
-			</div>
-		);
-	}
+    return (
+      <VideoForm
+        onSubmit={this.handleSubmit}
+        initialValues={_.pick(
+          video,
+          'id',
+          'url',
+          'programme',
+          'series',
+          'episodeNumber',
+          'episodeTitle',
+          'filename',
+          'attempts',
+          'tagged'
+        )}
+      />
+    );
+  }
 }
 
 const mapStateToProps = (state, ownProps) => {
-	const { id } = ownProps.match.params;
+  const { id } = ownProps.match.params;
 
-	return {
-		video: state.videos[id],
-	};
+  return {
+    errors: state.errors,
+    video: state.videos[id],
+  };
 };
 
 export default connect(
-	mapStateToProps,
-	{ getVideo, updateVideo }
+  mapStateToProps,
+  { getVideo, updateVideo }
 )(EditVideo);

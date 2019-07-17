@@ -1,58 +1,98 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import history from '../history';
+import { TextField, Button, Card, CardContent, CardActions, CardHeader, Grid, FormControlLabel, Checkbox } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
 class VideoForm extends Component {
-	renderError({ error, touched }) {
-		if (touched && error) {
-			return <div className="ui error message">{error}</div>;
-		}
-	}
+  renderCheckbox({ input, label }) {
+    return (
+      <div>
+        <FormControlLabel
+          control={<Checkbox checked={input.value ? true : false} onChange={input.onChange} />}
+          label={label}
+        />
+      </div>
+    );
+  }
 
-	renderField = ({ input, label, name, meta, type = "text" }) => {
-		const className = `field ${meta.touched && meta.error ? 'error' : ''}`;
+  renderField = ({ input, label, meta: { touched, invalid, error } }) => {
+    const { classes } = this.props;
 
-		return (
-			<div className={className}>
-				<label htmlFor={name}>{label}</label>
-				<input {...input} type={type} autoComplete="off" />
-				<div>{this.renderError(meta)}</div>
-			</div>
-		);
-	};
+    return (
+      <div>
+        <TextField className={classes.textField} label={label} fullWidth margin="normal" {...input} />
+      </div>
+    );
+  }
 
-	onSubmit = formValues => {
-		this.props.onSubmit(formValues);
-	};
+  render() {
+    const { classes } = this.props;
 
-	render() {
-		return (
-			<form className="ui form error" onSubmit={this.props.handleSubmit(this.onSubmit)}>
-				<Field name="id" component={this.renderField} label="ID" />
-				<Field name="url" component={this.renderField} label="URL" />
-				<Field name="programme" component={this.renderField} label="Programme" />
-				<Field name="series" component={this.renderField} label="Series" />
-				<Field name="episodeNumber" component={this.renderField} label="Episode Number" />
-				<Field name="episodeTitle" component={this.renderField} label="Episode Title" />
-				<Field name="filename" component={this.renderField} label="Filename" />
-				<Field name="attempts" component={this.renderField} label="Attempts" />
-				<Field name="tagged" component={this.renderField} label="Tagged" type="checkbox" />
-
-				<button className="ui button" onClick={() => history.push('/')}>Cancel</button>
-				<button className="ui button primary">Submit</button>
-			</form>
-		);
-	}
+    return (
+      <div className={classes.root}>
+        <form onSubmit={this.props.handleSubmit}>
+          <Card className={classes.card}>
+            <CardHeader title="Edit Video" />
+            <CardContent>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Field name="id" component={this.renderField} label="ID" />
+                </Grid>
+                <Grid item xs={12}>
+                  <Field name="url" component={this.renderField} label="URL" />
+                </Grid>
+                <Grid item xs={12}>
+                  <Field name="programme" component={this.renderField} label="Programme" />
+                </Grid>
+                <Grid item xs={2}>
+                  <Field name="series" component={this.renderField} label="Series" />
+                </Grid>
+                <Grid item xs={2}>
+                  <Field name="episodeNumber" component={this.renderField} label="Episode" />
+                </Grid>
+                <Grid item xs={8}>
+                  <Field name="episodeTitle" component={this.renderField} label="Episode Title" />
+                </Grid>
+                <Grid item xs={12}>
+                  <Field name="filename" component={this.renderField} label="Filename" />
+                </Grid>
+                <Grid item xs={6}>
+                  <Field name="attempts" component={this.renderField} label="Attempts" />
+                </Grid>
+                <Grid item xs={6}>
+                  <Field name="tagged" component={this.renderCheckbox} label="Tagged" type="checkbox" />
+                </Grid>
+              </Grid>
+            </CardContent>
+            <CardActions>
+              <Button color="secondary" onClick={() => history.push('/')}>
+                Cancel
+              </Button>
+              <Button type="submit" color="primary">
+                Submit
+              </Button>
+            </CardActions>
+          </Card>
+        </form>
+      </div>
+    );
+  }
 }
 
-const validate = formValues => {
-	const errors = {};
-
-	if (!formValues.url) {
-		errors.url = 'You must enter a URL';
-	}
-
-	return errors;
+const styles = {
+  root: { padding: '10vh' },
+  card: { margin: 'auto', backgroundColor: '#4448', maxWidth: 640 },
 };
 
-export default reduxForm({ form: 'videoForm', validate })(VideoForm);
+const validate = formValues => {
+  const errors = {};
+
+  if (!formValues.url) {
+    errors.url = 'You must enter a URL';
+  }
+
+  return errors;
+};
+
+export default reduxForm({ form: 'videoForm', validate })(withStyles(styles)(VideoForm));

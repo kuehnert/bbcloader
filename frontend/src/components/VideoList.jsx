@@ -2,7 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getVideos } from '../actions';
 import Video from './Video';
-import { TableHead, Paper, Table, TableRow, TableBody, TableFooter, TableCell } from '@material-ui/core';
+import {
+  TableHead,
+  Paper,
+  Table,
+  TableRow,
+  TableBody,
+  TableFooter,
+  TableCell,
+  Typography,
+  Card,
+} from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
@@ -11,6 +21,13 @@ const styles = theme => ({
     marginBottom: theme.spacing(3),
     overflowX: 'auto',
     backgroundColor: '#4448',
+  },
+  novideos: {
+    height: 100,
+    backgroundColor: '#4448',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
   },
   table: {},
 });
@@ -24,7 +41,11 @@ class VideoList extends Component {
     const { videos, classes } = this.props;
 
     if (videos.length === 0) {
-      return <div>Currently, there are no videos in the download queue.</div>;
+      return (
+        <Card className={classes.novideos}>
+          <Typography variant="body1" align="center">Currently, there are no videos in the download queue.</Typography>
+        </Card>
+      );
     } else {
       const videoRows = videos.map(video => {
         return <Video video={video} key={video.id} />;
