@@ -5,3 +5,6 @@ export const UPDATE_VIDEO = 'UPDATE_VIDEO'
 export const DELETE_VIDEO = 'DELETE_VIDEO'
 
 export const GET_STATUS = 'GET_STATUS'
+
+export const ADD_ERROR = 'ADD_ERROR'
+export const REMOVE_ERROR = 'REMOVE_ERROR'

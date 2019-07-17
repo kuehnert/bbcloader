@@ -8,7 +8,11 @@ export default (state = {}, { type, payload }) => {
 
 		case GET_VIDEO:
 		case UPDATE_VIDEO:
-			return { ...state, [payload.id]: payload };
+			if (payload.error) {
+				return { ...state, error: payload.error };
+			} else {
+				return { ...state, [payload.id]: payload };
+			}
 
 		case CREATE_VIDEO:
 			if (Array.isArray(payload)) {
