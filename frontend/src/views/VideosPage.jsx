@@ -6,8 +6,8 @@ import { makeStyles } from '@material-ui/styles';
 import { Grid, Container, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles({
-  card: { minWidth: 275 },
   page: { padding: '20px' },
+  h5: { marginTop: '20px', marginBottom: '10px' },
 });
 
 export default function VideosPage() {
@@ -18,24 +18,26 @@ export default function VideosPage() {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Typography variant="h2" color="secondary">
-						<img src="/media/BBCWorldService512.png" alt="Logo" width="64" height="64" />{' '}
-            BBC-Downloader
+            <img src="/media/BBCWorldService512.png" alt="Logo" width="64" height="64" /> BBC-Downloader
           </Typography>
         </Grid>
 
         <Grid item xs={12}>
+          <Typography variant="h5" color="primary" className={classes.h5}>
+            Status
+          </Typography>
           <Status />
         </Grid>
 
         <Grid item xs={12}>
-          <Typography variant="h4" color="primary">
+          <Typography variant="h5" color="primary" className={classes.h5}>
             Add a New Download
           </Typography>
           <AddVideo />
         </Grid>
 
         <Grid item xs={12}>
-          <Typography variant="h4" color="primary">
+          <Typography variant="h5" color="primary" className={classes.h5}>
             Download list
           </Typography>
           <VideoList />
