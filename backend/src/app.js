@@ -145,7 +145,11 @@ app.get('/videos/:id', (req, res) => {
   const video = videos[id];
   console.log('GET /videos/', id);
 
-  res.send(video);
+  if (video) {
+    res.send(video);
+  } else {
+    res.status(404).send({error: "Video not found"});
+  }
 });
 
 app.patch('/videos/:id', (req, res) => {
