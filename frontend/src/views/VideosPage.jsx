@@ -4,6 +4,7 @@ import AddVideo from '../components/AddVideo';
 import VideoList from '../components/VideoList';
 import { makeStyles } from '@material-ui/styles';
 import { Grid, Container, Typography } from '@material-ui/core';
+import FavLinks from '../components/FavLinks'
 
 const useStyles = makeStyles({
   page: { padding: '20px' },
@@ -27,6 +28,13 @@ export default function VideosPage() {
             Status
           </Typography>
           <Status />
+        </Grid>
+
+        <Grid item xs={12}>
+          <Typography variant="h5" color="primary" className={classes.h5}>
+            Favourites
+          </Typography>
+          <FavLinks />
         </Grid>
 
         <Grid item xs={12}>
