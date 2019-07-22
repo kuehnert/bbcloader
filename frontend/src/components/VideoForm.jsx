@@ -1,19 +1,22 @@
-import React, { Component } from 'react';
-import { Field, reduxForm, formValueSelector } from 'redux-form';
-import history from '../history';
 import {
-  TextField,
+  Radio,
+  RadioGroup,
   Button,
   Card,
-  CardContent,
   CardActions,
+  CardContent,
   CardHeader,
-  Grid,
-  FormControlLabel,
   Checkbox,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  TextField,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Field, formValueSelector, reduxForm } from 'redux-form';
+import history from '../history';
 
 class VideoForm extends Component {
   autoFilename({ programme, series, episodeNumber, episodeTitle, isFilmValue }) {
@@ -30,8 +33,8 @@ class VideoForm extends Component {
     this.props.change('filename', this.autoFilename({ ...this.props, [event.target.name]: event.target.value }));
   };
 
-  onIsFilmChange = event => {
-    const isFilmValue = !this.props.isFilmValue; // toggle
+  onIsFilmChange = newValueStr => {
+    const isFilmValue = newValueStr === 'true';
     let series = -1;
     let episodeNumber = -1;
     let episodeTitle = '';
@@ -47,6 +50,8 @@ class VideoForm extends Component {
       this.props.change('episodeNumber', episodeNumber);
     }
 
+    this.props.change("isFilm", newValueStr);
+    this.props.change("isFilmValue", isFilmValue);
     this.props.change(
       'filename',
       this.autoFilename({ ...this.props, series, episodeNumber, episodeTitle, isFilmValue })
@@ -79,6 +84,15 @@ class VideoForm extends Component {
     );
   };
 
+  renderRadioGroup = ({ input, ...rest }) => (
+    <FormControl>
+      <RadioGroup {...input} {...rest} onChange={(event, newValue) => this.onIsFilmChange(newValue)}>
+        <FormControlLabel value="true" control={<Radio />} label="Film" />
+        <FormControlLabel value="false" control={<Radio />} label="TV Episode" />
+      </RadioGroup>
+    </FormControl>
+  );
+
   render() {
     const { classes, isFilmValue } = this.props;
 
@@ -101,13 +115,7 @@ class VideoForm extends Component {
                 </Grid>
 
                 <Grid item xs={12}>
-                  <Field
-                    name="isFilm"
-                    component={this.renderCheckbox}
-                    label="Film?"
-                    type="checkbox"
-                    onChange={this.onIsFilmChange}
-                  />
+                  <Field name="isFilm" component={this.renderRadioGroup} label="Kind" />
                 </Grid>
 
                 {!isFilmValue && (
@@ -192,7 +200,7 @@ export default connect(state => {
     'episodeNumber',
     'episodeTitle'
   );
-  const isFilmValue = selector(state, 'isFilm');
+  const isFilmValue = selector(state, 'isFilmValue');
 
   return { programme, series, episodeNumber, episodeTitle, isFilmValue };
 })(reduxForm({ form: 'videoForm', validate })(withStyles(styles)(VideoForm)));

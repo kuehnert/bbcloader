@@ -40,7 +40,7 @@ class EditVideo extends Component {
           'filename',
           'attempts',
           'tagged'
-        ), isFilm: video.series === -1}}
+        ), isFilm: String(video.series === -1), isFilmValue: video.series === -1}}
       />
     );
   }
