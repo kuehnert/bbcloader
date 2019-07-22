@@ -29,7 +29,7 @@ class EditVideo extends Component {
     return (
       <VideoForm
         onSubmit={this.handleSubmit}
-        initialValues={_.pick(
+        initialValues={{..._.pick(
           video,
           'id',
           'url',
@@ -40,7 +40,7 @@ class EditVideo extends Component {
           'filename',
           'attempts',
           'tagged'
-        )}
+        ), isFilm: video.series === -1}}
       />
     );
   }
