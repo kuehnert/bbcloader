@@ -46,9 +46,9 @@ export class Status extends Component {
     return (
       <Grid container spacing={2} justify="space-evenly">
         {renderContent('External IP', externalIP, externalIP, classes)}
-        {renderContent('Online', isOnline, isOnline ? '✔' : '❌', classes)}
+        {renderContent('Online', externalIP, isOnline ? '✔' : '❌', classes)}
         {renderContent('Last Update', lastUpdate, lastUpdateStr, classes)}
-        {renderContent('Current Download', isOnline, downloadStr, classes)}
+        {renderContent('Current Download', externalIP, downloadStr, classes)}
       </Grid>
     );
   }

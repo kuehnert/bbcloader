@@ -53,7 +53,7 @@ class AddVideo extends Component {
         onDragOver={this.onDragOver}
         onDrop={this.onDrop}
         style={{ backgroundColor: this.state.bgcolor, border: this.state.border }}>
-				<Typography variant="h5" component="h2" color="primary" align="center">
+				<Typography variant="body1" color="primary" align="center">
           {this.state.message}
         </Typography>
       </Paper>

@@ -84,7 +84,6 @@ const updateExternalIP = (ip) => {
   console.log(
     'updateExternalIP:',
     externalIP,
-    ',',
     isOnline() ? 'VPN connected,' : 'VPN not connected,',
     shareAvailable ? 'share mounted,' : 'share not mounted,',
     lastUpdate,

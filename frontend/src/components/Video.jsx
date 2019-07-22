@@ -40,11 +40,14 @@ class Video extends Component {
   }
 
   render() {
-    const { classes, video } = this.props;
+    const { classes, video, status } = this.props;
     const { id, attempts, tagged } = video;
+    const isCurrent = status.currentVideo && id === status.currentVideo.id;
 
     return (
-      <TableRow onClick={() => history.push(`/videos/edit/${id}`)} className={classes.row}>
+      <TableRow
+        onClick={() => {if (!isCurrent) history.push(`/videos/edit/${id}`)}}
+        className={isCurrent ? classes.disabledRow : classes.row}>
         {this.renderSeriesEpisode(this.props.video)}
         <TableCell>{tagged ? '✔' : '❌'}</TableCell>
         <TableCell className="right">{attempts}</TableCell>
@@ -69,13 +72,21 @@ const styles = {
   row: {
     '&:hover': { cursor: 'pointer' },
   },
+  disabledRow: {
+    backgroundColor: '#dddd',
+    color: 'gray',
+  },
 };
+
+const mapStateToProps = state => ({
+  status: state.status,
+});
 
 const mapDispatchToProps = {
   deleteVideo,
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(withStyles(styles)(Video));
