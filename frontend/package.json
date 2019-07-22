@@ -22,7 +22,7 @@
   "scripts": {
     "start": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
-    "deploy": "rsync -az --force --delete --progress -e \"ssh -p22\" build pi@192.168.168.4:~/GITProjects/bbcloader/frontend/build",
+    "deploy": "rsync -az --exclude \".env\"  --force --delete --progress -e \"ssh -p22\" build pi@192.168.168.4:~/GITProjects/bbcloader/frontend/",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
