@@ -23,7 +23,8 @@ const loadConfig = () => {
     return JSON.parse(buffer.toString());
   } catch (error) {
     const config = {
-      destinationDir: '/mnt/d/MKData/Videos/Incoming/TVShows',
+      destinationTV: '/mnt/d/MKData/Videos/Incoming/TVShows',
+      destinationMovies: '/mnt/d/MKData/Videos/Movies/Incoming',
       downloadCommand: '/mnt/c/ProgramData/chocolatey/bin/youtube-dl.exe',
       downloadDir: 'D:/MKData/Videos/Incoming',
       port: 5000,
@@ -51,14 +52,14 @@ const loadCompleted = () => {
   }
 };
 
-const moveVideo = (sourceDir, destinationDir, filename, ext) => {
-  if (!fs.existsSync(destinationDir)) {
-    console.log(`Creating folder '${destinationDir}'`);
-    fs.mkdirSync(destinationDir, { recursive: true });
+const moveVideo = (sourceDir, destination, filename, ext) => {
+  if (!fs.existsSync(destination)) {
+    console.log(`Creating folder '${destination}'`);
+    fs.mkdirSync(destination, { recursive: true });
   }
 
   const fromFile = path.join(sourceDir, `${filename}.${ext}`);
-  const toFile = path.join(destinationDir, `${filename}.${ext}`);
+  const toFile = path.join(destination, `${filename}.${ext}`);
 
   fs.renameSync(fromFile, toFile);
 };
