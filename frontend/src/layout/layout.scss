@@ -1,5 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans');
+@import url('https://cdn.materialdesignicons.com/5.0.45/css/materialdesignicons.min.css');
+@import './variables';
 
 html {
   font-family: 'Open Sans', sans-serif;
+}
+
+body {
+  height: 100vh;
+  background: blue;
+  background: url('./sockalingumHD.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+h1 {
+  color: $color1;
+}
+
+h2, h3, h4, h5, h6 {
+  color: $color2;
 }

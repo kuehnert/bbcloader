@@ -139,6 +139,11 @@ app.get('/videos', (req, res) => {
   res.send(Object.values(videos));
 });
 
+app.get('/finished', (req, res) => {
+  console.log('GET /finished');
+  res.send(Object.values(completed));
+});
+
 app.get('/videos/:id', (req, res) => {
   const { id } = req.params;
   const video = videos[id];

@@ -4,8 +4,18 @@ import { AppThunk } from 'store';
 import { setErrorAlert } from 'features/globals/globalSlice';
 
 export interface Video {
-  title: string;
+  id: string;
+  url: string;
+  programme: string;
+  series: number;
+  episodeNumber: number;
+  episodeTitle: string;
   filename: string;
+  attempts: number;
+  year: string;
+  tagged: boolean;
+  isFilm: string;
+  isFilmValue: boolean;
 }
 
 type VideoSliceState = {
@@ -25,16 +35,19 @@ export const videoSlice = createSlice({
     fetchDownloadsSuccess(state, action: PayloadAction<Video[]>) {
       state.downloads = action.payload;
     },
+    fetchFinishedSuccess(state, action: PayloadAction<Video[]>) {
+      state.finished = action.payload;
+    },
   },
 });
 
-export const { fetchDownloadsSuccess } = videoSlice.actions;
+export const { fetchDownloadsSuccess, fetchFinishedSuccess } = videoSlice.actions;
 export default videoSlice.reducer;
 
 export const fetchDownloads = (): AppThunk => async (dispatch) => {
   let downloads;
   try {
-    const response = await backend.get('/downloads');
+    const response = await backend.get('/videos');
     downloads = response.data;
   } catch (error) {
     dispatch(setErrorAlert(`Fehler beim Laden der Downloads.`));
@@ -42,4 +55,17 @@ export const fetchDownloads = (): AppThunk => async (dispatch) => {
   }
 
   dispatch(fetchDownloadsSuccess(downloads));
+};
+
+export const fetchFinished = (): AppThunk => async (dispatch) => {
+  let finished;
+  try {
+    const response = await backend.get('/finished');
+    finished = response.data;
+  } catch (error) {
+    dispatch(setErrorAlert(`Fehler beim Laden der abgeschlossenen Downloads.`));
+    return;
+  }
+
+  dispatch(fetchFinishedSuccess(finished));
 };
