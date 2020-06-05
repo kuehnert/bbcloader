@@ -4,7 +4,7 @@ import history from './history';
 import VideosPage from './views/VideosPage';
 import EditVideo from './components/EditVideo';
 
-function App(props) {
+function App() {
   return (
     <Router history={history}>
       <Route path="/" exact component={VideosPage} />

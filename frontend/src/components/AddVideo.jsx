@@ -1,40 +1,44 @@
-import React, { Component } from 'react';
-import validator from 'validator';
-import { connect } from 'react-redux';
-import { createVideo } from '../actions';
-import { Paper, Typography } from '@material-ui/core';
-import { withStyles } from '@material-ui/styles';
+import React, { Component } from "react";
+import validator from "validator";
+import { connect } from "react-redux";
+import { createVideo } from "../actions";
+import { Paper } from "@material-ui/core";
+import './AddVideo.css';
 
 class AddVideo extends Component {
-  initialState = { message: 'Drag & drop URL here', bgcolor: '#4448', border: '8px yellow' };
+  initialState = {
+    message: "Drag & drop URL here",
+  };
   state = { ...this.initialState };
 
-  onDragOver = event => {
-    if (event.preventDefault) {
-      event.preventDefault();
-    }
-
-    return false;
+  onDragOver = (event) => {
+    event.preventDefault();
   };
 
-  onDragEnter = event => {
-    this.setState({ message: 'Drop here!', bgcolor: '#4448', border: '8px dashed red' });
+  onDragEnter = () => {
+    this.setState({
+      message: "Drop here!",
+    });
   };
 
-  onDragLeave = event => {
+  onDragLeave = () => {
     this.setState(this.initialState);
   };
 
-  onDrop = async event => {
+  onDrop = async (event) => {
     event.preventDefault();
-    const url = event.dataTransfer.getData('text');
+    const url = event.dataTransfer.getData("text");
 
     if (validator.isURL(url) && url.match(/bbc\.co\.uk/)) {
       this.props.createVideo(url);
 
-      this.setState({ message: 'Video(s) added.', bgcolor: '#2f28', border: '8px solid green' });
+      this.setState({
+        message: "Video(s) added.",
+        bgcolor: "#2f28",
+        border: "8px solid green",
+      });
     } else {
-      this.setState({ message: 'URL not usuable', bgcolor: '#f228' });
+      this.setState({ message: "URL not usuable", bgcolor: "#f228" });
     }
 
     setTimeout(() => {
@@ -43,39 +47,18 @@ class AddVideo extends Component {
   };
 
   render() {
-    const { classes } = this.props;
-
     return (
       <Paper
-        className={classes.dropzone}
+        className="dropzone"
         onDragEnter={this.onDragEnter}
         onDragLeave={this.onDragLeave}
         onDragOver={this.onDragOver}
         onDrop={this.onDrop}
-        style={{ backgroundColor: this.state.bgcolor, border: this.state.border }}>
-				<Typography variant="body1" color="primary" align="center">
-          {this.state.message}
-        </Typography>
+      >
+        {this.state.message}
       </Paper>
     );
   }
 }
 
-const styles = theme => ({
-  dropzone: {
-    padding: theme.spacing(3, 2),
-    height: '100px',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    marginTop: '20px',
-    marginBottom: '20px',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-	},
-});
-
-export default connect(
-  null,
-  { createVideo }
-)(withStyles(styles)(AddVideo));
+export default connect(null, { createVideo })(AddVideo);
