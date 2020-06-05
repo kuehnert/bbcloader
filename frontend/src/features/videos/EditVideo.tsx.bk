@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getVideo, updateVideo } from '../actions';
-import VideoForm from './VideoForm';
-import history from '../history';
+import { getVideo, updateVideo } from '../../actions';
+// import VideoForm from './VideoForm.jsx';
+import history from '../../myhistory';
 
 class EditVideo extends Component {
   componentDidMount() {
@@ -27,21 +27,22 @@ class EditVideo extends Component {
     }
 
     return (
-      <VideoForm
-        onSubmit={this.handleSubmit}
-        initialValues={{..._.pick(
-          video,
-          'id',
-          'url',
-          'programme',
-          'series',
-          'episodeNumber',
-          'episodeTitle',
-          'filename',
-          'attempts',
-          'tagged'
-        ), isFilm: String(video.series === -1), isFilmValue: video.series === -1}}
-      />
+      <div>Dummy</div>
+      // <VideoForm
+      //   onSubmit={this.handleSubmit}
+      //   initialValues={{..._.pick(
+      //     video,
+      //     'id',
+      //     'url',
+      //     'programme',
+      //     'series',
+      //     'episodeNumber',
+      //     'episodeTitle',
+      //     'filename',
+      //     'attempts',
+      //     'tagged'
+      //   ), isFilm: String(video.series === -1), isFilmValue: video.series === -1}}
+      // />
     );
   }
 }

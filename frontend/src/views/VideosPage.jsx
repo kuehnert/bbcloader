@@ -1,7 +1,7 @@
 import React from 'react';
-import Status from '../components/Status';
-import AddVideo from '../components/AddVideo';
-import VideoList from '../components/VideoList';
+import Status from '../features/status/Status';
+import AddVideo from '../features/videos/AddVideo';
+import VideoList from '../features/videos/VideoList';
 import { makeStyles } from '@material-ui/styles';
 import { Grid, Container, Typography } from '@material-ui/core';
 import FavLinks from '../components/FavLinks'

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import history from '../history';
+import history from '../../myhistory';
 import './Video.css';
 import { connect } from 'react-redux';
-import { deleteVideo } from '../actions';
+import { deleteVideo } from '../../actions';
 import { TableRow, TableCell, Button, Link, withStyles } from '@material-ui/core';
 
 class Video extends Component {

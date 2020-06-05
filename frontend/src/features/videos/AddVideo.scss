@@ -1,0 +1,27 @@
+.dropzone {
+  padding: 24px 16px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #4448;
+  color: yellow;
+  font-size: large;
+
+  &.enter {
+    background: #4448;
+    border: 8px dashed yellow;
+  }
+
+  &.success {
+    color: white;
+    background: #2f28;
+    border: 8px solid green;
+  }
+
+  &.error {
+    color: white;
+    background: #f228;
+    border: 8px dashed red;
+  }
+}

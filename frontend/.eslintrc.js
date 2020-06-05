@@ -1,0 +1,41 @@
+module.exports = {
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint', 'react-hooks'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+    'plugin:react/recommended',
+    'prettier/@typescript-eslint',
+  ],
+  rules: {
+    camelcase: 'off',
+    '@typescript-eslint/camelcase': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/interface-name-prefix': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    'no-prototype-builtins': 'off',
+    'react-hooks/rules-of-hooks': 'warn',
+    'react/prop-types': 'off',
+  },
+  parserOptions: {
+    ecmaVersion: 2018, // modern ECMAScript features
+    sourceType: 'module', // Allows use of imports
+    ecmaFeatures: {
+      jsx: true, // Allows JSX
+    },
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
+  ignorePatterns: ['coverage/', 'node_modules/', 'src/serviceWorker.ts'],
+  env: {
+    browser: true,
+    node: true,
+    es6: true,
+  },
+};
