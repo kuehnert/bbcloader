@@ -1,3 +1,5 @@
+@import '../../layout/variables';
+
 .dropzone {
   padding: 24px 16px;
   height: 100px;
@@ -14,13 +16,13 @@
   }
 
   &.success {
-    color: white;
+    color: $colorText;
     background: #2f28;
     border: 8px solid green;
   }
 
   &.error {
-    color: white;
+    color: $colorText;
     background: #f228;
     border: 8px dashed red;
   }

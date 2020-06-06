@@ -19,7 +19,7 @@ const VideoList: React.FC = () => {
   }, []);
 
   const episodeColumn = (video: Video) => {
-    if (video.isFilmValue) {
+    if (video.isFilm) {
       return null;
     } else if (video.series < 0) {
       return '?';

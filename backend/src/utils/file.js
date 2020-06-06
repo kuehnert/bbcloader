@@ -1,10 +1,9 @@
 const fs = require('fs');
 const path = require('path');
+const _ = require('lodash');
 
-const configFilename = path.join(__dirname, '..', '..', 'data', 'config.json');
 const videosFilename = path.join(__dirname, '..', '..', 'data', 'videos.json');
 const completedFilename = path.join(__dirname, '..', '..', 'data', 'videosDone.json');
-// const logFilename = path.join(__dirname, '..', '..', 'data', 'bbcloader.log');
 
 function shareAvailable(share) {
   return fs.existsSync(share);
@@ -14,23 +13,6 @@ const saveVideos = (videos, completed) => {
   fs.writeFileSync(videosFilename, JSON.stringify(videos));
   if (completed) {
     fs.writeFileSync(completedFilename, JSON.stringify(completed));
-  }
-};
-
-const loadConfig = () => {
-  try {
-    const buffer = fs.readFileSync(configFilename);
-    return JSON.parse(buffer.toString());
-  } catch (error) {
-    const config = {
-      destinationTV: '/mnt/d/MKData/Videos/Incoming/TVShows',
-      destinationMovies: '/mnt/d/MKData/Videos/Movies/Incoming',
-      downloadCommand: '/mnt/c/ProgramData/chocolatey/bin/youtube-dl.exe',
-      downloadDir: 'D:/MKData/Videos/Incoming',
-      port: 5000,
-    };
-    fs.writeFileSync(configFilename, JSON.stringify(config));
-    return config;
   }
 };
 
@@ -46,8 +28,12 @@ const loadVideos = () => {
 const loadCompleted = () => {
   try {
     const buffer = fs.readFileSync(completedFilename);
-    return JSON.parse(buffer.toString());
+    let completed = JSON.parse(buffer.toString());
+    completed = _.filter(completed, (v) => v.id != null);
+    completed = _.uniqBy(completed, "id");
+    return completed;
   } catch (error) {
+    console.error(error);
     return [];
   }
 };
@@ -65,7 +51,6 @@ const moveVideo = (sourceDir, destination, filename, ext) => {
 };
 
 module.exports = {
-  loadConfig,
   loadCompleted,
   loadVideos,
   saveVideos,

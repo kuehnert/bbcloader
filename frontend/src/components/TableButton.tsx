@@ -10,10 +10,12 @@ interface Props {
   to?: string;
   url?: string;
   tooltip?: string;
+  className?: string;
+  handleClick?: (event: React.MouseEvent) => void;
 }
 
 const TableButton: React.FC<Props> = (props) => {
-  const { label, to, url, icon, tooltip } = props;
+  const { label, to, url, icon, tooltip, className, handleClick } = props;
 
   const makeButton = (
     <Button
@@ -21,7 +23,8 @@ const TableButton: React.FC<Props> = (props) => {
       label={label}
       tooltip={tooltip}
       tooltipOptions={{ position: 'bottom' }}
-      className={classNames('p-button-primary', styles.tableButton)}
+      className={classNames('p-button-primary', styles.tableButton, className)}
+      onClick={handleClick}
     />
   );
 

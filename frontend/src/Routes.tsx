@@ -1,14 +1,19 @@
 import React from 'react';
-import { Router, Route } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 import history from './myhistory';
 import VideosPage from './views/VideosPage';
-// import EditVideo from './features/videos/EditVideo.tsx.bk';
+import EditVideo from './features/videos/EditVideo';
+import Status404 from 'components/Status404';
 
 function Routes() {
   return (
     <Router history={history}>
-      <Route path="/" exact component={VideosPage} />
-      {/* <Route path="/videos/edit/:id" component={EditVideo} /> */}
+      <Switch>
+        <Route path="/" exact component={VideosPage} />
+        <Route path="/downloads/:id/edit" component={EditVideo} />
+
+        <Route component={Status404} />
+      </Switch>
     </Router>
   );
 }

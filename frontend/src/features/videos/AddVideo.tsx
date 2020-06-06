@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { string } from 'yup';
 import classnames from 'classnames';
 import './AddVideo.scss';
+import { createVideo } from './videoSlice';
+import { useDispatch } from 'react-redux';
 
 interface Props {
   createVideo: () => void;
@@ -10,6 +12,8 @@ interface Props {
 const schema = string().url();
 
 const AddVideo: React.FC = () => {
+  const dispatch = useDispatch();
+
   const messages: { [key: string]: string } = {
     default: 'Drag & drop URL here',
     enter: 'Drop here!',
@@ -37,7 +41,7 @@ const AddVideo: React.FC = () => {
     const url = event.dataTransfer.getData('text');
 
     if (schema.isValid(url) && url.match(/bbc\.co\.uk/)) {
-      // createVideo(url);
+      dispatch(createVideo(url));
       setDropState('success');
     } else {
       setDropState('error');

@@ -5,9 +5,10 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import styles from './VideoList.module.scss';
-import { fetchDownloads, Video } from './videoSlice';
+import { fetchDownloads, Video, deleteVideo } from './videoSlice';
 import { formatEpisodeNumber } from 'utils/helpers';
 import TableButton from 'components/TableButton';
+import TableDeleteButton from 'components/TableDeleteButton';
 
 const VideoList: React.FC = () => {
   const dispatch = useDispatch();
@@ -18,8 +19,12 @@ const VideoList: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleDelete = (id: string) => {
+    dispatch(deleteVideo(id));
+  };
+
   const episodeColumn = (video: Video) => {
-    if (video.isFilmValue) {
+    if (video.isFilm) {
       return null;
     } else if (video.series < 0) {
       return '?';
@@ -29,10 +34,13 @@ const VideoList: React.FC = () => {
   };
 
   const actionColumn = (video: Video) => {
-    return <>
-      <TableButton icon="pencil" to={`/downloads/${video.id}/edit`} />
-    </>
-  }
+    return (
+      <>
+        <TableButton icon="pencil" to={`/downloads/${video.id}/edit`} />
+        <TableDeleteButton icon="delete" objectName={video.programme} objectId={video.id} handleDelete={handleDelete} />
+      </>
+    );
+  };
 
   if (videos.length === 0) {
     return <Card className={styles.novideos}>Currently, there are no videos in the download queue.</Card>;

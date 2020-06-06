@@ -8,15 +8,15 @@ html {
 
 body {
   height: 100vh;
-  background: blue;
+  color: $colorText;
   background: url('./sockalingumHD.jpg') no-repeat center center fixed;
   background-size: cover;
 }
 
 h1 {
-  color: $color1;
+  color: $colorTitle;
 }
 
 h2, h3, h4, h5, h6 {
-  color: $color2;
+  color: $colorTitle;
 }
