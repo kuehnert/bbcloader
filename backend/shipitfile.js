@@ -4,20 +4,20 @@ module.exports = (shipit) => {
   shipit.initConfig({
     default: {
       dirToCopy: "backend",
-      servers: "deploy@mso.onl",
+      servers: "pi@192.168.168.4",
       repositoryUrl: "https://github.com/kuehnert/bbcloader.git",
       keepReleases: 5,
       deleteOnRollback: false,
     },
     production: {
-      deployTo: "/home/deploy/sites/bbcloader-api",
+      deployTo: "/home/pi/sites/bbcloader-api",
       branch: "develop",
     },
   });
 
   shipit.on("deployed", () => {
     shipit.start("build");
-    shipit.start("reload");
+    // shipit.start("reload");
   });
 
   shipit.blTask("build", async () => {
