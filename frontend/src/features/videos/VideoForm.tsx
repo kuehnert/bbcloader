@@ -9,6 +9,7 @@ import React, { useEffect } from 'react';
 import { formatEpisodeNumber } from 'utils/helpers';
 import * as Yup from 'yup';
 import { Video } from './videoSlice';
+import { Checkbox } from 'primereact/checkbox';
 
 interface Props {
   video: Video;
@@ -89,9 +90,21 @@ const VideoForm: React.FC<Props> = ({ video, handleSubmit }) => {
             </>
           )}
 
+          <MakeFilename />
           <MyInput id="filename" name="filename" label="Filename" as={InputText} />
           <MyInput id="attempts" name="attempts" label="Attempts" as={InputNumber} />
-          <MakeFilename />
+
+          <label htmlFor="isFilm" className="p-col-2">
+            Ready?
+          </label>
+          <div className="p-col-10">
+            <Checkbox
+              id="tagged"
+              name="tagged"
+              checked={values.tagged}
+              onChange={() => setFieldValue('tagged', !values.tagged)}
+            />
+          </div>
 
           <div className="p-col-3">
             <Button type="button" label="Abbrechen" onClick={() => myhistory.goBack()} className="p-button-secondary" />

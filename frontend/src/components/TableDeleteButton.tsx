@@ -10,11 +10,12 @@ interface Props {
   className?: string;
   objectName: string;
   objectId: string;
+  disabled?: boolean;
   handleDelete: (id: string) => void;
 }
 
 const TableDeleteButton: React.FC<Props> = (props) => {
-  const { objectName, objectId, handleDelete } = props;
+  const { objectName, objectId, handleDelete, disabled = false } = props;
   const [visible, setVisible] = useState(false);
 
   const handleClick = () => {
@@ -37,7 +38,7 @@ const TableDeleteButton: React.FC<Props> = (props) => {
 
   return (
     <>
-      <TableButton {...props} className="p-button-danger" handleClick={() => setVisible(true)} />
+      <TableButton {...props} className="p-button-danger" handleClick={() => setVisible(true)} disabled={disabled} />
 
       <Dialog
         header="Vorsicht"

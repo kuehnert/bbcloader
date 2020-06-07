@@ -11,11 +11,12 @@ interface Props {
   url?: string;
   tooltip?: string;
   className?: string;
+  disabled?: boolean;
   handleClick?: (event: React.MouseEvent) => void;
 }
 
 const TableButton: React.FC<Props> = (props) => {
-  const { label, to, url, icon, tooltip, className, handleClick } = props;
+  const { label, to, url, icon, tooltip, className, handleClick, disabled = false } = props;
 
   const makeButton = (
     <Button
@@ -25,10 +26,13 @@ const TableButton: React.FC<Props> = (props) => {
       tooltipOptions={{ position: 'bottom' }}
       className={classNames('p-button-primary', styles.tableButton, className)}
       onClick={handleClick}
+      disabled={disabled}
     />
   );
 
-  if (url) {
+  if (disabled) {
+    return makeButton;
+  } else if (url) {
     return <a href={`${url}`}>{makeButton}</a>;
   } else if (to) {
     return <Link to={to}>{makeButton}</Link>;

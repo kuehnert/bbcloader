@@ -12,7 +12,8 @@ import TableDeleteButton from 'components/TableDeleteButton';
 
 const VideoList: React.FC = () => {
   const dispatch = useDispatch();
-  const videos = useSelector((state: RootState) => state.videos.downloads);
+  const { downloads } = useSelector((state: RootState) => state.videos);
+  const { currentVideo } = useSelector((state: RootState) => state.status);
 
   useEffect(() => {
     dispatch(fetchDownloads());
@@ -34,24 +35,40 @@ const VideoList: React.FC = () => {
   };
 
   const actionColumn = (video: Video) => {
+    const disabled = video.id === currentVideo?.id;
+
     return (
       <>
-        <TableButton icon="pencil" to={`/downloads/${video.id}/edit`} />
-        <TableDeleteButton icon="delete" objectName={video.programme} objectId={video.id} handleDelete={handleDelete} />
+        <TableButton icon="pencil" to={`/downloads/${video.id}/edit`} disabled={disabled} />
+        <TableDeleteButton
+          icon="delete"
+          objectName={video.programme}
+          objectId={video.id}
+          handleDelete={handleDelete}
+          disabled={disabled}
+        />
       </>
     );
   };
 
-  if (videos.length === 0) {
+  const taggedColumn = (video: Video) => (
+    <i
+      className={video.tagged ? 'mdi mdi-checkbox-marked-outline' : 'mdi mdi-checkbox-blank-outline'}
+      style={{ margin: 'auto' }}
+    />
+  );
+
+  if (downloads.length === 0) {
     return <Card className={styles.novideos}>Currently, there are no videos in the download queue.</Card>;
   } else {
     return (
-      <DataTable value={videos} autoLayout={true}>
+      <DataTable value={downloads} autoLayout={true}>
         <Column field="id" header="ID" />
         <Column field="programme" header="Programme" />
-        <Column field="year" header="Year" />
-        <Column header="Episode" body={episodeColumn} />
-        <Column field="attempts" header="Attempts" />
+        <Column field="year" header="Year" className={styles.colCenter} />
+        <Column header="Episode" body={episodeColumn} className={styles.colCenter} />
+        <Column field="attempts" header="Attempts" className={styles.colRight} />
+        <Column header="Tagged" body={taggedColumn} className={styles.colCenter} />
         <Column header="Actions" body={actionColumn} />
       </DataTable>
     );
