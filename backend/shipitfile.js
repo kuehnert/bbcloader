@@ -11,7 +11,7 @@ module.exports = (shipit) => {
     },
     production: {
       deployTo: "/home/pi/sites/bbcloader-api",
-      branch: "develop",
+      branch: "master",
     },
   });
 
