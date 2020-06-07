@@ -1,6 +1,15 @@
 {
   "name": "bbcloader",
-  "version": "1.0.1",
+  "version": "1.1.1",
+  "scripts": {
+    "build": "npm run clean && npm run tsc",
+    "clean": "rimraf dist/* '{src,test}/**/*.{js,js.map}'",
+    "deploy:production": "shipit production deploy",
+    "start": "NODE_ENV=development nodemon src/app.js -e js",
+    "tsc:w": "tsc --project tsconfig.json -w",
+    "tsc": "tsc --project tsconfig.json"
+  },
+  "author": "Matthias Kühnert",
   "private": true,
   "dependencies": {
     "axios": "0.19.2",
@@ -19,10 +28,8 @@
     "eslint-plugin-jsx-a11y": "6.2.3",
     "eslint-plugin-react": "7.20.0",
     "nodemon": "2.0.4",
+    "shipit-cli": "^5.3.0",
+    "shipit-deploy": "^5.3.0",
     "yargs": "15.3.1"
-  },
-  "scripts": {
-    "start": "NODE_ENV=production git pull && npm install && node src/app.js",
-    "dev": "NODE_ENV=development nodemon src/app.js -e js"
   }
 }
