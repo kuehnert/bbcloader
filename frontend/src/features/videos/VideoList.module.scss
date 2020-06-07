@@ -1,0 +1,24 @@
+@import '../../layout/variables';
+
+.paper {
+  width: 100%;
+  margin-bottom: $spacing * 3;
+  overflow-x: auto;
+  background: #4448;
+}
+
+.novideos {
+  height: 100;
+  background: #4448;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.colCenter {
+  text-align: center;
+}
+
+.colRight {
+  text-align: right;
+}

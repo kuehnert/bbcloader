@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+const yargs = require("yargs");
+const fs = require("fs");
+
+// --quiet --sub-lang "en" --write-sub --output filename.mp4 url
+const argv = yargs
+  .command("youtube-dl-fake", "fakes youtube-dl :D")
+  .option("quiet", {
+    description: "Keeps shtum",
+    type: "boolean",
+  })
+  .option("sub-lang", {
+    description: "select subtitle language",
+    type: "string",
+  })
+  .option("write-sub", {
+    description: "write subtitles into file",
+    type: "boolean",
+  })
+  .option("output", {
+    description: "ouput video file",
+    type: "string",
+  }).argv;
+
+console.log("youtube-dl-fake started");
+console.log("argv", argv);
+const content = `URL: ${argv._[0]}\nFILENAME: ${argv.output}\n`;
+fs.writeFileSync(argv.output, content);
+
+setTimeout(() => {
+  console.log("youtube-dl-fake finiss!");
+}, 1000 * 60); // 1 minute

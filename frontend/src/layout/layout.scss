@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans');
+@import url('https://cdn.materialdesignicons.com/5.0.45/css/materialdesignicons.min.css');
+@import './variables';
+
+html {
+  font-family: 'Open Sans', sans-serif;
+}
+
+body {
+  height: 100vh;
+  color: $colorText;
+  text-shadow: 2px 2px 2px black;
+  background: url('./sockalingumHD.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+h1 {
+  color: $colorTitle;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: $colorTitle;
+}
+
+body .p-datatable {
+  .p-datatable-thead > tr > th {
+    color: $colorText;
+    background: #eeea;
+  }
+
+  .p-datatable-tbody > tr {
+    color: $colorText;
+    background: #444a;
+
+    &:nth-child(even) {
+      background: #666a;
+    }
+  }
+}
+
+body .p-card {
+  background: #444a;
+  color: $colorText;
+}

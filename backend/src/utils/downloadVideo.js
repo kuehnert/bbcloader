@@ -9,17 +9,10 @@ const {
 } = require("../messages");
 const ttml2ass = require("./ttml2ass");
 
-const DEVELOPMENT_URL = "https://www.youtube.com/watch?v=wb3MT3W6_aU";
-const DOWNLOAD_CMD =
-  process.env.NODE_ENV === "production"
-    ? "/usr/local/bin/youtube-dl"
-    : "/home/mk/.local/bin/youtube-dl";
-
 process.on(
   "message",
   ({
     messageType,
-    config: { downloadDir, destinationMovies, destinationTV },
     video: inputVideo,
   }) => {
     if (messageType !== START_DOWNLOAD) {
@@ -34,13 +27,13 @@ process.on(
       "en",
       "--write-sub",
       "--output",
-      `${downloadDir}/${video.filename}.mp4`,
-      process.env.NODE_ENV === "production" ? video.url : DEVELOPMENT_URL,
+      `${process.env.DOWNLOAD_DIR}/${video.filename}.mp4`,
+      video.url,
     ];
 
     try {
       console.log(`Download started: ${video.url}`);
-      execFileSync(DOWNLOAD_CMD, args);
+      execFileSync(process.env.YOUTUBE_DL_BIN, args);
     } catch (error) {
       console.error("Download stopped with error!");
       console.log(error.status); // Might be 127 in your example.
@@ -54,14 +47,14 @@ process.on(
     // Move downloads into right folder
     video.downloaded = true;
     const finalDestination = path.join(
-      video.isFilmValue ? destinationMovies : destinationTV,
+      video.isFilm ? process.env.DESTINATION_MOVIES : process.env.DESTINATION_TV,
       video.programme
     );
-    file.moveVideo(downloadDir, finalDestination, video.filename, "mp4");
+    file.moveVideo(process.env.DOWNLOAD_DIR, finalDestination, video.filename, "mp4");
 
     // Convert & move subtitle file
-    const subFile = path.join(downloadDir, `${video.filename}.en.ttml`);
-    const convertedSubFile = path.join(downloadDir, `${video.filename}.en.ass`);
+    const subFile = path.join(process.env.DOWNLOAD_DIR, `${video.filename}.en.ttml`);
+    const convertedSubFile = path.join(process.env.DOWNLOAD_DIR, `${video.filename}.en.ass`);
     if (process.env.NODE_ENV === "development") {
       fs.copyFileSync(
         path.join(__dirname, "..", "..", "data", "demo.en.ttml"),
@@ -74,8 +67,8 @@ process.on(
       const ttml = fs.readFileSync(subFile).toString();
       const ass = ttml2ass(ttml, video.episodeTitle);
       fs.writeFileSync(convertedSubFile, ass);
-      file.moveVideo(downloadDir, finalDestination, video.filename, "en.ttml");
-      file.moveVideo(downloadDir, finalDestination, video.filename, "en.ass");
+      file.moveVideo(process.env.DOWNLOAD_DIR, finalDestination, video.filename, "en.ttml");
+      file.moveVideo(process.env.DOWNLOAD_DIR, finalDestination, video.filename, "en.ass");
     }
 
     console.log(

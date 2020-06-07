@@ -1,0 +1,33 @@
+@import '../../layout/variables';
+
+.favLinks {
+  align-content: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.chip {
+  background: $colorBack;
+  border-radius: 10%;
+  border: 1px solid black;
+  box-shadow: 8px 8px 10px #222;
+  color: $colorText;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 $spacing*2;
+  padding: 0.5*$spacing $spacing $spacing;
+
+  &:hover {
+    background: darken($colorBack, 10%);
+  }
+
+  .icon {
+    position: relative;
+    font-size: 2rem;
+    top: 3px;
+    margin-right: $spacing;
+  }
+}
