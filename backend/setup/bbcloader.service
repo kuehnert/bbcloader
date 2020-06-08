@@ -1,0 +1,21 @@
+[Unit]
+Description=NodeJS BBC-Downloader Application
+After=network-online.target
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=10
+Environment=NODE_ENV=production
+# ExecStart=/home/pi/.nvm/versions/node/v12.4.0/bin/npm start
+ExecStart=/home/pi/GITProjects/bbcloader/backend/start.sh
+WorkingDirectory=/home/pi/GITProjects/bbcloader/backend
+User=pi
+KillSignal=SIGQUIT
+StandardOutput=syslog
+StandardError=syslog
+#Change this to find app logs in /var/log/syslog
+SyslogIdentifier=bbcloader
+
+[Install]
+WantedBy=multi-user.target

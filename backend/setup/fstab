@@ -1,0 +1,11 @@
+proc            /proc           proc    defaults          0       0
+PARTUUID=bf9eeebf-01  /boot           vfat    defaults          0       2
+PARTUUID=bf9eeebf-02  /               ext4    defaults,noatime  0       1
+# a swapfile is not a swap partition, no line here
+#   use  dphys-swapfile swap[on|off]  for that
+
+# //SERVER/FREIGABE MOUNTPUNKT cifs LISTE_DER_OPTIONEN  0  0
+# first: sudo mkdir /mnt/video
+# //MKSynology/video /mnt/video cifs sec=ntlm,defaults,rw,credentials=/home/pi/.smbcredentials 0 0
+# //MKSynology/video /mnt/video cifs vers=3.0,rw,credentials=/home/pi/.smbcredentials 0 0
+//MKSynology/video /mnt/video cifs vers=1.0,rw,credentials=/home/pi/.smbcredentials 0 0

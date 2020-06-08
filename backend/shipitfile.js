@@ -10,13 +10,13 @@ module.exports = (shipit) => {
       keepReleases: 5,
       shared: {
         overwrite: true,
-        dirs: ["node_modules"],
+        dirs: ["node_modules", "data"],
       },
       deleteOnRollback: false,
     },
     production: {
-      servers: "pi@192.168.168.4",
-      deployTo: "/home/pi/sites/bbcloader-api",
+      servers: "mk@192.168.168.4",
+      deployTo: "/home/mk/sites/bbcloader-api",
       branch: "master",
     },
   });
@@ -27,24 +27,6 @@ module.exports = (shipit) => {
     "shared",
     "ecosystem.config.js"
   );
-
-  const ecosystem = `module.exports = {
-    apps: [
-      {
-        name: '${appName}',
-        script: '${shipit.releasePath}/app.js',
-        watch: true,
-        autorestart: true,
-        restart_delay: 1000,
-        env: {
-          NODE_ENV: 'development'
-        },
-        env_production: {
-          NODE_ENV: 'production'
-        }
-      }
-    ]
-  };`;
 
   shipit.on("updated", () => {
     shipit.start("npm-install", "copy-config");
@@ -59,8 +41,29 @@ module.exports = (shipit) => {
     shipit.start("pm2-server");
   });
 
+  shipit.on('rollback', () => {
+    shipit.start('npm-install', 'copy-config');
+  });
+
   shipit.blTask("copy-config", async () => {
     const fs = require("fs");
+    const ecosystem = `module.exports = {
+      apps: [
+        {
+          name: '${appName}',
+          script: '${shipit.releasePath}/src/app.js',
+          watch: true,
+          autorestart: true,
+          restart_delay: 1000,
+          env: {
+            NODE_ENV: 'development'
+          },
+          env_production: {
+            NODE_ENV: 'production'
+          }
+        }
+      ]
+    };`;
     fs.writeFileSync("ecosystem.config.js", ecosystem);
 
     await shipit.copyToRemote("ecosystem.config.js", ecosystemFilePath);
