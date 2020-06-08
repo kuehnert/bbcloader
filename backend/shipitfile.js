@@ -1,32 +1,86 @@
 module.exports = (shipit) => {
   require("shipit-deploy")(shipit);
+  require("shipit-shared")(shipit);
+  const appName = "bbcloader";
 
   shipit.initConfig({
     default: {
       dirToCopy: "backend",
-      servers: "pi@192.168.168.4",
       repositoryUrl: "https://github.com/kuehnert/bbcloader.git",
       keepReleases: 5,
+      shared: {
+        overwrite: true,
+        dirs: ["node_modules"],
+      },
       deleteOnRollback: false,
     },
     production: {
+      servers: "pi@192.168.168.4",
       deployTo: "/home/pi/sites/bbcloader-api",
       branch: "master",
     },
   });
 
-  shipit.on("deployed", () => {
-    shipit.start("build");
-    // shipit.start("reload");
+  const path = require("path");
+  const ecosystemFilePath = path.join(
+    shipit.config.deployTo,
+    "shared",
+    "ecosystem.config.js"
+  );
+
+  const ecosystem = `module.exports = {
+    apps: [
+      {
+        name: '${appName}',
+        script: '${shipit.releasePath}/app.js',
+        watch: true,
+        autorestart: true,
+        restart_delay: 1000,
+        env: {
+          NODE_ENV: 'development'
+        },
+        env_production: {
+          NODE_ENV: 'production'
+        }
+      }
+    ]
+  };`;
+
+  shipit.on("updated", () => {
+    shipit.start("npm-install", "copy-config");
   });
 
-  shipit.blTask("build", async () => {
+  // shipit.on("deployed", () => {
+  //   shipit.start("build");
+  //   // shipit.start("reload");
+  // });
+
+  shipit.on("published", () => {
+    shipit.start("pm2-server");
+  });
+
+  shipit.blTask("copy-config", async () => {
+    const fs = require("fs");
+    fs.writeFileSync("ecosystem.config.js", ecosystem);
+
+    await shipit.copyToRemote("ecosystem.config.js", ecosystemFilePath);
+
     await shipit.copyToRemote(
       `.env.${shipit.config.branch}`,
       `${shipit.releasePath}/.env`
     );
-    await shipit.remote(`cd ${shipit.releasePath} && npm install`);
-    await shipit.remote(`cd ${shipit.releasePath} && npm run build`);
+  });
+
+  shipit.blTask("npm-install", async () => {
+    await shipit.remote(`cd ${shipit.releasePath} && npm install --production`);
+    // await shipit.remote(`cd ${shipit.releasePath} && npm run build`);
+  });
+
+  shipit.blTask("pm2-server", async () => {
+    await shipit.remote(`pm2 delete -s ${appName} || :`);
+    await shipit.remote(
+      `pm2 start ${ecosystemFilePath} --env production --watch true`
+    );
   });
 
   // shipit.task("reload", async () => {
@@ -40,3 +94,5 @@ module.exports = (shipit) => {
   sudo systemctl enable linkshortener-staging.service
   sudo systemctl status linkshortener-staging
 */
+
+// source: https://www.digitalocean.com/community/tutorials/how-to-automate-your-node-js-production-deployments-with-shipit-on-centos-7

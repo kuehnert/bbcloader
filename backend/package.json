@@ -6,8 +6,7 @@
     "clean": "rimraf dist/* '{src,test}/**/*.{js,js.map}'",
     "deploy:production": "shipit production deploy",
     "start": "NODE_ENV=development nodemon src/app.js -e js",
-    "tsc:w": "tsc --project tsconfig.json -w",
-    "tsc": "tsc --project tsconfig.json"
+    "start:production": "NODE_ENV=production node src/app.js"
   },
   "author": "Matthias Kühnert",
   "private": true,
@@ -19,7 +18,8 @@
     "express": "4.17.1",
     "fast-html-parser": "1.0.1",
     "lodash": "4.17.15",
-    "request": "2.88.2"
+    "request": "2.88.2",
+    "shipit-shared": "^4.4.2"
   },
   "devDependencies": {
     "eslint": "7.2.0",

@@ -116,7 +116,7 @@ const createVideo = async (url) => {
   let video = new Video(url);
   video = await tagVideo(video);
 
-  if (completed.find(v => v.id === video.id) != null) {
+  if (completed.find((v) => v.id === video.id) != null) {
     const msg = `${video.filename} NOT added because it has been downloaded already.`;
     console.log(msg);
     return msg;
@@ -220,7 +220,7 @@ app.post("/videos", async (req, res) => {
       console.log(`Adding url ${url}...`);
       const video = await createVideo(url);
 
-      if (typeof video === 'string') {
+      if (typeof video === "string") {
         res.status(409).send({ error: video });
       } else {
         res.send(video);
