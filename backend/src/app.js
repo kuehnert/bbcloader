@@ -1,11 +1,12 @@
-require("dotenv").config();
-
 const _ = require("lodash");
 const { fork } = require("child_process");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const express = require("express");
 const path = require("path");
+const envPath = path.join(__dirname, '..', '.env');
+console.log('Loading env at ', envPath);
+require('dotenv').config({ path: envPath });
 
 const file = require("./utils/file");
 const {
@@ -232,7 +233,8 @@ app.post("/videos", async (req, res) => {
   }
 });
 
-if (process.env.PORT == null || process.env.NODE_ENV) {
+if (process.env.PORT == null || process.env.NODE_ENV == null) {
+  console.log('Error in process.env:', process.env);
   throw new Error("Env variables not loaded");
 }
 

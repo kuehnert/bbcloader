@@ -51,7 +51,7 @@ module.exports = (shipit) => {
       apps: [
         {
           name: '${appName}',
-          script: 'cd ${shipit.releasePath} && node /src/app.js',
+          script: 'cd ${shipit.releasePath} && node src/app.js',
           watch: true,
           autorestart: true,
           restart_delay: 5000,
