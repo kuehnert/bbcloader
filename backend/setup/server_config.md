@@ -5,7 +5,7 @@
 raspi-config, interface, activate ssh
 
 ## packages
-sudo apt install git nginx openvpn zsh python3-pip
+sudo apt install git nginx openvpn zsh python3-pip tmux
 sudo apt install samba samba-common-bin smbclient cifs-utils
 sudo python3 -m pip install click
 
