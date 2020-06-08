@@ -232,6 +232,10 @@ app.post("/videos", async (req, res) => {
   }
 });
 
+if (process.env.PORT == null || process.env.NODE_ENV) {
+  throw new Error("Env variables not loaded");
+}
+
 app.listen(process.env.PORT, "0.0.0.0", () => {
   console.log(
     `Server is up on port ${process.env.PORT} with env ${process.env.NODE_ENV}`
