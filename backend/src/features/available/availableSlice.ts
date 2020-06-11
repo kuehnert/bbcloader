@@ -22,7 +22,20 @@ const qs = {
 };
 const oneDay = 1000 * 60 * 60 * 24;
 
-const initialState = {
+export interface Available {
+  id: string;
+  programme: string;
+  categories: string[];
+  synopsis: string;
+  dateAdded: number;
+};
+
+export interface AvailableState {
+  lastCheck: number,
+  available: Available[],
+};
+
+const initialState: AvailableState = {
   lastCheck: new Date("2020-01-01").getTime(),
   available: [],
 };
@@ -31,12 +44,20 @@ export const availableSlice = createSlice({
   name: "available",
   initialState,
   reducers: {
-    loadAvailableSuccess(state, action: PayloadAction) {},
-    fetchAvailableSuccess(state, action: PayloadAction) {},
+    loadAvailableSuccess(state, action: PayloadAction<{available: Available[], lastCheck: number}>) {
+      const { available, lastCheck } = action.payload;
+      state.available = available;
+      state.lastCheck = lastCheck;
+    },
+    fetchAvailableSuccess(state, action: PayloadAction<{ available: Available[], lastCheck: number }>) {
+      const { available, lastCheck } = action.payload;
+      state.available = available;
+      state.lastCheck = lastCheck;
+    }
   },
 });
 
-export const { fetchAvailableSuccess } = availableSlice.actions;
+export const { fetchAvailableSuccess, loadAvailableSuccess } = availableSlice.actions;
 export default availableSlice.reducer;
 
 export const loadAvailable = (): AppThunk => async (dispatch, getState) => {
@@ -52,12 +73,12 @@ export const loadAvailable = (): AppThunk => async (dispatch, getState) => {
     } else {
       lastCheck = new Date("2020-01-01").getTime();
     }
-  } catch () {
+  } catch (error) {
     available = [];
   }
 
   // 2. check if we need to fetch new data: more than 1 day ago
-  if (getState().lastCheck + oneDay < new Date().getTime()) {
+  if (getState().available.lastCheck + oneDay < new Date().getTime()) {
 
   }
   try {
@@ -66,7 +87,7 @@ export const loadAvailable = (): AppThunk => async (dispatch, getState) => {
     return;
   }
 
-  dispatch(fetchAvailableSuccess(available));
+  dispatch(loadAvailableSuccess({available, lastCheck}));
 }
 
 export const fetchAvailable = (): AppThunk => async (dispatch, getState) => {
@@ -76,7 +97,7 @@ export const fetchAvailable = (): AppThunk => async (dispatch, getState) => {
   try {
     const buffer = fs.readFileSync(availableFilename);
     available = JSON.parse(buffer.toString());
-  } catch () {
+  } catch (error) {
     available = [];
   }
 
@@ -93,6 +114,6 @@ export const fetchAvailable = (): AppThunk => async (dispatch, getState) => {
   dispatch(fetchAvailableSuccess(available));
 }
 
-const saveAvailable = (available) => {
-  fs.writeFileSync(availableFilename, JSON.stringify(available));
-};
+// const saveAvailable = (available) => {
+//   fs.writeFileSync(availableFilename, JSON.stringify(available));
+// };

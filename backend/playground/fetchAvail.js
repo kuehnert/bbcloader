@@ -20,11 +20,20 @@ async function fetch() {
 
   console.log("programmeCount", programmeCount);
   const prgs = episodes
-    .map((e) => ({ id: e.id, title: (e.editorial_title || e.title).trim(), categories: e.categories, synopsis: e.synopses.programme_small }))
+    .map((e) => ({
+      id: e.id,
+      title: (e.editorial_title || e.title).trim(),
+      categories: e.categories,
+      synopsis: e.synopses.programme_small,
+    }))
     .sort((a, b) => a.title.localeCompare(b.title));
-  const prgStr = prgs.map((p) => `${p.id} ${p.title} (${p.categories.join(', ')}): ${p.synopsis}`).join("\n");
+  const prgStr = prgs
+    .map(
+      (p) => `${p.id} ${p.title} (${p.categories.join(", ")}): ${p.synopsis}`
+    )
+    .join("\n");
   console.log(`programmes:\n${prgStr}`);
-  console.log('programme detail', episodes[0]);
+  console.log("programme detail", episodes[0]);
 }
 
 fetch();

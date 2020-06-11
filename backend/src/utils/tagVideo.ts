@@ -1,22 +1,21 @@
-const parser = require('fast-html-parser');
-const axios = require('axios');
+import parser from 'fast-html-parser';
+import axios from 'axios';
+import { IVideo } from 'src/downloads/downloadSlice';
 
-function sentenceCase(str) {
-  if (str === null || str === '') return false;
-  return str
-    .toString()
-    .replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+function sentenceCase(str: string) {
+  if (str == null || str === '') return false;
+  return str.toString().replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 }
 
-function dd(number) {
-  if (number < 10) {
-    return `0${number}`;
+function dd(n: number) {
+  if (n < 10) {
+    return `0${n}`;
   }
 
-  return number;
+  return n;
 }
 
-async function getYearForFilm(url) {
+async function getYearForFilm(url: string) {
   try {
     console.log(`trying to find year for ${url}`);
 
@@ -24,7 +23,11 @@ async function getYearForFilm(url) {
     const root = parser.parse(response.data);
 
     const dateInfo = root.querySelector('.episode-metadata').childNodes[1].childNodes[1].rawText;
-    const year = dateInfo.match(/\d{4}/)[0];
+    if (dateInfo == null ) {
+      return -1;
+    }
+    const match = dateInfo.match(/\d{4}/);
+    const year = match && match[0];
     console.log('tagVideo year: ', url, year);
     return year;
   } catch (error) {
@@ -33,7 +36,7 @@ async function getYearForFilm(url) {
   }
 }
 
-const tagVideo = async (videoParam, cb) => {
+const tagVideo = async (videoParam: IVideo, cb?: (video: IVideo) => void) => {
   if (videoParam.tagged) {
     return null;
   }
@@ -59,9 +62,7 @@ const tagVideo = async (videoParam, cb) => {
   if (video.tagged) {
     video.programme = sentenceCase(video.programme.replace(/-/g, ' '));
     video.episodeTitle = sentenceCase(video.episodeTitle.replace(/-/g, ' '));
-    video.filename = `${video.programme} S${dd(video.series)}E${dd(video.episodeNumber)} ${
-      video.episodeTitle
-    }`;
+    video.filename = `${video.programme} S${dd(video.series)}E${dd(video.episodeNumber)} ${video.episodeTitle}`;
 
     if (cb) cb(video);
     return video;
@@ -90,4 +91,4 @@ const tagVideo = async (videoParam, cb) => {
   return null;
 };
 
-module.exports = tagVideo;
+export default tagVideo;

@@ -15,6 +15,6 @@
     "declaration": false,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["./src/**/*.ts"],
+  "include": ["./src/**/*.ts", "src/downloads/video.js.bk"],
   "exclude": ["node_modules", "./public", "dist", "test"]
 }
