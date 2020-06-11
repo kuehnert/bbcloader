@@ -32,7 +32,7 @@ process.on(
     ];
 
     try {
-      console.log(`Download started: ${video.url}`);
+      console.log(`Download started with command: ${process.env.YOUTUBE_DL_BIN} ${args.join(' ')}`);
       execFileSync(process.env.YOUTUBE_DL_BIN, args);
     } catch (error) {
       console.error("Download stopped with error!");
