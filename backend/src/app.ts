@@ -14,6 +14,8 @@ import { parseEpisodes } from './utils/parseEpisodes';
 import getExternalIP from './utils/getExternalIP';
 import tagVideo from './utils/tagVideo';
 import { IVideo, IVideoMap } from './downloads/downloadSlice';
+import store from './store';
+import { fetchAvailable } from './features/available/availableSlice';
 
 const app = express();
 const MY_IP = '37.24.163.194';
@@ -223,6 +225,11 @@ app.post('/videos', async (req, res) => {
   }
 });
 
+app.get('/available', async (req, res) => {
+  console.log('GET /available');
+  res.send(store.getState().available.available);
+});
+
 app.listen(+(process.env.PORT || 5000), '0.0.0.0', () => {
   console.log(`Server is up on port ${process.env.PORT} with env ${process.env.NODE_ENV}`);
 });
@@ -232,6 +239,8 @@ console.log('previously downloaded videos: ', completed.length);
 
 // Start background checks
 getExternalIP(updateExternalIP);
+store.dispatch(fetchAvailable());
 setInterval(() => {
   getExternalIP(updateExternalIP);
+  // store.dispatch(fetchAvailable());
 }, DOWNLOAD_INTERVAL);

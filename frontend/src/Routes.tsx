@@ -4,6 +4,7 @@ import history from './myhistory';
 import VideosPage from './views/VideosPage';
 import EditVideo from './features/videos/EditVideo';
 import Status404 from 'components/Status404';
+import AvailableIndex from 'features/available/AvailableIndex';
 
 function Routes() {
   return (
@@ -11,6 +12,8 @@ function Routes() {
       <Switch>
         <Route path="/" exact component={VideosPage} />
         <Route path="/downloads/:id/edit" component={EditVideo} />
+
+        <Route path="/available" component={AvailableIndex} />
 
         <Route component={Status404} />
       </Switch>
