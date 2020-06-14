@@ -22,7 +22,7 @@ const MakeFilename = () => {
 
   useEffect(() => {
     if (isFilm) {
-      setFieldValue('filename', `${programme}`);
+      setFieldValue('filename', `${programme.trim()}`);
     } else {
       if (series < 0 || episodeNumber < 0) {
         setFieldValue('series', 1);
@@ -31,7 +31,9 @@ const MakeFilename = () => {
 
       setFieldValue(
         'filename',
-        `${programme.trim()} ${formatEpisodeNumber({ series, episodeNumber })} ${episodeTitle.trim()}`,
+        `${programme} ${formatEpisodeNumber({ series, episodeNumber })} ${
+          episodeTitle ? episodeTitle.trim() : ''
+        }`.trim(),
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -44,12 +46,15 @@ const VideoSchema = Yup.object().shape({
   id: Yup.string().required('notwendig'),
   url: Yup.string().url().required('notwendig'),
   programme: Yup.string().required('notwendig'),
-  series: Yup.number().min(0),
-  episodeNumber: Yup.number().min(0),
+  isFilm: Yup.boolean(),
+  series: Yup.number().when('isFilm', { is: false, then: Yup.number().required().min(0) }),
+  episodeNumber: Yup.number().when('isFilm', { is: false, then: Yup.number().required() }),
   attempts: Yup.number().min(0),
 });
 
 const VideoForm: React.FC<Props> = ({ video, handleSubmit }) => {
+  console.log('VideoForm handleSubmit', handleSubmit);
+
   return (
     <Formik enableReinitialize initialValues={video} onSubmit={handleSubmit} validationSchema={VideoSchema}>
       {({ values, setFieldValue }) => (

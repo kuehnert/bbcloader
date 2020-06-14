@@ -4,6 +4,8 @@ import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
 import axios from 'axios';
+import { formatCategories } from '../../utils/formatters';
+import { startOfDay, startOfToday } from 'date-fns';
 
 const availableFilename = path.join(__dirname, '..', '..', '..', 'data', 'available.json');
 const groupId = 'p05pn9jr';
@@ -39,7 +41,7 @@ interface AvailableState {
 }
 
 const initialState: AvailableState = {
-  lastCheck: new Date('2020-01-01').getTime(),
+  lastCheck: startOfToday().getTime(),
   available: [],
 };
 
@@ -62,22 +64,24 @@ export const { fetchAvailableSuccess, fetchAvailableFailed } = availableSlice.ac
 export default availableSlice.reducer;
 
 export const fetchAvailable = (): AppThunk => async (dispatch, getState) => {
-  let loaded, available;
-  let lastCheck = new Date('2020-01-01').getTime(); // in the past
+  let available: Available[], fetched: Available[];
+  let lastCheck = -1;
 
   // 1. load file if present, else start with empty array;
   try {
     const buffer = fs.readFileSync(availableFilename);
-    loaded = JSON.parse(buffer.toString());
-    if (loaded.length > 0) {
-      lastCheck = loaded[0].addedOn;
+    available = JSON.parse(buffer.toString());
+    if (available.length > 0) {
+      lastCheck = available[0].addedOn;
     }
   } catch (error) {
-    loaded = [];
+    available = [];
+    lastCheck = startOfDay(new Date('2020-01-01')).getTime(); // in the past
   }
+  console.log(`loaded ${available.length} programmes`);
 
   // 2. check if we need to fetch new data: last check more than 1 day ago
-  if (getState().available.lastCheck + oneDay < new Date().getTime()) {
+  if (true || lastCheck + oneDay < new Date().getTime()) {
     const groupId = 'p05pn9jr';
     const url = `http://ibl.api.bbci.co.uk/ibl/v1/groups/${groupId}/episodes`;
     const qs = {
@@ -95,28 +99,32 @@ export const fetchAvailable = (): AppThunk => async (dispatch, getState) => {
       const programmeCount = programmes.group_episodes.count;
       const episodes = programmes.group_episodes.elements as ApiEpisode[];
 
-      console.log('fetched programmeCount', programmeCount);
-      available = episodes
-        .map((e) => ({
-          id: e.tleo_id,
-          title: (e.editorial_title || e.title).trim(),
-          categories: e.categories,
-          synopsis: e.synopses.programme_small,
-          addedOn: new Date().getTime(),
-        }))
-        .sort((a, b) => a.title.localeCompare(b.title)) as Available[];
-      lastCheck = new Date().getTime();
+      console.log(`fetched ${programmeCount} programmes`);
+      lastCheck = startOfToday().getTime();
+      fetched = episodes.map((e) => ({
+        id: e.tleo_id,
+        title: (e.editorial_title || e.title).trim(),
+        categories: formatCategories(e.categories),
+        synopsis: e.synopses.programme_small,
+        addedOn: lastCheck,
+      }));
+      const oldIds = available.map((a) => a.id);
+      fetched = fetched.filter((a) => !oldIds.includes(a.id)).sort((a, b) => a.title.localeCompare(b.title));
+      console.log(`of these: ${fetched.length} are new`);
+
+      available = fetched.concat(available);
+      // available = available.map((a) => (a.downloaded = finished.find((v) => v.id === a.id)));
       saveAvailable(available);
       // const prgStr = prgs.map((p) => `${p.id} ${p.title} (${p.categories.join(', ')}): ${p.synopsis}`).join('\n');
       // console.log(`programmes:\n${prgStr}`);
     } catch (error) {
       console.error('Error', error);
-      dispatch(fetchAvailableFailed(loaded));
+      dispatch(fetchAvailableFailed(available));
       return;
     }
   }
 
-  dispatch(fetchAvailableSuccess({ available: available || loaded, lastCheck }));
+  dispatch(fetchAvailableSuccess({ available, lastCheck }));
 };
 
 const saveAvailable = (available: Available[]) => {

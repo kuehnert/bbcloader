@@ -8,7 +8,7 @@ import { RootState } from '../../store';
 import { Available, fetchAvailable } from './availableSlice';
 
 const AvailableIndex: React.FC = () => {
-  const { available } = useSelector((state: RootState) => state.available);
+  const { available, lastBatchAdded } = useSelector((state: RootState) => state.available);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -30,13 +30,31 @@ const AvailableIndex: React.FC = () => {
     return available.categories.join(', ');
   };
 
+  const rowClassName = (available: Available) => {
+    if (available.downloaded) {
+      return { 'p-highlight2': true };
+    } else if (available.addedOn === lastBatchAdded) {
+      return { 'p-highlight': true };
+    } else {
+      return {};
+    }
+  };
+
   return (
     <div>
       <h1>Available Programmes</h1>
-      <DataTable value={available} autoLayout={true} paginator={true} rows={20}>
-        <Column header="Programme" field="title" sortable={true} />
+      <DataTable value={available} autoLayout={true} paginator={true} rows={20} rowClassName={rowClassName}>
+        <Column header="Programme" field="title" sortable={true} filter={true} filterMatchMode="contains" />
         <Column header="Synopsis" field="synopsis" />
-        <Column header="Genres" body={genreBody} />
+        <Column
+          header="Genres"
+          field="categories"
+          body={genreBody}
+          filter={true}
+          // filterField="genres"
+          filterMatchMode="contains"
+          // filterFunction={genreFilter}
+        />
         {/* <Column header="ID" field="id" /> */}
         <Column header="Added On" body={addedOnBody} sortable={true} />
         <Column header="Actions" body={actionBody} />

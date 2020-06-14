@@ -39,10 +39,24 @@ body .p-datatable {
     &:nth-child(even) {
       background: #666a;
     }
+
+    &.p-highlight {
+      background-color: transparentize(yellow, 0.8);
+
+      &:nth-child(even) {
+        background: transparentize(yellow, 0.7);
+      }
+    }
   }
 }
 
 body .p-card {
   background: #444a;
   color: $colorText;
+}
+
+body .p-toolbar {
+  background: transparentize(black, 0.6);
+  border: none;
+  padding: $spacing;
 }

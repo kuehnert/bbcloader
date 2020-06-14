@@ -1,9 +1,11 @@
+@import '../layout/variables';
+
 .tableButton {
   margin-left: 0;
   width: 8.35em;
 
   > span.p-button-text.p-c {
-    padding-top: 4px;
-    padding-bottom: 4px;
+    padding-top: $spacing/2;
+    padding-bottom: $spacing/2;
   }
 }

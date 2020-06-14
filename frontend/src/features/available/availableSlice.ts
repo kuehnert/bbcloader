@@ -8,10 +8,12 @@ export interface Available {
   title: string;
   categories: string[];
   addedOn: number;
+  downloaded?: boolean;
 }
 
 const initialState = {
   available: Array<Available>(),
+  lastBatchAdded: -1,
 };
 
 export const availableSlice = createSlice({
@@ -19,7 +21,9 @@ export const availableSlice = createSlice({
   initialState,
   reducers: {
     fetchAvailableSuccess(state, action: PayloadAction<Available[]>) {
-      state.available = action.payload;
+      const available = action.payload;
+      state.available = available;
+      state.lastBatchAdded = available[0].addedOn;
     },
   },
 });
