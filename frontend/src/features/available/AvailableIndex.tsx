@@ -1,36 +1,11 @@
-import classnames from 'classnames';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, RouteComponentProps } from 'react-router-dom';
-import { RootState } from '../../store';
-import { AutoComplete } from 'primereact/autocomplete';
-import { Button } from 'primereact/button';
-import { Calendar } from 'primereact/calendar';
-import { Card } from 'primereact/card';
-import { Chart } from 'primereact/chart';
-import { Checkbox } from 'primereact/checkbox';
+import TableButton from 'components/TableButton';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
-import { Dialog } from 'primereact/dialog';
-import { Dropdown } from 'primereact/dropdown';
-import { Growl } from 'primereact/growl';
-import { InputSwitch } from 'primereact/inputswitch';
-import { InputText } from 'primereact/inputtext';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { ListBox } from 'primereact/listbox';
-import { Menu } from 'primereact/menu';
-import { Menubar } from 'primereact/menubar';
-import { Paginator } from 'primereact/paginator';
-import { Panel } from 'primereact/panel';
-import { ProgressSpinner } from 'primereact/progressspinner';
-import { RadioButton } from 'primereact/radiobutton';
-import { SelectButton } from 'primereact/selectbutton';
-import { SplitButton } from 'primereact/splitbutton';
-import { Toolbar } from 'primereact/toolbar';
-import { Tree } from 'primereact/tree';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { formatDate } from 'utils/helpers';
+import { RootState } from '../../store';
 import { Available, fetchAvailable } from './availableSlice';
-import TableButton from 'components/TableButton';
 
 const AvailableIndex: React.FC = () => {
   const { available } = useSelector((state: RootState) => state.available);
@@ -51,14 +26,19 @@ const AvailableIndex: React.FC = () => {
     );
   };
 
+  const genreBody = (available: Available) => {
+    return available.categories.join(', ');
+  };
+
   return (
     <div>
       <h1>Available Programmes</h1>
       <DataTable value={available} autoLayout={true} paginator={true} rows={20}>
-        <Column header="Programme" field="title" />
+        <Column header="Programme" field="title" sortable={true} />
         <Column header="Synopsis" field="synopsis" />
-        <Column header="ID" field="id" />
-        <Column header="Added On" body={addedOnBody} />
+        <Column header="Genres" body={genreBody} />
+        {/* <Column header="ID" field="id" /> */}
+        <Column header="Added On" body={addedOnBody} sortable={true} />
         <Column header="Actions" body={actionBody} />
       </DataTable>
     </div>
