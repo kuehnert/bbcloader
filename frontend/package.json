@@ -7,7 +7,7 @@
     "build": "npm run clean && react-scripts build",
     "clean": "rimraf build/{*,.*}",
     "clear": "rimraf node_modules/{*,.*} build/{*,.*} package-lock.json",
-    "deploy": "env-path -p .env.production npm run build && rsync -az --exclude \".env\"  --force --delete --progress -e \"ssh -p22\" build/ mk@192.168.168.4:~/sites/bbcloader-webapp/",
+    "deploy:production": "env-path -p .env.production npm run build && rsync -az --exclude \".env\"  --force --delete --progress -e \"ssh -p22\" build/ mk@192.168.168.4:~/sites/bbcloader-webapp/",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
