@@ -1,35 +1,31 @@
 module.exports = (shipit) => {
-  require("shipit-deploy")(shipit);
-  require("shipit-shared")(shipit);
-  const appName = "bbcloader";
+  require('shipit-deploy')(shipit);
+  require('shipit-shared')(shipit);
+  const appName = 'bbcloader';
 
   shipit.initConfig({
     default: {
-      dirToCopy: "backend",
-      repositoryUrl: "https://github.com/kuehnert/bbcloader.git",
+      dirToCopy: 'backend',
+      repositoryUrl: 'https://github.com/kuehnert/bbcloader.git',
       keepReleases: 5,
       shared: {
         overwrite: true,
-        dirs: ["node_modules", "data"],
+        dirs: ['node_modules', 'data'],
       },
       deleteOnRollback: false,
     },
     production: {
-      servers: "mk@192.168.168.4",
-      deployTo: "/home/mk/sites/bbcloader-api",
-      branch: "master",
+      servers: 'mk@192.168.168.4',
+      deployTo: '/home/mk/sites/bbcloader-api',
+      branch: 'master',
     },
   });
 
-  const path = require("path");
-  const ecosystemFilePath = path.join(
-    shipit.config.deployTo,
-    "shared",
-    "ecosystem.config.js"
-  );
+  const path = require('path');
+  const ecosystemFilePath = path.join(shipit.config.deployTo, 'shared', 'ecosystem.config.js');
 
-  shipit.on("updated", () => {
-    shipit.start("npm-install", "copy-config");
+  shipit.on('updated', () => {
+    shipit.start('npm-install', 'copy-config');
   });
 
   // shipit.on("deployed", () => {
@@ -37,16 +33,16 @@ module.exports = (shipit) => {
   //   // shipit.start("reload");
   // });
 
-  shipit.on("published", () => {
-    shipit.start("pm2-server");
+  shipit.on('published', () => {
+    shipit.start('pm2-server');
   });
 
   shipit.on('rollback', () => {
     shipit.start('npm-install', 'copy-config');
   });
 
-  shipit.blTask("copy-config", async () => {
-    const fs = require("fs");
+  shipit.blTask('copy-config', async () => {
+    const fs = require('fs');
     const ecosystem = `module.exports = {
       apps: [
         {
@@ -64,26 +60,22 @@ module.exports = (shipit) => {
         }
       ]
     };`;
-    fs.writeFileSync("ecosystem.config.js", ecosystem);
+    fs.writeFileSync('ecosystem.config.js', ecosystem);
 
-    await shipit.copyToRemote("ecosystem.config.js", ecosystemFilePath);
+    await shipit.copyToRemote('ecosystem.config.js', ecosystemFilePath);
 
-    await shipit.copyToRemote(
-      `.env.${shipit.config.branch}`,
-      `${shipit.releasePath}/.env`
-    );
+    await shipit.copyToRemote(`.env.${shipit.config.branch}`, `${shipit.releasePath}/.env`);
   });
 
-  shipit.blTask("npm-install", async () => {
-    await shipit.remote(`cd ${shipit.releasePath} && npm install --production`);
-    // await shipit.remote(`cd ${shipit.releasePath} && npm run build`);
+  shipit.blTask('npm-install', async () => {
+    // await shipit.remote(`cd ${shipit.releasePath} && npm install --production`);
+    await shipit.remote(`cd ${shipit.releasePath} && npm install`);
+    await shipit.remote(`cd ${shipit.releasePath} && npm run build`);
   });
 
-  shipit.blTask("pm2-server", async () => {
+  shipit.blTask('pm2-server', async () => {
     await shipit.remote(`pm2 delete -s ${appName} || :`);
-    await shipit.remote(
-      `pm2 start ${ecosystemFilePath} --env production --watch true`
-    );
+    await shipit.remote(`pm2 start ${ecosystemFilePath} --env production --watch true`);
   });
 
   // shipit.task("reload", async () => {
