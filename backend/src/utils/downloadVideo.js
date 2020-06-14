@@ -46,6 +46,7 @@ process.on(
 
     // Move downloads into right folder
     video.downloaded = true;
+    video.downloadedAt = new Date().getTime();
     const finalDestination = path.join(
       video.isFilm ? process.env.DESTINATION_MOVIES : process.env.DESTINATION_TV,
       video.programme

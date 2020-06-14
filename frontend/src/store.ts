@@ -3,8 +3,10 @@ import { ThunkAction } from 'redux-thunk';
 import globalReducer from './features/globals/globalSlice';
 import videoReducer from './features/videos/videoSlice';
 import statusReducer from './features/status/statusSlice';
+import availableReducer from 'features/available/availableSlice';
 
 export const rootReducer = combineReducers({
+  available: availableReducer,
   globals: globalReducer,
   status: statusReducer,
   videos: videoReducer,

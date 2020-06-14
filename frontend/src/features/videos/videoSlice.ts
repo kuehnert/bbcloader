@@ -15,6 +15,8 @@ export interface Video {
   year: string;
   tagged: boolean;
   isFilm: boolean;
+  downloaded?: boolean;
+  downloadedAt?: Date;
 }
 
 type VideoSliceState = {
