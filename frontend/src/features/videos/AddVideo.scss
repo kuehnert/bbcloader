@@ -1,7 +1,7 @@
 @import '../../layout/variables';
 
 .dropzone {
-  padding: 24px 16px;
+  padding: 3*$spacing 2*$spacing;
   height: 100px;
   display: flex;
   justify-content: center;
@@ -12,18 +12,18 @@
 
   &.enter {
     background: #4448;
-    border: 8px dashed yellow;
+    border: $spacing dashed yellow;
   }
 
   &.success {
     color: $colorText;
     background: #2f28;
-    border: 8px solid green;
+    border: $spacing solid green;
   }
 
   &.error {
     color: $colorText;
     background: #f228;
-    border: 8px dashed red;
+    border: $spacing dashed red;
   }
 }

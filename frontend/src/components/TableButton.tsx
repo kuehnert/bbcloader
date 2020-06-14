@@ -33,7 +33,11 @@ const TableButton: React.FC<Props> = (props) => {
   if (disabled) {
     return makeButton;
   } else if (url) {
-    return <a href={`${url}`}>{makeButton}</a>;
+    return (
+      <a href={`${url}`} target="_new">
+        {makeButton}
+      </a>
+    );
   } else if (to) {
     return <Link to={to}>{makeButton}</Link>;
   } else {

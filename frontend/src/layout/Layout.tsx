@@ -5,12 +5,14 @@ import 'primereact/resources/themes/nova-light/theme.css';
 import React from 'react';
 import Alerts from '../components/Alerts';
 import Routes from '../Routes';
+import Header from './Header';
 import './layout.scss';
 
 const Layout: React.FC = () => {
   return (
     <div className="layout-main">
       <Alerts />
+      <Header />
       <Routes />
     </div>
   );

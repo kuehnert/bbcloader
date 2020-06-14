@@ -1,22 +1,23 @@
-const fs = require('fs');
-const path = require('path');
-const _ = require('lodash');
+import fs from 'fs';
+import path from 'path';
+import _ from 'lodash';
+import { IVideo, IVideoMap } from 'src/downloads/downloadSlice';
 
 const videosFilename = path.join(__dirname, '..', '..', 'data', 'videos.json');
 const completedFilename = path.join(__dirname, '..', '..', 'data', 'videosDone.json');
 
-function shareAvailable(share) {
+export function shareAvailable(share: string) {
   return fs.existsSync(share);
 }
 
-const saveVideos = (videos, completed) => {
+export const saveVideos = (videos: IVideoMap, completed?: IVideo[]) => {
   fs.writeFileSync(videosFilename, JSON.stringify(videos));
   if (completed) {
     fs.writeFileSync(completedFilename, JSON.stringify(completed));
   }
 };
 
-const loadVideos = () => {
+export const loadVideos = () => {
   try {
     const buffer = fs.readFileSync(videosFilename);
     return JSON.parse(buffer.toString());
@@ -25,7 +26,7 @@ const loadVideos = () => {
   }
 };
 
-const loadCompleted = () => {
+export const loadCompleted = () => {
   try {
     const buffer = fs.readFileSync(completedFilename);
     let completed = JSON.parse(buffer.toString());
@@ -38,7 +39,7 @@ const loadCompleted = () => {
   }
 };
 
-const moveVideo = (sourceDir, destination, filename, ext) => {
+export const moveVideo = (sourceDir: string, destination: string, filename: string, ext: string) => {
   if (!fs.existsSync(destination)) {
     console.log(`Creating folder '${destination}'`);
     fs.mkdirSync(destination, { recursive: true });
@@ -48,12 +49,4 @@ const moveVideo = (sourceDir, destination, filename, ext) => {
   const toFile = path.join(destination, `${filename}.${ext}`);
 
   fs.renameSync(fromFile, toFile);
-};
-
-module.exports = {
-  loadCompleted,
-  loadVideos,
-  saveVideos,
-  moveVideo,
-  shareAvailable,
 };
