@@ -1,6 +1,6 @@
 import parser from 'fast-html-parser';
 import axios from 'axios';
-import { IVideo } from 'src/downloads/downloadSlice';
+import { IVideo } from '../features/downloads/downloadSlice';
 
 function sentenceCase(str: string) {
   if (str == null || str === '') return false;

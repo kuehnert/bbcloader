@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
-import { IVideo, IVideoMap } from 'src/downloads/downloadSlice';
+import { IVideo, IVideoMap } from '../features/downloads/downloadSlice';
 
 const videosFilename = path.join(__dirname, '..', '..', 'data', 'videos.json');
 const completedFilename = path.join(__dirname, '..', '..', 'data', 'videosDone.json');

@@ -4,7 +4,7 @@ import path from 'path';
 import { moveVideo } from './file';
 import { START_DOWNLOAD, DOWNLOAD_SUCCESSFUL, DOWNLOAD_ERROR } from '../messages';
 import ttml2ass from './ttml2ass';
-import { IVideo } from 'src/downloads/downloadSlice';
+import { IVideo } from '../features/downloads/downloadSlice';
 
 process.on('message', ({ messageType, video: inputVideo }) => {
   if (messageType !== START_DOWNLOAD) {
@@ -32,6 +32,7 @@ process.on('message', ({ messageType, video: inputVideo }) => {
     console.log(error.message); // Holds the message you typically want.
     console.log(error.stderr); // Holds the stderr output. Use `.toString()`.
     console.log(error.stdout); // Holds the stdout output. Use `.toString()`.
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     process.send!({ messageType: DOWNLOAD_ERROR, video: video, error: error });
     return;
   }

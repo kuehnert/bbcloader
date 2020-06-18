@@ -11,7 +11,7 @@ import { START_DOWNLOAD, DOWNLOAD_SUCCESSFUL, DOWNLOAD_ERROR } from './messages'
 import { parseEpisodes } from './utils/parseEpisodes';
 import getExternalIP from './utils/getExternalIP';
 import tagVideo from './utils/tagVideo';
-import { IVideo, IVideoMap } from './downloads/downloadSlice';
+import { IVideo, IVideoMap } from './features/downloads/downloadSlice';
 import store from './store';
 import { fetchAvailable } from './features/available/availableSlice';
 
