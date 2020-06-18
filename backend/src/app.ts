@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 import _ from 'lodash';
 import { fork } from 'child_process';
 import bodyParser from 'body-parser';
@@ -26,7 +24,7 @@ let videos: IVideoMap = file.loadVideos();
 let currentVideo: IVideo | undefined;
 let externalIP: string | null = null;
 let lastUpdate: Date | null = null;
-let shareAvailable: boolean = false;
+let shareAvailable = false;
 
 function isOnline() {
   return process.env.NODE_ENV === 'development' || (externalIP && externalIP !== MY_IP);
@@ -47,7 +45,7 @@ const startNextDownload = async () => {
   }
 
   if (currentVideo == null) {
-    currentVideo = Object.values(videos).find((v) => v.tagged && v.attempts < 5);
+    currentVideo = Object.values(videos).find(v => v.tagged && v.attempts < 5);
 
     if (currentVideo == null) {
       console.log('No download in list');
@@ -58,22 +56,25 @@ const startNextDownload = async () => {
       forked = fork(path.join(__dirname, 'utils/downloadVideo'));
       forked.send({ messageType: START_DOWNLOAD, video: currentVideo });
 
-      forked.on('message', ({ messageType, error, video }: { messageType: any; error: any; video: IVideo }) => {
-        if (messageType === DOWNLOAD_SUCCESSFUL) {
-          forked.kill();
-          videos = _.omit(videos, video.id);
-          completed.unshift(video);
-          file.saveVideos(videos, completed);
-          currentVideo = undefined;
-          startNextDownload();
-        } else if (messageType === DOWNLOAD_ERROR) {
-          forked.kill();
-          console.error(`Error downloading ${video.url}: ${error}`);
-          videos[video.id] = video;
-          file.saveVideos(videos);
-          currentVideo = undefined;
+      forked.on(
+        'message',
+        ({ messageType, error, video }: { messageType: any; error: any; video: IVideo }) => {
+          if (messageType === DOWNLOAD_SUCCESSFUL) {
+            forked.kill();
+            videos = _.omit(videos, video.id);
+            completed.unshift(video);
+            file.saveVideos(videos, completed);
+            currentVideo = undefined;
+            startNextDownload();
+          } else if (messageType === DOWNLOAD_ERROR) {
+            forked.kill();
+            console.error(`Error downloading ${video.url}: ${error}`);
+            videos[video.id] = video;
+            file.saveVideos(videos);
+            currentVideo = undefined;
+          }
         }
-      });
+      );
     }
   } else {
     console.log('Download in progress. Skipping.');
@@ -83,13 +84,14 @@ const startNextDownload = async () => {
 const updateExternalIP = (ip: string) => {
   lastUpdate = new Date();
   externalIP = ip;
-  shareAvailable = file.shareAvailable(process.env.DOWNLOAD_DIR!);
+  shareAvailable =
+    process.env.DOWNLOAD_DIR != null && file.shareAvailable(process.env.DOWNLOAD_DIR);
   console.log(
     'updateExternalIP:',
     externalIP,
     isOnline() ? 'VPN connected,' : 'VPN not connected,',
     shareAvailable ? 'share mounted,' : 'share not mounted,',
-    lastUpdate,
+    lastUpdate
   );
 
   startNextDownload();
@@ -109,7 +111,7 @@ const createVideo = async (url: string) => {
   let video = new IVideo(url);
   video = await tagVideo(video);
 
-  if (completed.find((v) => v.id === video.id) != null) {
+  if (completed.find(v => v.id === video.id) != null) {
     const msg = `${video.filename} NOT added because it has been downloaded already.`;
     console.log(msg);
     return msg;
@@ -196,17 +198,17 @@ app.post('/videos', async (req, res) => {
       parseEpisodes(url, async (urls: string[]) => {
         const promises = Array<any>();
 
-        urls.forEach((u) => {
+        urls.forEach(u => {
           promises.push(createVideo(u));
         });
 
         Promise.all(promises)
-          .then((data) => {
-            const newVideos = data.filter((v) => v !== null);
+          .then(data => {
+            const newVideos = data.filter(v => v !== null);
             res.send(newVideos);
             startNextDownload();
           })
-          .catch((err) => console.error(err));
+          .catch(err => console.error(err));
       });
     } else {
       // Individual video

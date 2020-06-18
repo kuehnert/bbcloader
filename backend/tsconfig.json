@@ -11,5 +11,5 @@
     "baseUrl": ".",
     "experimentalDecorators": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*.ts"]
 }

@@ -1,14 +1,13 @@
 {
   "name": "bbcloader",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "scripts": {
     "build": "npm run tsc",
     "clean": "rimraf dist/*",
     "clear": "rimraf dist/* node_modules/{*,.bin}",
     "deploy:production": "shipit production deploy",
-    "deploy:poormans": "env-path -p .env.master npm run build && rsync -az --exclude \".env\"  --force --delete --progress -e \"ssh -p22\" dist/ mk@192.168.168.4:~/sites/bbcloader-api/poormans",
-    "start:production": "cross-env NODE_ENV=production node dist/app.js",
-    "start": "NODE_ENV=development nodemon --watch \"src/**/*.ts\" --ignore \"node_modules/**/*\" --exec ts-node src/app.ts",
+    "start:production": "node -r dotenv/config dist/app.js",
+    "start": "nodemon --watch \"src/**/*.ts\" --ignore \"node_modules/**/*\" --exec ts-node -r dotenv/config src/app.ts",
     "tsc:w": "tsc --project tsconfig.json -w",
     "tsc": "tsc --project tsconfig.json"
   },
