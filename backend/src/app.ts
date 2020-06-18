@@ -55,7 +55,7 @@ const startNextDownload = async () => {
       console.log(`Starting download ${currentVideo.url}...`);
       currentVideo.attempts += 1;
 
-      forked = fork('./src/utils/downloadVideo.js');
+      forked = fork(path.join(__dirname, 'utils/downloadVideo'));
       forked.send({ messageType: START_DOWNLOAD, video: currentVideo });
 
       forked.on('message', ({ messageType, error, video }: { messageType: any; error: any; video: IVideo }) => {

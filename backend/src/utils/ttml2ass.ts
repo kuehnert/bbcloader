@@ -1,10 +1,10 @@
-const formatLine = (line) => {
-  const begin = line.match(/begin="([^"]+)"/)[1];
-  const end = line.match(/end="([^"]+)"/)[1];
+const formatLine = (line: string) => {
+  const begin = line.match(/begin="([^"]+)"/)![1];
+  const end = line.match(/end="([^"]+)"/)![1];
   const styleRes = line.match(/style="([^"]+)"/);
   const style = styleRes ? styleRes[1] : 'Default';
   const text = line
-    .match(/>(.+)<\/p/)[1]
+    .match(/>(.+)<\/p/)![1]
     .replace(/<br \/>/g, '\\N')
     .replace(/<span tts:color="white">/g, '{\\c&Hffffff&}')
     .replace(/<span tts:color="yellow">/g, '{\\c&H00ffff&}')
@@ -15,7 +15,7 @@ const formatLine = (line) => {
   return ass;
 };
 
-const ttml2ass = (ttml, title) => {
+const ttml2ass = (ttml: string, title: string) => {
   const preamble = `[Script Info]
 ; This is an Advanced Sub Station Alpha v4+ script.
 Title: ${title}
@@ -37,7 +37,7 @@ Format: Layer, Start, End, Style, Actor, MarginL, MarginR, MarginV, Effect, Text
 `;
 
   let out = `${preamble}`;
-  const lines = ttml.match(/<p .+<\/p>/g);
+  const lines = ttml.match(/<p .+<\/p>/g)!;
 
   console.log(`${lines.length} lines found.`);
 
@@ -48,4 +48,4 @@ Format: Layer, Start, End, Style, Actor, MarginL, MarginR, MarginV, Effect, Text
   return out;
 };
 
-module.exports = ttml2ass;
+export default ttml2ass;

@@ -10,6 +10,8 @@ export class IVideo {
   year?: string;
   tagged: boolean = false;
   isFilm: boolean = true;
+  downloaded?: boolean = false;
+  downloadedAt?: number;
 
   constructor(url: string) {
     const match = url.match(/episode\/(\w+)\//);

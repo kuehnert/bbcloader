@@ -1,20 +1,15 @@
 {
   "compilerOptions": {
-    "target": "esnext",
     "module": "commonjs",
-    "strict": false,
     "esModuleInterop": true,
-    "baseUrl": ".",
-    "outDir": "./dist",
-    "lib": ["es2016", "dom"],
-    "typeRoots": ["./node_modules/@types"],
+    "allowSyntheticDefaultImports": true,
+    "target": "es6",
+    "strict": true,
     "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "sourceMap": true,
-    "declaration": false,
-    "allowSyntheticDefaultImports": true
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "experimentalDecorators": true
   },
-  "include": ["./src/**/*.ts"],
-  "exclude": ["node_modules", "./public", "dist", "test"]
+  "include": ["src/**/*"]
 }
