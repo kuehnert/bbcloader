@@ -1,7 +1,13 @@
 import { format } from 'date-fns';
 
-export function formatDate(date: string | Date, formatStr = 'MM/yy') {
-  return format(new Date(date), formatStr);
+const dateFormats: { [key: string]: string } = {
+  month: 'MM/yy',
+  day: 'dd/MM/yy',
+  hour: 'dd/MM/yy, H.m',
+};
+
+export function formatDate(date: string | Date, formatStr = 'hour') {
+  return format(new Date(date), dateFormats[formatStr] || dateFormats['hour']);
 }
 
 const twoDigits = (n: number) => (n < 10 ? `0${n}` : n);

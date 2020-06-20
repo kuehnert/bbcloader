@@ -1,13 +1,15 @@
 $spacing: 0.25rem;
 
-$colorText: #eee;
-$colorTitle: yellow;
-$colorBack: #A41213;
-$colorSuccess: green;
-
 $color1: #f87e1c;
 $color2: #1976d2;
 $color3: #79b58f;
 $color4: #22999b;
 $color5: #fced63;
 $color6: #9b4f07;
+
+$colorText: #eee;
+$colorTitle: $color5;
+$colorBack: #a41213;
+$colorStatusSuccess: rgba(0, 100, 0, 0.7);
+$colorStatusWarn: rgba($color5, 0.7);
+$colorBg: #4448;

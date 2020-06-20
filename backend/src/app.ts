@@ -23,6 +23,7 @@ let forked: any = null;
 let videos: IVideoMap = file.loadVideos();
 let currentVideo: IVideo | undefined;
 let externalIP: string | null = null;
+let country = 'Unknown';
 let lastUpdate: Date | null = null;
 let shareAvailable = false;
 
@@ -81,9 +82,10 @@ const startNextDownload = async () => {
   }
 };
 
-const updateExternalIP = (ip: string) => {
+const updateExternalIP = (result: { ip: string; country: string }) => {
   lastUpdate = new Date();
-  externalIP = ip;
+  externalIP = result.ip;
+  country = result.country;
   shareAvailable =
     process.env.DOWNLOAD_DIR != null && file.shareAvailable(process.env.DOWNLOAD_DIR);
   console.log(
@@ -135,12 +137,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/status', async (req: express.Request, res: express.Response) => {
   console.log('GET /status');
   await getExternalIP(updateExternalIP);
+  const env = _.pick(
+    process.env,
+    'NODE_ENV',
+    'DOWNLOAD_DIR',
+    'DESTINATION_TV',
+    'DESTINATION_MOVIES'
+  );
 
   res.send({
     currentVideo,
     externalIP,
+    country,
     isOnline: isOnline(),
     lastUpdate,
+    env,
   });
 });
 

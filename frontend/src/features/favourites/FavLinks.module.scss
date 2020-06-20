@@ -12,8 +12,10 @@
   color: $colorText;
   cursor: pointer;
   display: inline-block;
-  margin: 0 $spacing*2;
-  padding: 0.5*$spacing $spacing $spacing;
+  margin: $spacing $spacing*2;
+  padding: $spacing $spacing $spacing;
+  text-align: center;
+  height: 3.8rem;
 
   &:hover {
     background: darken($colorBack, 10%);
@@ -24,5 +26,11 @@
     font-size: 2rem;
     top: 3px;
     margin-right: $spacing;
+  }
+}
+
+@media(max-width: 1000px) {
+  .label {
+    display: none;
   }
 }

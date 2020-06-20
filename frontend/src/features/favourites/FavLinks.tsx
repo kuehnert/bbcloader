@@ -24,8 +24,10 @@ const FavLinks: React.FC = () => {
         className={classnames('p-col', className)}
         color="secondary"
       >
-        <i className={classnames(link.icon, styles.icon)} />
-        {link.name}
+        <span>
+          <i className={classnames(link.icon, styles.icon)} />
+          <span className={styles.label}>{link.name}</span>
+        </span>
       </div>
     ));
   };

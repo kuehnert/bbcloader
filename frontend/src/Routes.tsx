@@ -4,7 +4,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import EditVideo from './features/videos/EditVideo';
 import VideosPage from './features/videos/VideoIndex';
-import CompletedIndex from './features/completed/CompletedIndex'
+import CompletedIndex from './features/completed/CompletedIndex';
 
 function Routes() {
   return (

@@ -1,6 +1,6 @@
 {
   "name": "bbcloader",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "scripts": {
     "build": "npm run tsc",
     "clean": "rimraf dist/*",

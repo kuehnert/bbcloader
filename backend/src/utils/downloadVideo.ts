@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import fs from 'fs';
 import { execFileSync } from 'child_process';
 import path from 'path';

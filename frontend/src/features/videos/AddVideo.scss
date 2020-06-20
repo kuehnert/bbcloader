@@ -6,12 +6,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #4448;
+  background: $colorBg;
   color: yellow;
   font-size: large;
 
   &.enter {
-    background: #4448;
+    background: $colorBg;
     border: $spacing dashed yellow;
   }
 

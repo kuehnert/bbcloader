@@ -4,6 +4,7 @@ import AddVideo from './AddVideo';
 import VideoList from './VideoList';
 import FavLinks from '../favourites/FavLinks';
 import styles from './VideoIndex.module.scss';
+import DebugCard from 'components/DebugCard';
 
 export default function VideosPage() {
   return (
@@ -19,6 +20,8 @@ export default function VideosPage() {
 
       <h2>Download list</h2>
       <VideoList />
+
+      <DebugCard />
     </div>
   );
 }

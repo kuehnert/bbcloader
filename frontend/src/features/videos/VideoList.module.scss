@@ -4,12 +4,12 @@
   width: 100%;
   margin-bottom: $spacing * 3;
   overflow-x: auto;
-  background: #4448;
+  background: $colorBg;
 }
 
 .novideos {
   height: 100;
-  background: #4448;
+  background: $colorBg;
   display: flex;
   flex-direction: column;
   justify-content: center;

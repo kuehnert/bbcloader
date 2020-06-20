@@ -1,0 +1,26 @@
+@import '../../layout/variables';
+
+.statusCard {
+  height: 100px;
+  background: $colorBg;
+  border-radius: $spacing*2;
+
+  > .p-card-body  > .p-card-title {
+    font-size: 1rem;
+    font-weight: normal;
+  }
+
+  .content {
+    font-size: 1.5rem;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  &.warnCard {
+    background: $colorStatusWarn;
+  }
+
+  &.greenCard {
+    background: $colorStatusSuccess;
+  }
+}
