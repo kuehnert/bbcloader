@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 const dateFormats: { [key: string]: string } = {
   month: 'MM/yy',
   day: 'dd/MM/yy',
-  hour: 'dd/MM/yy, H.m',
+  hour: 'dd/MM/yy, HH:mm',
 };
 
 export function formatDate(date: string | Date, formatStr = 'hour') {
