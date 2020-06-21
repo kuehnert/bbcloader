@@ -2,18 +2,13 @@ import { Card } from 'primereact/card';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
+import styles from './DebugCard.module.scss';
 
 const DebugCard: React.FC = () => {
   const { debug, env, externalIP } = useSelector((state: RootState) => state.status);
 
   const envTable = () => (
-    <table>
-      <thead>
-        <tr>
-          <th>Variable</th>
-          <th>Value</th>
-        </tr>
-      </thead>
+    <table className={styles.debugTable}>
       <tbody>
         <tr>
           <th>External IP</th>

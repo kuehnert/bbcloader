@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk } from '../../store';
-import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
 import axios from 'axios';
@@ -8,15 +7,6 @@ import { formatCategories } from '../../utils/formatters';
 import { startOfDay, startOfToday } from 'date-fns';
 
 const availableFilename = path.join(__dirname, '..', '..', '..', 'data', 'available.json');
-const groupId = 'p05pn9jr';
-const url = `http://ibl.api.bbci.co.uk/ibl/v1/groups/${groupId}/episodes`;
-const qs = {
-  rights: 'web',
-  page: 1,
-  per_page: 200,
-  initial_child_count: 1,
-  availability: 'available',
-};
 const oneDay = 1000 * 60 * 60 * 24;
 
 interface ApiEpisode {
@@ -49,7 +39,10 @@ export const availableSlice = createSlice({
   name: 'available',
   initialState,
   reducers: {
-    fetchAvailableSuccess(state, action: PayloadAction<{ available: Available[]; lastCheck: number }>) {
+    fetchAvailableSuccess(
+      state,
+      action: PayloadAction<{ available: Available[]; lastCheck: number }>
+    ) {
       const { available, lastCheck } = action.payload;
       state.available = available;
       state.lastCheck = lastCheck;
@@ -63,7 +56,7 @@ export const availableSlice = createSlice({
 export const { fetchAvailableSuccess, fetchAvailableFailed } = availableSlice.actions;
 export default availableSlice.reducer;
 
-export const fetchAvailable = (): AppThunk => async (dispatch, getState) => {
+export const fetchAvailable = (): AppThunk => async (dispatch) => {
   let available: Available[], fetched: Available[];
   let lastCheck = -1;
 
@@ -81,7 +74,7 @@ export const fetchAvailable = (): AppThunk => async (dispatch, getState) => {
   console.log(`loaded ${available.length} programmes`);
 
   // 2. check if we need to fetch new data: last check more than 1 day ago
-  if (true || lastCheck + oneDay < new Date().getTime()) {
+  if (lastCheck + oneDay < new Date().getTime()) {
     const groupId = 'p05pn9jr';
     const url = `http://ibl.api.bbci.co.uk/ibl/v1/groups/${groupId}/episodes`;
     const qs = {
@@ -101,15 +94,17 @@ export const fetchAvailable = (): AppThunk => async (dispatch, getState) => {
 
       console.log(`fetched ${programmeCount} programmes`);
       lastCheck = startOfToday().getTime();
-      fetched = episodes.map((e) => ({
+      fetched = episodes.map(e => ({
         id: e.tleo_id,
         title: (e.editorial_title || e.title).trim(),
         categories: formatCategories(e.categories),
         synopsis: e.synopses.programme_small,
         addedOn: lastCheck,
       }));
-      const oldIds = available.map((a) => a.id);
-      fetched = fetched.filter((a) => !oldIds.includes(a.id)).sort((a, b) => a.title.localeCompare(b.title));
+      const oldIds = available.map(a => a.id);
+      fetched = fetched
+        .filter(a => !oldIds.includes(a.id))
+        .sort((a, b) => a.title.localeCompare(b.title));
       console.log(`of these: ${fetched.length} are new`);
 
       available = fetched.concat(available);

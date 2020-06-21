@@ -33,12 +33,12 @@ export const globalSlice = createSlice({
       state.notFound = action.payload;
     },
     setErrorAlert(state, action: PayloadAction<string>) {
-      const alert = { severity: 'error', summary: 'Fehler', detail: action.payload };
+      const alert = { severity: 'error', summary: action.payload };
       state.alerts[alert.severity] = alert;
       state.isFetching = false;
     },
     setSuccessAlert(state, action: PayloadAction<string>) {
-      const alert = { severity: 'success', summary: 'Erfolg', detail: action.payload };
+      const alert = { severity: 'success', summary: action.payload };
       state.alerts[alert.severity] = alert;
       state.isFetching = false;
     },

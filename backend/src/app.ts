@@ -229,7 +229,7 @@ app.post('/videos', async (req, res) => {
       if (typeof video === 'string') {
         res.status(409).send({ error: video });
       } else {
-        res.send(video);
+        res.send([video]);
         startNextDownload();
       }
     }

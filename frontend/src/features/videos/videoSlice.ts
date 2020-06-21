@@ -39,8 +39,8 @@ export const videoSlice = createSlice({
     fetchFinishedSuccess(state, action: PayloadAction<Video[]>) {
       state.finished = action.payload;
     },
-    createVideoSuccess(state, action: PayloadAction<Video>) {
-      state.downloads.push(action.payload);
+    createVideoSuccess(state, action: PayloadAction<Video[]>) {
+      state.downloads = state.downloads.concat(action.payload);
     },
     updateVideoSuccess(state, action: PayloadAction<Video>) {
       const video = action.payload;
@@ -90,18 +90,19 @@ export const fetchFinished = (): AppThunk => async (dispatch) => {
 };
 
 export const createVideo = (url: string): AppThunk => async (dispatch) => {
-  let video;
+  let videos, count;
   try {
     const response = await backend.post('/videos', { url });
-    video = response.data;
+    videos = response.data;
+    count = videos.length;
   } catch (error) {
     console.error(error.response);
     dispatch(setErrorAlert(error.response.data.error));
     return;
   }
 
-  dispatch(setSuccessAlert('download added'));
-  dispatch(createVideoSuccess(video));
+  dispatch(setSuccessAlert(`${count} download${count > 1 ? 's' : ''} added`));
+  dispatch(createVideoSuccess(videos));
 };
 
 export const updateVideo = (values: Video): AppThunk => async (dispatch) => {

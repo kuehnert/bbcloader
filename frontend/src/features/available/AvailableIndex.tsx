@@ -16,7 +16,7 @@ const AvailableIndex: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const addedOnBody = (available: Available) => formatDate(new Date(available.addedOn));
+  const addedOnBody = (available: Available) => formatDate(new Date(available.addedOn), 'day');
 
   const actionBody = (available: Available) => {
     return (
