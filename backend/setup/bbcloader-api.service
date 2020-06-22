@@ -5,12 +5,10 @@ After=network-online.target
 [Service]
 Type=simple
 Restart=on-failure
-RestartSec=10
-Environment=NODE_ENV=production
-# ExecStart=/home/pi/.nvm/versions/node/v12.4.0/bin/npm start
-ExecStart=/home/pi/GITProjects/bbcloader/backend/start.sh
-WorkingDirectory=/home/pi/GITProjects/bbcloader/backend
-User=pi
+RestartSec=30
+ExecStart=/home/mk/sites/bbcloader-api/current/bin/start.sh
+WorkingDirectory=/home/mk/sites/bbcloader-api/current
+User=mk
 KillSignal=SIGQUIT
 StandardOutput=syslog
 StandardError=syslog

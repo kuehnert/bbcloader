@@ -2,7 +2,7 @@ server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
 
-	root /home/pi/sites/bbcloader-webapp;
+	root /home/mk/sites/bbcloader-webapp;
 
 	index index.html index.htm index.nginx-debian.html;
 

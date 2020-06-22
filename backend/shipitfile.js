@@ -1,7 +1,6 @@
-module.exports = (shipit) => {
+module.exports = shipit => {
   require('shipit-deploy')(shipit);
   require('shipit-shared')(shipit);
-  const appName = 'bbcloader';
 
   shipit.initConfig({
     default: {
@@ -21,20 +20,12 @@ module.exports = (shipit) => {
     },
   });
 
-  const path = require('path');
-  const ecosystemFilePath = path.join(shipit.config.deployTo, 'shared', 'ecosystem.config.js');
-
   shipit.on('updated', () => {
     shipit.start('npm-install', 'copy-config');
   });
 
-  // shipit.on("deployed", () => {
-  //   shipit.start("build");
-  //   // shipit.start("reload");
-  // });
-
   shipit.on('published', () => {
-    shipit.start('pm2-server');
+    shipit.start('reload');
   });
 
   shipit.on('rollback', () => {
@@ -42,29 +33,8 @@ module.exports = (shipit) => {
   });
 
   shipit.blTask('copy-config', async () => {
-    const fs = require('fs');
-    const ecosystem = `module.exports = {
-      apps: [
-        {
-          name: '${appName}',
-          script: 'cd ${shipit.releasePath} && npm run start:production',
-          watch: true,
-          autorestart: true,
-          restart_delay: 5000,
-          env: {
-            NODE_ENV: 'development'
-          },
-          env_production: {
-            NODE_ENV: 'production'
-          }
-        }
-      ]
-    };`;
-    fs.writeFileSync('ecosystem.config.js', ecosystem);
-
-    await shipit.copyToRemote('ecosystem.config.js', ecosystemFilePath);
-
     await shipit.copyToRemote(`.env.${shipit.config.branch}`, `${shipit.releasePath}/.env`);
+    await shipit.copyToRemote(`bin`, `${shipit.releasePath}/bin`);
   });
 
   shipit.blTask('npm-install', async () => {
@@ -73,14 +43,9 @@ module.exports = (shipit) => {
     await shipit.remote(`cd ${shipit.releasePath} && npm run build`);
   });
 
-  shipit.blTask('pm2-server', async () => {
-    await shipit.remote(`pm2 delete -s ${appName} || :`);
-    await shipit.remote(`pm2 start ${ecosystemFilePath} --env production --watch true`);
+  shipit.blTask('reload', async () => {
+    await shipit.remote(`sudo ${shipit.releasePath}/bin/restart_bbcloader.sh`);
   });
-
-  // shipit.task("reload", async () => {
-  //   await shipit.remote("sudo /home/pi/bin/restart_linkshortener");
-  // });
 };
 
 /*

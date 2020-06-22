@@ -22,7 +22,11 @@ sudo apt-get install -y nodejs
 * /etc/nginx
 
 
+## service
+
+* copy file to /lib/systemd/system/bbcloader-api.service
+
+
 ## iptables
 
 ## openvpn
-
