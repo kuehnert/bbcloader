@@ -1,0 +1,1 @@
+mk ALL=NOPASSWD:/home/mk/sites/bbcloader-api/current/bin/restart_bbcloader.sh

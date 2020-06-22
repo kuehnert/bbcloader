@@ -25,8 +25,10 @@ sudo apt-get install -y nodejs
 ## service
 
 * copy file to /lib/systemd/system/bbcloader-api.service
-
+* cp 10-mk-pwless to /etc/sudoers.d/
 
 ## iptables
 
 ## openvpn
+
+https://www.cyberciti.biz/faq/ubuntu-20-04-lts-set-up-openvpn-server-in-5-minutes/
