@@ -16,7 +16,7 @@ import store from './store';
 import { fetchAvailable } from './features/available/availableSlice';
 
 const app = express();
-const MY_IP = '37.24.163.194';
+const MY_IP = '37.24.163.193'; // ehem. 194
 const DOWNLOAD_INTERVAL = 60 * 1000 * (process.env.NODE_ENV === 'production' ? 10 : 1);
 const completed: IVideo[] = file.loadCompleted();
 let forked: any = null;
