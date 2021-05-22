@@ -1,9 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppThunk } from '../../store';
 import fs from 'fs';
 import path from 'path';
 import axios from 'axios';
-import { formatCategories } from '../../utils/formatters';
+import { formatCategories } from '../../src/utils/formatters';
 import { startOfDay, startOfToday } from 'date-fns';
 
 const availableFilename = path.join(__dirname, '..', '..', '..', 'data', 'available.json');
@@ -24,37 +22,6 @@ export interface Available {
   categories: string[];
   addedOn: number;
 }
-
-interface AvailableState {
-  lastCheck: number;
-  available: Available[];
-}
-
-const initialState: AvailableState = {
-  lastCheck: startOfToday().getTime(),
-  available: [],
-};
-
-export const availableSlice = createSlice({
-  name: 'available',
-  initialState,
-  reducers: {
-    fetchAvailableSuccess(
-      state,
-      action: PayloadAction<{ available: Available[]; lastCheck: number }>
-    ) {
-      const { available, lastCheck } = action.payload;
-      state.available = available;
-      state.lastCheck = lastCheck;
-    },
-    fetchAvailableFailed(state, action: PayloadAction<Available[]>) {
-      state.available = action.payload;
-    },
-  },
-});
-
-export const { fetchAvailableSuccess, fetchAvailableFailed } = availableSlice.actions;
-export default availableSlice.reducer;
 
 export const fetchAvailable = (): AppThunk => async (dispatch) => {
   let available: Available[], fetched: Available[];

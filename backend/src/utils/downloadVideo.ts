@@ -3,7 +3,7 @@ import fs from 'fs';
 import { execFileSync } from 'child_process';
 import path from 'path';
 import { moveVideo } from './file';
-import { START_DOWNLOAD, DOWNLOAD_SUCCESSFUL, DOWNLOAD_ERROR } from '../messages';
+import { START_DOWNLOAD, DOWNLOAD_SUCCESSFUL, DOWNLOAD_ERROR } from './messages';
 import ttml2ass from './ttml2ass';
 import { IVideo } from '../features/downloads/downloadSlice';
 
