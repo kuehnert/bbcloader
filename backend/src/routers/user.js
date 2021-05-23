@@ -1,6 +1,7 @@
 const express = require('express');
 const router = new express.Router();
 const User = require('../models/user');
+const auth = require('../middleware/auth');
 
 // LOGIN
 router.post('/users/login', async (req, res) => {
@@ -9,7 +10,7 @@ router.post('/users/login', async (req, res) => {
     const user = await User.findByCredentials(email, password);
     const token = await user.generateAuthToken();
 
-    res.send({user, token});
+    res.send({ user, token });
   } catch (error) {
     res.status(400).send({ error: "Unable to login" });
   }
@@ -23,14 +24,14 @@ router.post('/users', async (req, res) => {
     await user.save();
     const token = await user.generateAuthToken();
 
-    res.status(201).send({user, token});
+    res.status(201).send({ user, token });
   } catch (error) {
     res.status(400).send(error);
   }
 });
 
 // FETCH ALL
-router.get('/users', async (_, res) => {
+router.get('/users', auth, async (_, res) => {
   try {
     const users = await User.find({});
     res.send(users);
@@ -39,8 +40,14 @@ router.get('/users', async (_, res) => {
   }
 });
 
+// FETCH CURRENT USER
+router.get('/users/me', auth, async (req, res) => {
+  console.log('req.user', req.user);
+  res.send(req.user);
+});
+
 // FETCH
-router.get('/users/:id', async (req, res) => {
+router.get('/users/:id', auth, async (req, res) => {
   const _id = req.params.id;
 
   try {
@@ -57,7 +64,7 @@ router.get('/users/:id', async (req, res) => {
 });
 
 // PATCH
-router.patch('/users/:id', async (req, res) => {
+router.patch('/users/:id', auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ['name', 'email', 'password'];
   const isValidOperation = updates.every((attr) => allowedUpdates.includes(attr));
