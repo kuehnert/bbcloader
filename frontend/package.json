@@ -23,7 +23,7 @@
     "date-fns": "^2.14.0",
     "dotenv": "8.2.0",
     "formik": "2.1.4",
-    "lodash": "4.17.15",
+    "lodash": "4.17.21",
     "normalizr": "3.6.0",
     "primeflex": "1.1.0",
     "primeicons": "2.0.0",
