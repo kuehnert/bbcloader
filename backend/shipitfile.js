@@ -14,7 +14,7 @@ module.exports = shipit => {
       deleteOnRollback: false,
     },
     production: {
-      servers: 'mk@192.168.168.4',
+      servers: 'mk@bbc.kuehnert.it',
       deployTo: '/home/mk/sites/bbcloader-api',
       branch: 'master',
     },
@@ -33,7 +33,7 @@ module.exports = shipit => {
   });
 
   shipit.blTask('copy-config', async () => {
-    await shipit.copyToRemote(`.env.${shipit.config.branch}`, `${shipit.releasePath}/.env`);
+    await shipit.copyToRemote(`.env.production`, `${shipit.releasePath}/.env`);
     await shipit.copyToRemote('bin', `${shipit.releasePath}/bin`);
   });
 
