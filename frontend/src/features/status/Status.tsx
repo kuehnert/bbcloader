@@ -7,14 +7,14 @@ import { fetchStatus } from './statusSlice';
 
 const Status: React.FC = () => {
   const dispatch = useDispatch();
-  const { country, isOnline, currentVideo, lastUpdate } = useSelector((state: RootState) => state.status);
+  const { country, isOnline, currentDownload, lastUpdate } = useSelector((state: RootState) => state.status);
 
   useEffect(() => {
     dispatch(fetchStatus());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const downloadStr = currentVideo ? currentVideo.filename : '–';
+  const downloadStr = currentDownload ? currentDownload.filename : '–';
 
   return (
     <div className="p-grid">

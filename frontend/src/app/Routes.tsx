@@ -5,8 +5,8 @@ import { Route, Switch } from 'react-router-dom';
 import ProtectedRoute from '../components/ProtectedRoute';
 import LoginPage from '../features/users/LoginPage';
 import CompletedIndex from '../features/completed/CompletedIndex';
-import EditVideo from '../features/videos/EditVideo';
-import VideosPage from '../features/videos/VideoIndex';
+import EditDownload from '../features/downloads/EditDownload';
+import DownloadsPage from '../features/downloads/DownloadIndex';
 
 function Routes(): JSX.Element {
   return (
@@ -14,8 +14,8 @@ function Routes(): JSX.Element {
       <Route path="/login" exact component={LoginPage} />
       {/* <Route path="/signup" exact component={SignUpPage} /> */}
 
-      <ProtectedRoute path="/" exact component={VideosPage} />
-      <ProtectedRoute path="/downloads/:id/edit" component={EditVideo} />
+      <ProtectedRoute path="/" exact component={DownloadsPage} />
+      <ProtectedRoute path="/downloads/:id/edit" component={EditDownload} />
       <ProtectedRoute path="/available" component={AvailableIndex} />
       <ProtectedRoute path="/completed" component={CompletedIndex} />
 

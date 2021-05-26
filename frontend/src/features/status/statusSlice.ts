@@ -1,11 +1,12 @@
-import { Video } from '../videos/videoSlice';
+import { Download } from '../downloads/downloadSlice';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk } from '../../store';
-import backend from 'api/bbcApi';
+import bbcApi from 'api/bbcApi';
 import { setErrorAlert } from 'features/globals/globalSlice';
+import authHeader from 'utils/authHeader';
 
 export interface Status {
-  currentVideo?: Video;
+  currentDownload?: Download;
   externalIP?: string;
   country?: string;
   isOnline?: boolean;
@@ -24,7 +25,7 @@ export const statusSlice = createSlice({
   initialState,
   reducers: {
     fetchStatusSuccess(state, action: PayloadAction<Status>) {
-      state.currentVideo = action.payload.currentVideo;
+      state.currentDownload = action.payload.currentDownload;
       state.externalIP = action.payload.externalIP;
       state.isOnline = action.payload.isOnline;
       state.lastUpdate = action.payload.lastUpdate;
@@ -43,7 +44,7 @@ export default statusSlice.reducer;
 export const fetchStatus = (): AppThunk => async dispatch => {
   let status;
   try {
-    const response = await backend.get('/status');
+    const response = await bbcApi.get('/status', { headers: authHeader() });
     status = response.data;
   } catch (error) {
     dispatch(setErrorAlert(`Fehler beim Laden der Statusanzeigen.`));

@@ -1,11 +1,11 @@
 import React from 'react';
-import styles from '../videos/VideoIndex.module.scss';
+import styles from '../downloads/DownloadIndex.module.scss';
 import FinishedList from './FinishedList';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
-export default function VideosPage(): JSX.Element {
-  const { finished } = useSelector((state: RootState) => state.videos);
+export default function DownloadsPage(): JSX.Element {
+  const { finished } = useSelector((state: RootState) => state.downloads);
 
   return (
     <div className={styles.page}>

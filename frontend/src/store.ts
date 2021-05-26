@@ -1,7 +1,7 @@
 import { Action, combineReducers, configureStore } from '@reduxjs/toolkit';
 import { ThunkAction } from 'redux-thunk';
 import globalReducer from './features/globals/globalSlice';
-import videoReducer from './features/videos/videoSlice';
+import downloadReducer from './features/downloads/downloadSlice';
 import statusReducer from './features/status/statusSlice';
 import availableReducer from './features/available/availableSlice';
 import userReducer from './features/users/userSlice';
@@ -10,7 +10,7 @@ export const rootReducer = combineReducers({
   available: availableReducer,
   globals: globalReducer,
   status: statusReducer,
-  videos: videoReducer,
+  downloads: downloadReducer,
   users: userReducer,
 });
 

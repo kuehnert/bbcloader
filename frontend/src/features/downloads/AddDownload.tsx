@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import { string } from 'yup';
 import classnames from 'classnames';
-import './AddVideo.scss';
-import { createVideo } from './videoSlice';
+import './AddDownload.scss';
+import { createDownload } from './downloadSlice';
 import { useDispatch } from 'react-redux';
 
 // interface Props {
-//   createVideo: () => void;
+//   createDownload: () => void;
 // }
 
 const schema = string().url();
 
-const AddVideo: React.FC = () => {
+const AddDownload: React.FC = () => {
   const dispatch = useDispatch();
 
   const messages: { [key: string]: string } = {
     default: 'Drag & drop URL here',
     enter: 'Drop here!',
-    success: 'Video(s) added.',
+    success: 'Download(s) added.',
     error: 'URL not usuable',
   };
 
@@ -41,7 +41,7 @@ const AddVideo: React.FC = () => {
     const url = event.dataTransfer.getData('text');
 
     if (schema.isValid(url) && url.match(/bbc\.co\.uk/)) {
-      dispatch(createVideo(url));
+      dispatch(createDownload(url));
       setDropState('success');
     } else {
       setDropState('error');
@@ -64,4 +64,4 @@ const AddVideo: React.FC = () => {
   );
 };
 
-export default AddVideo;
+export default AddDownload;

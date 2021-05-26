@@ -1,12 +1,12 @@
 import React from 'react';
 import Status from '../status/Status';
-import AddVideo from './AddVideo';
-import VideoList from './VideoList';
+import AddDownload from './AddDownload';
+import DownloadList from './DownloadList';
 import FavLinks from '../favourites/FavLinks';
-import styles from './VideoIndex.module.scss';
+import styles from './DownloadIndex.module.scss';
 import DebugCard from 'components/DebugCard';
 
-export default function VideosPage() {
+export default function DownloadsPage() {
   return (
     <div className={styles.page}>
       <h2>Status</h2>
@@ -16,10 +16,10 @@ export default function VideosPage() {
       <FavLinks />
 
       <h2>Add a download</h2>
-      <AddVideo />
+      <AddDownload />
 
       <h2>Download list</h2>
-      <VideoList />
+      <DownloadList />
 
       <DebugCard />
     </div>

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk } from '../../store';
 import backend from 'api/bbcApi';
 import { setErrorAlert } from 'features/globals/globalSlice';
+import authHeader from 'utils/authHeader';
 
 export interface Available {
   id: string;
@@ -35,7 +36,7 @@ export const fetchAvailable = (): AppThunk => async (dispatch: any) => {
   let available;
 
   try {
-    const response = await backend.get('/available');
+    const response = await backend.get('/available', { headers: authHeader() });
     available = response.data as Available[];
   } catch (error) {
     dispatch(setErrorAlert(`Fehler beim Laden der verfügbaren Videos.`));

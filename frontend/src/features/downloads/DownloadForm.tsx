@@ -8,17 +8,17 @@ import { RadioButton } from 'primereact/radiobutton';
 import React, { useEffect } from 'react';
 import { formatEpisodeNumber } from 'utils/helpers';
 import * as Yup from 'yup';
-import { Video } from './videoSlice';
+import { Download } from './downloadSlice';
 import { Checkbox } from 'primereact/checkbox';
 
 interface Props {
-  video: Video;
-  handleSubmit: (video: Video) => void;
+  download: Download;
+  handleSubmit: (download: Download) => void;
 }
 
 const MakeFilename = () => {
   const { values, setFieldValue } = useFormikContext();
-  const { isFilm, programme, series, episodeNumber, episodeTitle } = values as Video;
+  const { isFilm, programme, series, episodeNumber, episodeTitle } = values as Download;
 
   useEffect(() => {
     if (isFilm) {
@@ -42,7 +42,7 @@ const MakeFilename = () => {
   return null;
 };
 
-const VideoSchema = Yup.object().shape({
+const DownloadSchema = Yup.object().shape({
   id: Yup.string().required('notwendig'),
   url: Yup.string().url().required('notwendig'),
   programme: Yup.string().required('notwendig'),
@@ -52,11 +52,11 @@ const VideoSchema = Yup.object().shape({
   attempts: Yup.number().min(0),
 });
 
-const VideoForm: React.FC<Props> = ({ video, handleSubmit }) => {
-  console.log('VideoForm handleSubmit', handleSubmit);
+const DownloadForm: React.FC<Props> = ({ download, handleSubmit }) => {
+  console.log('DownloadForm handleSubmit', handleSubmit);
 
   return (
-    <Formik enableReinitialize initialValues={video} onSubmit={handleSubmit} validationSchema={VideoSchema}>
+    <Formik enableReinitialize initialValues={download} onSubmit={handleSubmit} validationSchema={DownloadSchema}>
       {({ values, setFieldValue }) => (
         <Form className="p-grid p-fluid p-justify-end">
           <MyInput id="id" name="id" label="ID" as={InputText} />
@@ -124,4 +124,4 @@ const VideoForm: React.FC<Props> = ({ video, handleSubmit }) => {
   );
 };
 
-export default VideoForm;
+export default DownloadForm;

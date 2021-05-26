@@ -4,16 +4,16 @@ import { DataTable } from 'primereact/datatable';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
-import styles from './VideoList.module.scss';
-import { fetchDownloads, Video, deleteVideo } from './videoSlice';
+import styles from './DownloadList.module.scss';
+import { fetchDownloads, Download, deleteDownload } from './downloadSlice';
 import { formatEpisodeNumber } from 'utils/helpers';
 import TableButton from 'components/TableButton';
 import TableDeleteButton from 'components/TableDeleteButton';
 
-const VideoList: React.FC = () => {
+const DownloadList: React.FC = () => {
   const dispatch = useDispatch();
-  const { downloads } = useSelector((state: RootState) => state.videos);
-  const { currentVideo } = useSelector((state: RootState) => state.status);
+  const { downloads } = useSelector((state: RootState) => state.downloads);
+  const { currentDownload } = useSelector((state: RootState) => state.status);
 
   useEffect(() => {
     dispatch(fetchDownloads());
@@ -21,29 +21,29 @@ const VideoList: React.FC = () => {
   }, []);
 
   const handleDelete = (id: string) => {
-    dispatch(deleteVideo(id));
+    dispatch(deleteDownload(id));
   };
 
-  const episodeColumn = (video: Video) => {
-    if (video.isFilm) {
+  const episodeColumn = (download: Download) => {
+    if (download.isFilm) {
       return null;
-    } else if (video.series < 0) {
+    } else if (download.series < 0) {
       return '?';
     } else {
-      return formatEpisodeNumber(video);
+      return formatEpisodeNumber(download);
     }
   };
 
-  const actionColumn = (video: Video) => {
-    const disabled = video.id === currentVideo?.id;
+  const actionColumn = (download: Download) => {
+    const disabled = download.id === currentDownload?.id;
 
     return (
       <>
-        <TableButton icon="pencil" to={`/downloads/${video.id}/edit`} disabled={disabled} />
+        <TableButton icon="pencil" to={`/downloads/${download.id}/edit`} disabled={disabled} />
         <TableDeleteButton
           icon="delete"
-          objectName={video.programme}
-          objectId={video.id}
+          objectName={download.programme}
+          objectId={download.id}
           handleDelete={handleDelete}
           disabled={disabled}
         />
@@ -51,15 +51,15 @@ const VideoList: React.FC = () => {
     );
   };
 
-  const taggedColumn = (video: Video) => (
+  const taggedColumn = (download: Download) => (
     <i
-      className={video.tagged ? 'mdi mdi-checkbox-marked-outline' : 'mdi mdi-checkbox-blank-outline'}
+      className={download.tagged ? 'mdi mdi-checkbox-marked-outline' : 'mdi mdi-checkbox-blank-outline'}
       style={{ margin: 'auto' }}
     />
   );
 
   if (downloads.length === 0) {
-    return <Card className={styles.novideos}>Currently, there are no videos in the download queue.</Card>;
+    return <Card className={styles.nodownloads}>Currently, there are no downloads in the download queue.</Card>;
   } else {
     return (
       <DataTable value={downloads} autoLayout={true}>
@@ -75,13 +75,13 @@ const VideoList: React.FC = () => {
   }
 };
 
-export default VideoList;
+export default DownloadList;
 
 // const mapStateToProps = state => ({
-//   videos: Object.values(state.videos),
+//   downloads: Object.values(state.downloads),
 // });
 
 // export default connect(
 //   mapStateToProps,
-//   { getVideos }
-// )(withStyles(styles)(VideoList));
+//   { getDownloads }
+// )(withStyles(styles)(DownloadList));
