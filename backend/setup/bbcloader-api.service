@@ -1,3 +1,6 @@
+# /etc/systemd/system/bbcloader-api.service
+# sudo syscontrol enable bbcloader-api
+# sudo syscontrol start bbcloader-api
 [Unit]
 Description=NodeJS BBC-Downloader Application
 After=network-online.target

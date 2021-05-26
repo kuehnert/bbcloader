@@ -40,7 +40,7 @@ module.exports = shipit => {
   shipit.blTask('npm-install', async () => {
     // await shipit.remote(`cd ${shipit.releasePath} && npm install --production`);
     await shipit.remote(`cd ${shipit.releasePath} && npm install`);
-    await shipit.remote(`cd ${shipit.releasePath} && npm run build`);
+    // await shipit.remote(`cd ${shipit.releasePath} && npm run build`);
   });
 
   shipit.blTask('reload', async () => {

@@ -5,7 +5,7 @@
     "clean": "rimraf dist/*",
     "clear": "rimraf dist/* node_modules/{*,.bin}",
     "deploy": "shipit production deploy",
-    "start": "node -r dotenv/config dist/index.js",
+    "start": "node -r dotenv/config src/index.js",
     "dev": "nodemon --ignore \"node_modules/**/*\" -r dotenv/config src/index.js"
   },
   "author": "Matthias Kühnert",

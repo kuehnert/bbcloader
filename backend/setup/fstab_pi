@@ -1,3 +1,4 @@
+# /etc/fstab
 proc            /proc           proc    defaults          0       0
 PARTUUID=bf9eeebf-01  /boot           vfat    defaults          0       2
 PARTUUID=bf9eeebf-02  /               ext4    defaults,noatime  0       1
