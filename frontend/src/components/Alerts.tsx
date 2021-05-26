@@ -1,4 +1,4 @@
-import { Growl } from 'primereact/growl';
+import { Toast } from 'primereact/toast';
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearAlert } from '../features/globals/globalSlice';
@@ -7,11 +7,11 @@ import { RootState } from '../store';
 const Alerts: React.FC = () => {
   const alerts = useSelector((state: RootState) => state.globals.alerts);
   const dispatch = useDispatch();
-  const growlEl = useRef<any>(null);
+  const toastEl = useRef<any>(null);
 
   useEffect(() => {
     Object.keys(alerts).forEach((key) => {
-      growlEl.current?.show({
+      toastEl.current?.show({
         severity: key,
         summary: alerts[key].summary,
         detail: alerts[key].detail,
@@ -21,7 +21,7 @@ const Alerts: React.FC = () => {
     });
   }, [dispatch, alerts]);
 
-  return <Growl ref={growlEl} />;
+  return <Toast ref={toastEl} />;
 };
 
 export default Alerts;

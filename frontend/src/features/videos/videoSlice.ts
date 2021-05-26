@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import backend from '../../api/backend';
-import { AppThunk } from 'store';
+import backend from '../../api/bbcApi';
+import { AppThunk } from '../../store';
 import { setErrorAlert, setSuccessAlert } from 'features/globals/globalSlice';
 
 export interface Video {
@@ -44,12 +44,12 @@ export const videoSlice = createSlice({
     },
     updateVideoSuccess(state, action: PayloadAction<Video>) {
       const video = action.payload;
-      const index = state.downloads.findIndex((v) => v.id === video.id);
+      const index = state.downloads.findIndex(v => v.id === video.id);
       state.downloads[index] = video;
     },
     deleteVideoSuccess(state, action: PayloadAction<string>) {
       const id = action.payload;
-      state.downloads = state.downloads.filter((v) => v.id !== id);
+      state.downloads = state.downloads.filter(v => v.id !== id);
     },
   },
 });
@@ -63,7 +63,7 @@ export const {
 } = videoSlice.actions;
 export default videoSlice.reducer;
 
-export const fetchDownloads = (): AppThunk => async (dispatch) => {
+export const fetchDownloads = (): AppThunk => async dispatch => {
   let downloads;
   try {
     const response = await backend.get('/videos');
@@ -76,7 +76,7 @@ export const fetchDownloads = (): AppThunk => async (dispatch) => {
   dispatch(fetchDownloadsSuccess(downloads));
 };
 
-export const fetchFinished = (): AppThunk => async (dispatch) => {
+export const fetchFinished = (): AppThunk => async dispatch => {
   let finished;
   try {
     const response = await backend.get('/finished');
@@ -89,7 +89,7 @@ export const fetchFinished = (): AppThunk => async (dispatch) => {
   dispatch(fetchFinishedSuccess(finished));
 };
 
-export const createVideo = (url: string): AppThunk => async (dispatch) => {
+export const createVideo = (url: string): AppThunk => async dispatch => {
   let videos, count;
   try {
     const response = await backend.post('/videos', { url });
@@ -105,7 +105,7 @@ export const createVideo = (url: string): AppThunk => async (dispatch) => {
   dispatch(createVideoSuccess(videos));
 };
 
-export const updateVideo = (values: Video): AppThunk => async (dispatch) => {
+export const updateVideo = (values: Video): AppThunk => async dispatch => {
   let video;
   try {
     const response = await backend.patch(`/videos/${values.id}`, values);
@@ -120,7 +120,7 @@ export const updateVideo = (values: Video): AppThunk => async (dispatch) => {
   dispatch(updateVideoSuccess(video));
 };
 
-export const deleteVideo = (id: string): AppThunk => async (dispatch) => {
+export const deleteVideo = (id: string): AppThunk => async dispatch => {
   try {
     await backend.delete(`/videos/${id}`);
   } catch (error) {

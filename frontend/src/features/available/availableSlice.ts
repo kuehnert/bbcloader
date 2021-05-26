@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppThunk } from 'store';
-import backend from 'api/backend';
+import { AppThunk } from '../../store';
+import backend from 'api/bbcApi';
 import { setErrorAlert } from 'features/globals/globalSlice';
 
 export interface Available {
@@ -31,7 +31,7 @@ export const availableSlice = createSlice({
 export const { fetchAvailableSuccess } = availableSlice.actions;
 export default availableSlice.reducer;
 
-export const fetchAvailable = (): AppThunk => async (dispatch) => {
+export const fetchAvailable = (): AppThunk => async (dispatch: any) => {
   let available;
 
   try {

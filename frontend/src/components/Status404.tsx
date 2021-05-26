@@ -4,7 +4,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import myhistory from '../myhistory';
 import { setNotFound } from '../features/globals/globalSlice';
-import { RootState } from '../store';
+import { RootState } from 'store';
 
 const Status404: React.FC = () => {
   const error = useSelector((state: RootState) => state.globals.notFound);

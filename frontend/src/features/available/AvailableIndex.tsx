@@ -4,7 +4,7 @@ import { DataTable } from 'primereact/datatable';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatDate } from 'utils/helpers';
-import { RootState } from '../../store';
+import { RootState } from 'store';
 import { Available, fetchAvailable } from './availableSlice';
 
 const AvailableIndex: React.FC = () => {

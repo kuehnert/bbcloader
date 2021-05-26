@@ -1,7 +1,7 @@
 import { Card } from 'primereact/card';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { RootState } from 'store';
 import styles from './DebugCard.module.scss';
 
 const DebugCard: React.FC = () => {

@@ -2,7 +2,7 @@ import myhistory from 'myhistory';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
-import { RootState } from '../../store';
+import { RootState } from 'store';
 import VideoForm from './VideoForm';
 import { Video, updateVideo } from './videoSlice';
 

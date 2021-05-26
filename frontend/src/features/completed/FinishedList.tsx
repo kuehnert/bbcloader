@@ -4,7 +4,7 @@ import { DataTable } from 'primereact/datatable';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatDate, formatEpisodeNumber } from 'utils/helpers';
-import { RootState } from '../../store';
+import { RootState } from 'store';
 import styles from '../videos/VideoList.module.scss';
 import { fetchFinished, Video } from '../videos/videoSlice';
 

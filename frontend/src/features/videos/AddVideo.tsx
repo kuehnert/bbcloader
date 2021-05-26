@@ -5,9 +5,9 @@ import './AddVideo.scss';
 import { createVideo } from './videoSlice';
 import { useDispatch } from 'react-redux';
 
-interface Props {
-  createVideo: () => void;
-}
+// interface Props {
+//   createVideo: () => void;
+// }
 
 const schema = string().url();
 
@@ -58,8 +58,7 @@ const AddVideo: React.FC = () => {
       onDragEnter={onDragEnter}
       onDragLeave={onDragLeave}
       onDragOver={onDragOver}
-      onDrop={onDrop}
-    >
+      onDrop={onDrop}>
       {messages[dropState]}
     </div>
   );

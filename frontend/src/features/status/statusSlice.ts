@@ -1,7 +1,7 @@
 import { Video } from '../videos/videoSlice';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppThunk } from 'store';
-import backend from 'api/backend';
+import { AppThunk } from '../../store';
+import backend from 'api/bbcApi';
 import { setErrorAlert } from 'features/globals/globalSlice';
 
 export interface Status {
@@ -40,7 +40,7 @@ export const statusSlice = createSlice({
 export const { fetchStatusSuccess, setDebug } = statusSlice.actions;
 export default statusSlice.reducer;
 
-export const fetchStatus = (): AppThunk => async (dispatch) => {
+export const fetchStatus = (): AppThunk => async dispatch => {
   let status;
   try {
     const response = await backend.get('/status');

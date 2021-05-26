@@ -3,7 +3,7 @@ import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import { RootState } from 'store';
 import styles from './VideoList.module.scss';
 import { fetchDownloads, Video, deleteVideo } from './videoSlice';
 import { formatEpisodeNumber } from 'utils/helpers';
