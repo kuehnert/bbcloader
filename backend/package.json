@@ -21,6 +21,7 @@
     "lodash": "4.17.21",
     "mongodb": "3.6.8",
     "mongoose": "5.12.10",
+    "node-fetch": "^2.6.1",
     "shipit-deploy": "5.3.0",
     "shipit-shared": "4.4.2",
     "validator": "13.6.0"

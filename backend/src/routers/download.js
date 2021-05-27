@@ -4,6 +4,8 @@ const auth = require('../middleware/auth');
 const _ = require('lodash');
 const fs = require('fs');
 const Download = require('../models/download');
+const fetchEpisodes = require('../utils/fetchEpisodes');
+const createDownload = require('../utils/createDownload');
 
 // FETCH STATUS
 router.get('/status', auth, async (req, res) => {
@@ -38,14 +40,32 @@ router.get('/downloads', auth, async (_, res) => {
 
 // CREATE
 router.post('/downloads', auth, async (req, res) => {
-  const download = new Download(req.body);
+  const { url } = req.body;
 
-  try {
-    await download.save();
-    res.status(201).send(download);
-  } catch (error) {
-    res.sendStatus(500);
+  if (url.match(/\/episodes\//)) {
+    // Programme page
+    const urls = await fetchEpisodes(url);
+    const promises = Array();
+
+    urls.forEach(u => {
+      promises.push(createDownload(u));
+    });
+
+    let result = await Promise.all(promises);
+    downloads = result.map(r => r.download).filter(e => e != null);
+    errors = result.map(r => r.error).filter(e => e != null).map(e => ({ code: e.code, item: e.keyValue.url }));
+    res.status(201).send({ downloads, errors });
+  } else {
+    // Individual video
+    const { download, error } = await createDownload(url);
+    if (download) {
+      res.status(201).send({ downloads: [download], errors: [] });
+    } else {
+      res.status(201).send({ downloads: [], errors: [error].map(e => ({ code: e.code, item: e.keyValue.url })) });
+    }
+    // 11000 => duplicate key
   }
+  // startNextDownload();
 });
 
 module.exports = router;

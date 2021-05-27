@@ -1,27 +1,16 @@
 import _ from 'lodash';
 import { fork } from 'child_process';
 // import bodyParser from 'body-parser';
-import cors from 'cors';
-import express from 'express';
 import path from 'path';
 import * as file from '../../src/utils/file';
 
 import { START_DOWNLOAD, DOWNLOAD_SUCCESSFUL, DOWNLOAD_ERROR } from '../../src/utils/messages';
 
-// import { parseEpisodes } from './utils/parseEpisodes';
-// import getExternalIP from './utils/getExternalIP';
-// import tagVideo from './utils/tagVideo';
-
-const app = express();
-
 const DOWNLOAD_INTERVAL = 60 * 1000 * (process.env.NODE_ENV === 'production' ? 10 : 1);
 // const completed: IVideo[] = file.loadCompleted();
 
 let forked: any = null;
-// let videos: IVideoMap = file.loadVideos();
 let currentVideo: IVideo | undefined;
-// let externalIP: string | null = null;
-// let country = 'Unknown';
 // let lastUpdate: Date | null = null;
 let shareAvailable = false;
 
@@ -76,48 +65,7 @@ const startNextDownload = async () => {
   }
 };
 
-// A single video is added to the list
-// const createVideo = async (url: string) => {
-//   let video = new IVideo(url);
-//   video = await tagVideo(video);
-
-//   if (completed.find(v => v.id === video.id) != null) {
-//     const msg = `${video.filename} NOT added because it has been downloaded already.`;
-//     console.log(msg);
-//     return msg;
-//   } else if (videos[video.id] != null) {
-//     const msg = `${video.filename} NOT added because it is already on download list`;
-//     console.log(msg);
-//     return msg;
-//   } else {
-//     videos[video.id] = video;
-//     file.saveVideos(videos);
-//     console.log(`${video.url} added`);
-//     return video;
-//   }
-// };
-
-app.use(cors());
 // app.use(express.static(path.join(__dirname, 'public')));
-
-// app.get('/status', async (req: express.Request, res: express.Response) => {
-//   console.log('GET /status');
-//   // await getExternalIP(updateExternalIP);
-//   const env = _.pick(
-//     process.env,
-//     'NODE_ENV',
-//     'DOWNLOAD_DIR',
-//     'DESTINATION_TV',
-//     'DESTINATION_MOVIES'
-//   );
-
-//   res.send({
-//     currentVideo,
-//     isOnline: isOnline(),
-//     lastUpdate,
-//     env,
-//   });
-// });
 
 // app.get('/videos', (req, res) => {
 //   console.log('GET /videos');

@@ -59,11 +59,11 @@ const DownloadList: React.FC = () => {
   );
 
   if (downloads.length === 0) {
-    return <Card className={styles.nodownloads}>Currently, there are no downloads in the download queue.</Card>;
+    return <Card className={styles.nodownloads}>No downloads queued.</Card>;
   } else {
     return (
       <DataTable value={downloads} autoLayout={true}>
-        <Column field="id" header="ID" />
+        <Column field="bbcID" header="ID" />
         <Column field="programme" header="Programme" />
         <Column field="year" header="Year" className={styles.colCenter} />
         <Column header="Episode" body={episodeColumn} className={styles.colCenter} />

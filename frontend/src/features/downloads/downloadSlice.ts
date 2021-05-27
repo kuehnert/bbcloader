@@ -6,6 +6,7 @@ import authHeader from 'utils/authHeader';
 
 export interface Download {
   id: string;
+  bbcID: string;
   url: string;
   programme: string;
   series: number;
@@ -20,9 +21,16 @@ export interface Download {
   downloadedAt?: Date;
 }
 
+export interface Error {
+  code: string;
+  name?: string;
+  item: string;
+};
+
 type DownloadSliceState = {
   downloads: Download[];
   finished: Download[];
+  errors?: Error[];
 };
 
 const initialState = {
@@ -93,23 +101,37 @@ export const fetchFinished = (): AppThunk => async dispatch => {
 export const createDownload =
   (url: string): AppThunk =>
   async dispatch => {
-    let downloads, count;
+    let downloads: Download[], errors: Error[], downloadCount = 0, errorCount = 0;
     try {
       const response = await backend.post(
         '/downloads',
         { url },
         { headers: authHeader() }
       );
-      downloads = response.data;
-      count = downloads.length;
+
+      downloads = response.data.downloads;
+      downloadCount = downloads.length;
+      errors = response.data.errors;
+      errorCount = errors.length;
     } catch (error) {
-      console.error(error.response);
-      dispatch(setErrorAlert(error.response.data.error));
+      // console.error(error.response);
+      // dispatch(setErrorAlert(error.response.data.error));
+      dispatch(setErrorAlert("Unkown error creating video"));
       return;
     }
 
-    dispatch(setSuccessAlert(`${count} download${count > 1 ? 's' : ''} added`));
-    dispatch(createDownloadSuccess(downloads));
+    console.log('downloads:', downloads);
+    console.log('errors:', errors);
+
+
+    if (downloadCount > 0) {
+      dispatch(setSuccessAlert(`${downloadCount} download${downloadCount > 1 ? 's' : ''} added`));
+      dispatch(createDownloadSuccess(downloads));
+    }
+
+    if (errorCount > 0) {
+      dispatch(setErrorAlert(`${errorCount} download${errorCount > 1 ? 's' : ''} not added`));
+    }
   };
 
 export const updateDownload =
