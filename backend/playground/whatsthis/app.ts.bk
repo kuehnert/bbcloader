@@ -89,24 +89,6 @@ const startNextDownload = async () => {
 //   }
 // });
 
-// app.patch('/videos/:id', (req, res) => {
-//   const { id } = req.params;
-//   const newVideo = { ...videos[id], ...req.body, id };
-
-//   console.log('PATCH /videos/', id);
-//   videos[id] = newVideo;
-//   file.saveVideos(videos);
-
-//   res.send(newVideo);
-// });
-
-// app.delete('/videos/:id', (req, res) => {
-//   const { id } = req.params;
-//   videos = _.omit(videos, id);
-//   file.saveVideos(videos);
-
-//   res.send(id);
-// });
 
 // app.get('/completed', (req, res) => {
 //   res.send(completed);

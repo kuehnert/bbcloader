@@ -29,7 +29,7 @@ router.get('/status', auth, async (req, res) => {
 });
 
 // FETCH ALL
-router.get('/downloads', auth, async (_, res) => {
+router.get('/downloads', auth, async (req, res) => {
   try {
     const downloads = await Download.find({});
     res.send(downloads);
@@ -67,5 +67,47 @@ router.post('/downloads', auth, async (req, res) => {
   }
   // startNextDownload();
 });
+
+router.patch('/downloads/:id', auth, async (req, res) => {
+  const ALLOWED = ["attempts", "episodeNumber", "episodeTitle", "filename", "isFilm", "programme", "series", "tagged", "year"];
+  const patches = _.omit(req.body, ["bbcID", "downloaded", "url", "_id", "__v"]);
+  const updates = Object.keys(patches);
+  const isValid = updates.every(a => ALLOWED.includes(a));
+  // console.log('patches', JSON.stringify(patches, null, 4));
+  // console.log('isValid', isValid);
+
+  if (!isValid) {
+    return res.status(400).send({ error: "Invalid updates" });
+  }
+
+  try {
+    const download = await Download.findOneAndUpdate({ bbcID: req.params.id }, req.body, { new: true, runValidators: true, useFindAndModify: false });
+    console.log('download', download);
+
+    if (!download) {
+      return res.sendStatus(404);
+    }
+
+    res.status(201).send(download);
+  } catch (error) {
+    console.log('error', error);
+    res.sendStatus(500);
+  }
+});
+
+router.delete('/downloads/:id', auth, async (req, res) => {
+  try {
+    const result = await Download.findOneAndDelete({ bbcID: req.params.id });
+    if (result) {
+      res.status(201).send(result);
+    } else {
+      res.sendStatus(404);
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+
+});
+
 
 module.exports = router;
