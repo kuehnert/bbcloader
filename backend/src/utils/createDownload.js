@@ -36,7 +36,8 @@ async function getYearForFilm(url) {
 }
 
 const createDownload = async (url) => {
-  const download = new Download({ url });
+  const nextOrderIndex = await Download.lastIndex();
+  const download = new Download({ url, addedAt: new Date(), orderIndex: nextOrderIndex });
   const match = url.match(/episode\/(\w+)\/([\w-]+)-series-(\d+)-(\d+)-(.+)$/);
   const match2 = url.match(/episode\/(\w+)\/([\w-]+)-series-(\d+)-episode-(\d+)/);
   const match3 = url.match(/episode\/(\w+)\/([^/]+)-episode-(\d)$/);

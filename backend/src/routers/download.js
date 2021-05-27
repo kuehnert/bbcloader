@@ -31,7 +31,7 @@ router.get('/status', auth, async (req, res) => {
 // FETCH ALL
 router.get('/downloads', auth, async (req, res) => {
   try {
-    const downloads = await Download.find({});
+    const downloads = await Download.find({}).sort('orderIndex');
     res.send(downloads);
   } catch (error) {
     res.sendStatus(500);

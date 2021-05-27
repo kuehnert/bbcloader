@@ -7,7 +7,7 @@ import { fetchStatus } from './statusSlice';
 
 const Status: React.FC = () => {
   const dispatch = useDispatch();
-  const { country, isOnline, currentDownload, lastUpdate } = useSelector((state: RootState) => state.status);
+  const { shareAvailable, currentDownload, lastUpdate } = useSelector((state: RootState) => state.status);
 
   useEffect(() => {
     dispatch(fetchStatus());
@@ -18,8 +18,7 @@ const Status: React.FC = () => {
 
   return (
     <div className="p-grid">
-      <StatusCard title="VPN Online" content={isOnline ? '✔' : '❌'} />
-      <StatusCard title="VPN Country" content={country} />
+      <StatusCard title="Share Online" content={shareAvailable ? '✔' : '❌'} />
       <StatusCard title="Last Update" content={lastUpdate ? formatDate(lastUpdate, 'time') : ''} />
       <StatusCard title="Current Download" content={downloadStr} />
     </div>

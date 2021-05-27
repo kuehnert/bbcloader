@@ -9,18 +9,26 @@ const downloadSchema = mongoose.Schema({
     lowercase: true,
   },
   bbcID: { type: String, required: true, unique: true, trim: true },
-  programme: { type: String, trim: true, },
-  series: { type: Number, },
+  addedAt: { type: Date, required: true },
+  attempts: { type: Number, required: true, default: 0 },
+  downloaded: { type: Boolean, default: false },
+  downloadedAt: { type: Date },
   episodeNumber: { type: Number, },
   episodeTitle: { type: String, trim: true, },
   filename: { type: String, trim: true, },
-  year: { type: String, trim: true, },
-  attempts: { type: Number, required: true, default: 0 },
-  tagged: { type: Boolean, default: false },
   isFilm: { type: Boolean, default: false },
-  downloaded: { type: Boolean, default: false },
-  downloadedAt: { type: Date },
+  orderIndex: { type: Number, required: true, unique: true },
+  programme: { type: String, trim: true, },
+  series: { type: Number, },
+  tagged: { type: Boolean, default: false },
+  year: { type: String, trim: true, },
 });
+
+downloadSchema.statics.lastIndex = async () => {
+  const last = await Download.findOne().sort('-orderIndex');
+
+  return (last) ? last.orderIndex + 1 : 0;
+};
 
 const Download = mongoose.model("download", downloadSchema);
 

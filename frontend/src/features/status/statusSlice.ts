@@ -7,9 +7,7 @@ import authHeader from 'utils/authHeader';
 
 export interface Status {
   currentDownload?: Download;
-  externalIP?: string;
-  country?: string;
-  isOnline?: boolean;
+  shareAvailable?: boolean;
   lastUpdate?: Date;
   debug: boolean;
   env: { [key: string]: string };
@@ -26,11 +24,9 @@ export const statusSlice = createSlice({
   reducers: {
     fetchStatusSuccess(state, action: PayloadAction<Status>) {
       state.currentDownload = action.payload.currentDownload;
-      state.externalIP = action.payload.externalIP;
-      state.isOnline = action.payload.isOnline;
-      state.lastUpdate = action.payload.lastUpdate;
-      state.country = action.payload.country;
       state.env = action.payload.env;
+      state.shareAvailable = action.payload.shareAvailable;
+      state.lastUpdate = action.payload.lastUpdate;
     },
     setDebug(state, action: PayloadAction<boolean>) {
       state.debug = action.payload;

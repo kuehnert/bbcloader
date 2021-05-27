@@ -5,15 +5,11 @@ import { RootState } from 'store';
 import styles from './DebugCard.module.scss';
 
 const DebugCard: React.FC = () => {
-  const { debug, env, externalIP } = useSelector((state: RootState) => state.status);
+  const { debug, env } = useSelector((state: RootState) => state.status);
 
   const envTable = () => (
     <table className={styles.debugTable}>
       <tbody>
-        <tr>
-          <th>External IP</th>
-          <td>{externalIP}</td>
-        </tr>
         {Object.keys(env).map((k) => (
           <tr key={k}>
             <th>{k}</th>
