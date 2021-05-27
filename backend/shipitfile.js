@@ -44,7 +44,7 @@ module.exports = shipit => {
   });
 
   shipit.blTask('reload', async () => {
-    await shipit.remote(`sudo ${shipit.releasePath}/bin/restart_bbcloader.sh`);
+    await shipit.remote(`sudo ${shipit.releasePath}/bin/restart_bbcloader.sh`, { tty: true });
   });
 };
 

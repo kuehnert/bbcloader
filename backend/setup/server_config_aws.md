@@ -26,3 +26,9 @@ sudo apt-get install -y nodejs gcc g++ make
 
 * copy file to /lib/systemd/system/bbcloader-api.service
 * cp 10-mk-pwless to /etc/sudoers.d/
+
+
+## letsencrypt
+# https://tecadmin.net/how-to-setup-lets-encrypt-on-ubuntu-20-04/
+sudo snap install --classic certbot
+sudo certbot --nginx
