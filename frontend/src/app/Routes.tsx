@@ -15,7 +15,7 @@ function Routes(): JSX.Element {
       {/* <Route path="/signup" exact component={SignUpPage} /> */}
 
       <ProtectedRoute path="/" exact component={DownloadsPage} />
-      <ProtectedRoute path="/downloads/:id/edit" component={EditDownload} />
+      <ProtectedRoute path="/downloads/:bbcID/edit" component={EditDownload} />
       <ProtectedRoute path="/available" component={AvailableIndex} />
       <ProtectedRoute path="/completed" component={CompletedIndex} />
 

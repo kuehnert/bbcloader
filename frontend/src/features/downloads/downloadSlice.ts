@@ -5,7 +5,7 @@ import { setErrorAlert, setSuccessAlert } from 'features/globals/globalSlice';
 import authHeader from 'utils/authHeader';
 
 export interface Download {
-  id: string;
+  _id: string;
   bbcID: string;
   url: string;
   programme: string;
@@ -53,12 +53,12 @@ export const downloadSlice = createSlice({
     },
     updateDownloadSuccess(state, action: PayloadAction<Download>) {
       const download = action.payload;
-      const index = state.downloads.findIndex(v => v.id === download.id);
+      const index = state.downloads.findIndex(v => v.bbcID === download.bbcID);
       state.downloads[index] = download;
     },
     deleteDownloadSuccess(state, action: PayloadAction<string>) {
-      const id = action.payload;
-      state.downloads = state.downloads.filter(v => v.id !== id);
+      const bbcID = action.payload;
+      state.downloads = state.downloads.filter(v => v.bbcID !== bbcID);
     },
   },
 });
@@ -120,9 +120,8 @@ export const createDownload =
       return;
     }
 
-    console.log('downloads:', downloads);
-    console.log('errors:', errors);
-
+    // console.log('downloads:', downloads);
+    // console.log('errors:', errors);
 
     if (downloadCount > 0) {
       dispatch(setSuccessAlert(`${downloadCount} download${downloadCount > 1 ? 's' : ''} added`));
@@ -139,7 +138,7 @@ export const updateDownload =
   async dispatch => {
     let download;
     try {
-      const response = await backend.patch(`/downloads/${values.id}`, values, {
+      const response = await backend.patch(`/downloads/${values.bbcID}`, values, {
         headers: authHeader(),
       });
       download = response.data;

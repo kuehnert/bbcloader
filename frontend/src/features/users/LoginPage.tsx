@@ -14,8 +14,6 @@ const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
 
   const handleSubmit = async (values: LoginValues) => {
-    console.log(JSON.stringify(values, null, 4));
-
     dispatch(login(values));
     history.push('/');
   };

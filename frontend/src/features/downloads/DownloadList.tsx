@@ -20,8 +20,8 @@ const DownloadList: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleDelete = (id: string) => {
-    dispatch(deleteDownload(id));
+  const handleDelete = (bbcID: string) => {
+    dispatch(deleteDownload(bbcID));
   };
 
   const episodeColumn = (download: Download) => {
@@ -35,15 +35,15 @@ const DownloadList: React.FC = () => {
   };
 
   const actionColumn = (download: Download) => {
-    const disabled = download.id === currentDownload?.id;
+    const disabled = download.bbcID === currentDownload?.bbcID;
 
     return (
       <>
-        <TableButton icon="pencil" to={`/downloads/${download.id}/edit`} disabled={disabled} />
+        <TableButton icon="pencil" to={`/downloads/${download.bbcID}/edit`} disabled={disabled} />
         <TableDeleteButton
           icon="delete"
           objectName={download.programme}
-          objectId={download.id}
+          objectId={download.bbcID}
           handleDelete={handleDelete}
           disabled={disabled}
         />
@@ -76,12 +76,3 @@ const DownloadList: React.FC = () => {
 };
 
 export default DownloadList;
-
-// const mapStateToProps = state => ({
-//   downloads: Object.values(state.downloads),
-// });
-
-// export default connect(
-//   mapStateToProps,
-//   { getDownloads }
-// )(withStyles(styles)(DownloadList));
