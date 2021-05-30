@@ -69,14 +69,16 @@ router.post('/downloads', auth, async (req, res) => {
 });
 
 router.patch('/downloads/:id', auth, async (req, res) => {
-  const ALLOWED = ["attempts", "episodeNumber", "episodeTitle", "filename", "isFilm", "programme", "series", "tagged", "year"];
-  const patches = _.omit(req.body, ["bbcID", "downloaded", "url", "_id", "__v"]);
+  const ALLOWED = ["attempts", "episodeNumber", "episodeTitle", "filename", "isFilm", "orderIndex", "programme", "series", "tagged", "year"];
+  const patches = _.omit(req.body, ["addedAt", "bbcID", "downloaded", "url", "_id", "__v"]);
   const updates = Object.keys(patches);
   const isValid = updates.every(a => ALLOWED.includes(a));
   // console.log('patches', JSON.stringify(patches, null, 4));
   // console.log('isValid', isValid);
 
   if (!isValid) {
+    const invalid = updates.filter(e => !ALLOWED.includes(e))
+    console.log('Invalid attributes', JSON.stringify(invalid, null, 4) );
     return res.status(400).send({ error: "Invalid updates" });
   }
 
