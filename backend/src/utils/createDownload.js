@@ -27,10 +27,10 @@ async function getYearForFilm(url) {
 
     const match = dateInfo.match(/\d{4}/);
     const year = match && match[0];
-    console.log('tagdownload year: ', url, year);
+    // console.log('tagdownload year: ', url, year);
     return year;
   } catch (error) {
-    console.error('tagdownload year not found for', url);
+    // console.error('tagdownload year not found for', url);
     return null;
   }
 }

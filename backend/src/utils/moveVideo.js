@@ -16,8 +16,8 @@ const moveVideo = (sourceDir, destination, filename, ext) => {
   const toFile = path.join(destination, `${filename}.${ext}`);
 
   try {
-    await fs.move(fromFile, toFile);
-    console.log('Moved file successfully');
+    fs.moveSync(fromFile, toFile);
+    console.log('Moved file successfully', toFile);
   } catch (error) {
     console.error("Error moving file", error);
   }
