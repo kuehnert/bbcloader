@@ -7,7 +7,8 @@ import { fetchStatus } from './statusSlice';
 
 const Status: React.FC = () => {
   const dispatch = useDispatch();
-  const { shareAvailable, currentDownload, lastUpdate } = useSelector((state: RootState) => state.status);
+  const { downloadsActive, shareAvailable, currentDownload, lastUpdate } =
+    useSelector((state: RootState) => state.status);
 
   useEffect(() => {
     dispatch(fetchStatus());
@@ -17,10 +18,17 @@ const Status: React.FC = () => {
   const downloadStr = currentDownload ? currentDownload.filename : '–';
 
   return (
-    <div className="p-grid">
-      <StatusCard title="Share Online" content={shareAvailable ? '✔' : '❌'} />
-      <StatusCard title="Last Update" content={lastUpdate ? formatDate(lastUpdate, 'time') : ''} />
-      <StatusCard title="Current Download" content={downloadStr} />
+    <div className='p-grid'>
+      <StatusCard
+        title='Downloads Active'
+        content={downloadsActive ? '✔' : '❌'}
+      />
+      <StatusCard title='Share Online' content={shareAvailable ? '✔' : '❌'} />
+      <StatusCard
+        title='Last Update'
+        content={lastUpdate ? formatDate(lastUpdate, 'time') : ''}
+      />
+      <StatusCard title='Current Download' content={downloadStr} />
     </div>
   );
 };

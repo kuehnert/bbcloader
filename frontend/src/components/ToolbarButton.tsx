@@ -5,19 +5,30 @@ import './ToolbarButton.scss';
 import classnames from 'classnames';
 
 interface Props {
-  label: string;
+  label: string | JSX.Element;
   icon: string;
   to?: string;
   external?: string;
   download?: boolean;
   tooltip?: string;
+  onClick?: () => void;
 }
 
-const ToolbarButton: React.FC<Props> = ({ download, external, label, icon, to }) => {
+const ToolbarButton: React.FC<Props> = ({
+  download,
+  external,
+  label,
+  icon,
+  to,
+  onClick,
+}) => {
   const makeButton = (external?: boolean) => (
-    <button className={classnames('toolbarButton', { 'toolbarButton-external': external })}>
+    <button
+      className={classnames('toolbarButton', {
+        'toolbarButton-external': external,
+      })}>
       <span className={`icon mdi mdi-${icon}`}></span>
-      <span className="label">{label}</span>
+      <span className='label'>{label}</span>
     </button>
   );
 
@@ -33,7 +44,7 @@ const ToolbarButton: React.FC<Props> = ({ download, external, label, icon, to })
         href={external}
         download={download}
         target={!download ? 'new' : 'old'}
-      >
+        onClick={onClick}>
         {makeButton(true)}
       </a>
     );

@@ -25,7 +25,7 @@ export interface Error {
   code: string;
   name?: string;
   item: string;
-};
+}
 
 type DownloadSliceState = {
   downloads: Download[];
@@ -60,6 +60,9 @@ export const downloadSlice = createSlice({
       const bbcID = action.payload;
       state.downloads = state.downloads.filter(v => v.bbcID !== bbcID);
     },
+    deleteQueueSuccess(state) {
+      state.downloads = [];
+    },
   },
 });
 
@@ -69,6 +72,7 @@ export const {
   createDownloadSuccess,
   updateDownloadSuccess,
   deleteDownloadSuccess,
+  deleteQueueSuccess,
 } = downloadSlice.actions;
 export default downloadSlice.reducer;
 
@@ -101,7 +105,10 @@ export const fetchFinished = (): AppThunk => async dispatch => {
 export const createDownload =
   (url: string): AppThunk =>
   async dispatch => {
-    let downloads: Download[], errors: Error[], downloadCount = 0, errorCount = 0;
+    let downloads: Download[],
+      errors: Error[],
+      downloadCount = 0,
+      errorCount = 0;
     try {
       const response = await backend.post(
         '/downloads',
@@ -116,7 +123,7 @@ export const createDownload =
     } catch (error) {
       // console.error(error.response);
       // dispatch(setErrorAlert(error.response.data.error));
-      dispatch(setErrorAlert("Unkown error creating video"));
+      dispatch(setErrorAlert('Unkown error creating video'));
       return;
     }
 
@@ -124,12 +131,20 @@ export const createDownload =
     // console.log('errors:', errors);
 
     if (downloadCount > 0) {
-      dispatch(setSuccessAlert(`${downloadCount} download${downloadCount > 1 ? 's' : ''} added`));
+      dispatch(
+        setSuccessAlert(
+          `${downloadCount} download${downloadCount > 1 ? 's' : ''} added`
+        )
+      );
       dispatch(createDownloadSuccess(downloads));
     }
 
     if (errorCount > 0) {
-      dispatch(setErrorAlert(`${errorCount} download${errorCount > 1 ? 's' : ''} not added`));
+      dispatch(
+        setErrorAlert(
+          `${errorCount} download${errorCount > 1 ? 's' : ''} not added`
+        )
+      );
     }
   };
 
@@ -138,9 +153,13 @@ export const updateDownload =
   async dispatch => {
     let download;
     try {
-      const response = await backend.patch(`/downloads/${values.bbcID}`, values, {
-        headers: authHeader(),
-      });
+      const response = await backend.patch(
+        `/downloads/${values.bbcID}`,
+        values,
+        {
+          headers: authHeader(),
+        }
+      );
       download = response.data;
     } catch (error) {
       console.error(error.response);
@@ -165,4 +184,20 @@ export const deleteDownload =
 
     dispatch(setSuccessAlert('download removed'));
     dispatch(deleteDownloadSuccess(id));
+  };
+
+export const deleteQueue =
+  (options?: { all?: boolean; [key: string]: any }): AppThunk =>
+  async dispatch => {
+    try {
+      const params = options?.all ? '?all=true' : '';
+      await backend.delete(`/downloads${params}`, { headers: authHeader() });
+    } catch (error) {
+      console.error(error.response);
+      dispatch(setErrorAlert(error.response.data.error));
+      return;
+    }
+
+    dispatch(setSuccessAlert(options?.all ? 'Alle Downloads gelöscht' : 'Queue cleared'));
+    dispatch(deleteQueueSuccess());
   };

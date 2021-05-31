@@ -12,6 +12,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 global.currentDownload = null;
 global.downloadInterval = 1000 * 60 * process.env.DOWNLOAD_INTERVAL;
+global.downloadsActive = process.env.DOWNLOAD_ACTIVE !== "false"
 
 app.use(express.json());
 app.use(cors());

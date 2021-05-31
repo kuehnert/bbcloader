@@ -38,7 +38,8 @@ const DownloadList: React.FC = () => {
     const disabled = download.bbcID === currentDownload?.bbcID;
 
     return (
-      <>
+      <div className="p-buttonset">
+        <TableButton icon="eye" url={download.url} />
         <TableButton icon="pencil" to={`/downloads/${download.bbcID}/edit`} disabled={disabled} />
         <TableDeleteButton
           icon="delete"
@@ -47,7 +48,7 @@ const DownloadList: React.FC = () => {
           handleDelete={handleDelete}
           disabled={disabled}
         />
-      </>
+      </div>
     );
   };
 
@@ -67,6 +68,7 @@ const DownloadList: React.FC = () => {
         <Column field="programme" header="Programme" />
         <Column field="year" header="Year" className={styles.colCenter} />
         <Column header="Episode" body={episodeColumn} className={styles.colCenter} />
+        <Column field="episodeTitle" header="Title" className={styles.colCenter} />
         <Column field="attempts" header="Attempts" className={styles.colRight} />
         <Column header="Tagged" body={taggedColumn} className={styles.colCenter} />
         <Column header="Actions" body={actionColumn} />

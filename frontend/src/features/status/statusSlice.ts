@@ -6,6 +6,7 @@ import { setErrorAlert } from 'features/globals/globalSlice';
 import authHeader from 'utils/authHeader';
 
 export interface Status {
+  downloadsActive?: boolean;
   currentDownload?: Download;
   shareAvailable?: boolean;
   lastUpdate?: Date;

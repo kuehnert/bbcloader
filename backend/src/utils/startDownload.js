@@ -8,6 +8,10 @@ const { shareAvailable } = require('./shareAvailable');
 // Start download
 const startDownload = async () => {
   // check if share is shareAvailable
+  if (!global.downloadsActive) {
+    return console.log('Downloading inactive');
+  }
+
   if (!shareAvailable()) {
     return console.error('Share not mounted. Skipping downloads.');
   }

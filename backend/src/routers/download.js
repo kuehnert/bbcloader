@@ -7,6 +7,7 @@ const fetchEpisodes = require('../utils/fetchEpisodes');
 const createDownload = require('../utils/createDownload');
 const startDownload = require('../utils/startDownload');
 const { shareAvailable, getEnv } = require('../utils/shareAvailable');
+const debug = require('../utils/debug');
 
 // FETCH STATUS
 router.get('/status', auth, async (req, res) => {
@@ -14,6 +15,7 @@ router.get('/status', auth, async (req, res) => {
     currentDownload,
     shareAvailable: shareAvailable(),
     lastUpdate: new Date(),
+    downloadsActive,
     env: getEnv(),
   });
 });
@@ -32,7 +34,7 @@ router.get('/downloads', auth, async (req, res) => {
 router.post('/downloads', auth, async (req, res) => {
   const { url } = req.body;
 
-  if (url.match(/\/episodes\//)) {
+  if (url.match(/\/episodes\/|\?seriesId=/)) {
     // Programme page
     const urls = await fetchEpisodes(url);
     const promises = Array();
@@ -42,8 +44,13 @@ router.post('/downloads', auth, async (req, res) => {
     });
 
     let result = await Promise.all(promises);
+    // debug(result);
     downloads = result.map(r => r.download).filter(e => e != null);
-    errors = result.map(r => r.error).filter(e => e != null).map(e => ({ code: e.code, item: e.keyValue.url }));
+    // debug(downloads);
+
+    errors = result.map(r => r.error).filter(e => e != null).map(e => ({ code: e.code, item: e.keyValue?.url }));
+    // debug(errors);
+
     res.status(201).send({ downloads, errors });
   } else {
     // Individual video
@@ -51,7 +58,7 @@ router.post('/downloads', auth, async (req, res) => {
     if (download) {
       res.status(201).send({ downloads: [download], errors: [] });
     } else {
-      res.status(201).send({ downloads: [], errors: [error].map(e => ({ code: e.code, item: e.keyValue.url })) });
+      res.status(201).send({ downloads: [], errors: [error].map(e => ({ code: e.code, item: e.keyValue })) });
     }
     // 11000 => duplicate key
   }
@@ -65,8 +72,6 @@ router.patch('/downloads/:id', auth, async (req, res) => {
   const patches = _.omit(req.body, ["addedAt", "bbcID", "downloaded", "url", "_id", "__v"]);
   const updates = Object.keys(patches);
   const isValid = updates.every(a => ALLOWED.includes(a));
-  // console.log('patches', JSON.stringify(patches, null, 4));
-  // console.log('isValid', isValid);
 
   if (!isValid) {
     const invalid = updates.filter(e => !ALLOWED.includes(e));
@@ -101,7 +106,31 @@ router.delete('/downloads/:id', auth, async (req, res) => {
   } catch (error) {
     res.status(500).send(error);
   }
+});
 
+router.delete('/downloads', auth, async (req, res) => {
+  console.log('req.query', req.query);
+  const deleteAll = req.query.all;
+  console.log('deleteAll', deleteAll);
+  let result;
+
+  try {
+    if (deleteAll) {
+      console.log('deleting ALL downloads');
+      result = await Download.deleteMany();
+    } else {
+      console.log('deleting downloads in QUEUE');
+      result = await Download.deleteMany({ downloaded: false });
+    }
+
+    if (result) {
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(404);
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
 module.exports = router;

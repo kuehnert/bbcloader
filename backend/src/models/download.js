@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const autoIncrement = require('mongoose-auto-increment');
+
+autoIncrement.initialize(mongoose.connection);
 
 const downloadSchema = mongoose.Schema({
   url: {
@@ -17,21 +20,17 @@ const downloadSchema = mongoose.Schema({
   episodeTitle: { type: String, trim: true, },
   filename: { type: String, trim: true, },
   isFilm: { type: Boolean, default: false },
-  orderIndex: { type: Number, required: true, unique: true },
+  // orderIndex: { type: Number, required: true },
   programme: { type: String, trim: true, },
   series: { type: Number, },
   tagged: { type: Boolean, default: false },
   year: { type: String, trim: true, },
 });
 
+downloadSchema.plugin(autoIncrement.plugin, { model: 'Download', field: 'orderIndex' });
+
 downloadSchema.statics.findNextDownload = () => {
   return Download.findOne({ tagged: true, downloaded: false }).where('attempts').lt(6).sort('orderIndex');
-};
-
-downloadSchema.statics.lastIndex = async () => {
-  const last = await Download.findOne().sort('-orderIndex');
-
-  return (last) ? last.orderIndex + 1 : 0;
 };
 
 const Download = mongoose.model("download", downloadSchema);

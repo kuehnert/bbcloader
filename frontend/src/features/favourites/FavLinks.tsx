@@ -3,7 +3,8 @@ import styles from './FavLinks.module.scss';
 import classnames from 'classnames';
 
 const FavLinks: React.FC = () => {
-  const onClick = (url: string) => window.open(url, 'new', 'location=0');
+  // const onClick = (url: string) => window.open(url, 'new', 'location=0');
+  const onClick = (url: string) => window.open(url, 'new');
 
   const links = [
     { name: 'Films', url: 'https://www.bbc.co.uk/iplayer/categories/films/most-recent', icon: 'mdi mdi-movie-open' },

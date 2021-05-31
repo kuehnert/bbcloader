@@ -1,6 +1,7 @@
 const parser = require('fast-html-parser');
 const axios = require('axios');
 const Download = require('../models/download');
+const debug = require('./debug');
 
 function sentenceCase(str) {
   if (str == null || str === '') return false;
@@ -36,8 +37,8 @@ async function getYearForFilm(url) {
 }
 
 const createDownload = async (url) => {
-  const nextOrderIndex = await Download.lastIndex();
-  const download = new Download({ url, addedAt: new Date(), orderIndex: nextOrderIndex });
+  debug(`createDownload(${url})`)
+  const download = new Download({ url, addedAt: new Date() });
   const match = url.match(/episode\/(\w+)\/([\w-]+)-series-(\d+)-(\d+)-(.+)$/);
   const match2 = url.match(/episode\/(\w+)\/([\w-]+)-series-(\d+)-episode-(\d+)/);
   const match3 = url.match(/episode\/(\w+)\/([^/]+)-episode-(\d)$/);
@@ -59,8 +60,6 @@ const createDownload = async (url) => {
     download.tagged = true;
   }
 
-  // console.log('download', download);
-
   if (download.tagged) {
     download.programme = sentenceCase(download.programme.replace(/-/g, ' '));
     download.episodeNumber = +download.episodeNumber;
@@ -73,6 +72,7 @@ const createDownload = async (url) => {
       await download.save();
       return { download };
     } catch (error) {
+      console.error(error);
       return { error };
     }
   }
@@ -97,6 +97,7 @@ const createDownload = async (url) => {
       await download.save();
       return { download };
     } catch (error) {
+      console.error(error);
       return { error };
     }
   }
