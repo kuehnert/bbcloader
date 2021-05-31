@@ -55,7 +55,8 @@ router.post('/downloads', auth, async (req, res) => {
     }
     // 11000 => duplicate key
   }
-  // startNextDownload();
+
+  startDownload();
 });
 
 // UPDATE

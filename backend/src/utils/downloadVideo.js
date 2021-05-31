@@ -44,8 +44,9 @@ process.on('message', async ({ messageType, video: video }) => {
     video.isFilm ? process.env.DESTINATION_MOVIES : process.env.DESTINATION_TV,
     video.programme,
   );
-  console.log('Moving file...');
-  moveVideo(process.env.DOWNLOAD_DIR, finalDestination, video.filename, 'mp4');
+  console.log('Moving video...');
+  await moveVideo(process.env.DOWNLOAD_DIR, finalDestination, video.filename, 'mp4');
+  console.log('Video moved');
 
   // Convert & move subtitle file
   const subFile = path.join(process.env.DOWNLOAD_DIR, `${video.filename}.en.ttml`);
