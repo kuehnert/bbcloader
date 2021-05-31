@@ -25,7 +25,7 @@ const downloadSchema = mongoose.Schema({
 });
 
 downloadSchema.statics.findNextDownload = () => {
-  return Download.findOne({ tagged: true, downloaded: false }).where('attempts').lt(6).sort('-orderIndex');
+  return Download.findOne({ tagged: true, downloaded: false }).where('attempts').lt(6).sort('orderIndex');
 };
 
 downloadSchema.statics.lastIndex = async () => {
