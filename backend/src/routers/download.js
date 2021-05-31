@@ -2,36 +2,25 @@ const express = require('express');
 const router = new express.Router();
 const auth = require('../middleware/auth');
 const _ = require('lodash');
-const fs = require('fs');
 const Download = require('../models/download');
 const fetchEpisodes = require('../utils/fetchEpisodes');
 const createDownload = require('../utils/createDownload');
+const { shareAvailable, getEnv } = require('../utils/shareAvailable');
 
 // FETCH STATUS
 router.get('/status', auth, async (req, res) => {
-  // await getExternalIP(updateExternalIP);
-  const env = _.pick(
-    process.env,
-    'NODE_ENV',
-    'DOWNLOAD_DIR',
-    'DESTINATION_TV',
-    'DESTINATION_MOVIES'
-  );
-
-  const shareAvailable = fs.existsSync(env.DOWNLOAD_DIR) && fs.existsSync(env.DESTINATION_MOVIES) && fs.existsSync(env.DESTINATION_TV);
-
   res.send({
-    currentDownload: { _id: "dummy", url: "dummy", programme: "dummy" },
-    shareAvailable,
+    currentDownload,
+    shareAvailable: shareAvailable(),
     lastUpdate: new Date(),
-    env,
+    env: getEnv(),
   });
 });
 
 // FETCH ALL
 router.get('/downloads', auth, async (req, res) => {
   try {
-    const downloads = await Download.find({}).sort('orderIndex');
+    const downloads = await Download.find({ downloaded: false }).sort('orderIndex');
     res.send(downloads);
   } catch (error) {
     res.sendStatus(500);
@@ -68,6 +57,7 @@ router.post('/downloads', auth, async (req, res) => {
   // startNextDownload();
 });
 
+// UPDATE
 router.patch('/downloads/:id', auth, async (req, res) => {
   const ALLOWED = ["attempts", "episodeNumber", "episodeTitle", "filename", "isFilm", "orderIndex", "programme", "series", "tagged", "year"];
   const patches = _.omit(req.body, ["addedAt", "bbcID", "downloaded", "url", "_id", "__v"]);
@@ -77,8 +67,8 @@ router.patch('/downloads/:id', auth, async (req, res) => {
   // console.log('isValid', isValid);
 
   if (!isValid) {
-    const invalid = updates.filter(e => !ALLOWED.includes(e))
-    console.log('Invalid attributes', JSON.stringify(invalid, null, 4) );
+    const invalid = updates.filter(e => !ALLOWED.includes(e));
+    console.log('Invalid attributes', JSON.stringify(invalid, null, 4));
     return res.status(400).send({ error: "Invalid updates" });
   }
 
@@ -110,6 +100,5 @@ router.delete('/downloads/:id', auth, async (req, res) => {
   }
 
 });
-
 
 module.exports = router;

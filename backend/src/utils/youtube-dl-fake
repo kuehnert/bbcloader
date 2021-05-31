@@ -23,10 +23,10 @@ const argv = yargs
   }).argv;
 
 console.log("youtube-dl-fake started");
-console.log("argv", argv);
+// console.log("argv", argv);
 const content = `URL: ${argv._[0]}\nFILENAME: ${argv.output}\n`;
 fs.writeFileSync(argv.output, content);
 
 setTimeout(() => {
   console.log("youtube-dl-fake finiss!");
-}, 1000 * 60); // 1 minute
+}, 1000 * 5); // 1 minute
