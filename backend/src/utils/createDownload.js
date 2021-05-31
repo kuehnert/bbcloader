@@ -59,6 +59,8 @@ const createDownload = async (url) => {
     download.tagged = true;
   }
 
+  // console.log('download', download);
+
   if (download.tagged) {
     download.programme = sentenceCase(download.programme.replace(/-/g, ' '));
     download.episodeNumber = +download.episodeNumber;
@@ -75,7 +77,7 @@ const createDownload = async (url) => {
     }
   }
 
-  const match4 = url.match(/episode\/(\w+)\/([^/]+)$/);
+  const match4 = url.match(/episode\/([^\/]+)(?:\/sign)?\/([^/]+)$/);
   if (match4) {
     // Match films: /iplayer/episode/b0078rmt/lucky-jim
     [, download.bbcID, download.programme] = match4;
@@ -99,7 +101,8 @@ const createDownload = async (url) => {
     }
   }
 
-  return null;
+  console.error('Unable to parse URL', url);
+  return { error: { code: 2, message: "Unable to parse url", keyValue: { url } } };
 };
 
 module.exports = createDownload;

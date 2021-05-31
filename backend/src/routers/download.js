@@ -75,7 +75,7 @@ router.patch('/downloads/:id', auth, async (req, res) => {
 
   try {
     const download = await Download.findOneAndUpdate({ bbcID: req.params.id }, req.body, { new: true, runValidators: true, useFindAndModify: false });
-    console.log('download', download);
+    // console.log('download', download);
 
     if (!download) {
       return res.sendStatus(404);

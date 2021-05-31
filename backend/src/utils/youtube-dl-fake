@@ -29,4 +29,4 @@ fs.writeFileSync(argv.output, content);
 
 setTimeout(() => {
   console.log("youtube-dl-fake finiss!");
-}, 1000 * 60); // 1 minute
+}, 1000 * process.env.YOUTUBE_DEV_DELAY); // x seconds
