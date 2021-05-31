@@ -4,6 +4,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { deleteQueue } from '../features/downloads/downloadSlice';
 import { confirmDialog } from 'primereact/confirmdialog'; // To use confirmDialog method
+import { toggleDownloads } from 'features/status/statusSlice';
 
 const Header: React.FC = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,11 @@ const Header: React.FC = () => {
     console.log('Deleting all downloads');
     dispatch(deleteQueue({ all: true }));
   };
+
+  const handletoggleDownloads = () => {
+    console.log('Toggling downloading');
+    dispatch(toggleDownloads());
+  }
 
   const confirmDeleteQueue = () => {
     confirmDialog({
@@ -63,15 +69,20 @@ const Header: React.FC = () => {
         icon='mdi mdi-delete'
         label={
           <>
-            <b>Alle</b> löschen
+            Delete <b>all</b> Videos
           </>
         }
         onClick={confirmDeleteAll}
       />
       <ToolbarButton
         icon='mdi mdi-delete'
-        label='Warteschlange löschen'
+        label='Remove Queue'
         onClick={confirmDeleteQueue}
+      />
+      <ToolbarButton
+        icon='mdi mdi-hammer'
+        label='Toggle Downloading'
+        onClick={handletoggleDownloads}
       />
     </>
   );

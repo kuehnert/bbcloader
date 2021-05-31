@@ -4,6 +4,7 @@ const cors = require('cors');
 require('./db/mongoose');
 const userRouter = require('./routers/user');
 const downloadRouter = require('./routers/download');
+const statusRouter = require('./routers/status');
 const log = require('./middleware/log');
 const startNextDownload = require('./utils/startDownload');
 const _ = require('lodash');
@@ -19,6 +20,7 @@ app.use(cors());
 app.use(log);
 app.use(userRouter);
 app.use(downloadRouter);
+app.use(statusRouter);
 
 app.listen(port, () => {
   console.log('Server runnnig on port', port);

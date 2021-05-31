@@ -9,17 +9,6 @@ const startDownload = require('../utils/startDownload');
 const { shareAvailable, getEnv } = require('../utils/shareAvailable');
 const debug = require('../utils/debug');
 
-// FETCH STATUS
-router.get('/status', auth, async (req, res) => {
-  res.send({
-    currentDownload,
-    shareAvailable: shareAvailable(),
-    lastUpdate: new Date(),
-    downloadsActive,
-    env: getEnv(),
-  });
-});
-
 // FETCH ALL
 router.get('/downloads', auth, async (req, res) => {
   try {

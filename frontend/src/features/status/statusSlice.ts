@@ -25,9 +25,13 @@ export const statusSlice = createSlice({
   reducers: {
     fetchStatusSuccess(state, action: PayloadAction<Status>) {
       state.currentDownload = action.payload.currentDownload;
+      state.downloadsActive = action.payload.downloadsActive;
       state.env = action.payload.env;
-      state.shareAvailable = action.payload.shareAvailable;
       state.lastUpdate = action.payload.lastUpdate;
+      state.shareAvailable = action.payload.shareAvailable;
+    },
+    toggleDownloadsSuccess(state, action: PayloadAction<boolean>) {
+      state.downloadsActive = action.payload;
     },
     setDebug(state, action: PayloadAction<boolean>) {
       state.debug = action.payload;
@@ -35,7 +39,8 @@ export const statusSlice = createSlice({
   },
 });
 
-export const { fetchStatusSuccess, setDebug } = statusSlice.actions;
+export const { fetchStatusSuccess, setDebug, toggleDownloadsSuccess } =
+  statusSlice.actions;
 export default statusSlice.reducer;
 
 export const fetchStatus = (): AppThunk => async dispatch => {
@@ -49,4 +54,19 @@ export const fetchStatus = (): AppThunk => async dispatch => {
   }
 
   dispatch(fetchStatusSuccess(status));
+};
+
+export const toggleDownloads = (): AppThunk => async dispatch => {
+  let status;
+  try {
+    const response = await bbcApi.post('/toggleDownloads', null, {
+      headers: authHeader(),
+    });
+    status = response.data;
+  } catch (error) {
+    dispatch(setErrorAlert(`Error changing download state.`));
+    return;
+  }
+
+  dispatch(toggleDownloadsSuccess(status));
 };
