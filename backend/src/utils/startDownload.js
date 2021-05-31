@@ -13,7 +13,7 @@ const startDownload = async () => {
   }
 
   if (currentDownload == null) {
-    currentDownload = await Download.findOne({ downloaded: false }).where('attempts').lt(6).sort('-orderIndex');
+    currentDownload = await Download.findNextDownload();
 
     if (currentDownload == null) {
       console.log('No download in list');

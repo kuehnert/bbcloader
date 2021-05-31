@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs-extra');
 const { execFileSync } = require('child_process');
 const path = require('path');
 const moveVideo = require('./moveVideo');
@@ -44,6 +44,7 @@ process.on('message', async ({ messageType, video: video }) => {
     video.isFilm ? process.env.DESTINATION_MOVIES : process.env.DESTINATION_TV,
     video.programme,
   );
+  console.log('Moving file...');
   moveVideo(process.env.DOWNLOAD_DIR, finalDestination, video.filename, 'mp4');
 
   // Convert & move subtitle file

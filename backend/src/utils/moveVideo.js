@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const _ = require('lodash');
 
@@ -15,7 +15,7 @@ const moveVideo = (sourceDir, destination, filename, ext) => {
   const fromFile = path.join(sourceDir, `${filename}.${ext}`);
   const toFile = path.join(destination, `${filename}.${ext}`);
 
-  fs.renameSync(fromFile, toFile);
+  fs.moveSync(fromFile, toFile);
 };
 
 module.exports = moveVideo;

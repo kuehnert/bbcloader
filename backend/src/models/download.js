@@ -24,6 +24,10 @@ const downloadSchema = mongoose.Schema({
   year: { type: String, trim: true, },
 });
 
+downloadSchema.statics.findNextDownload = () => {
+  return Download.findOne({ tagged: true, downloaded: false }).where('attempts').lt(6).sort('-orderIndex');
+};
+
 downloadSchema.statics.lastIndex = async () => {
   const last = await Download.findOne().sort('-orderIndex');
 

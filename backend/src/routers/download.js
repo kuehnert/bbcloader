@@ -5,6 +5,7 @@ const _ = require('lodash');
 const Download = require('../models/download');
 const fetchEpisodes = require('../utils/fetchEpisodes');
 const createDownload = require('../utils/createDownload');
+const startDownload = require('../utils/startDownload');
 const { shareAvailable, getEnv } = require('../utils/shareAvailable');
 
 // FETCH STATUS
@@ -81,6 +82,7 @@ router.patch('/downloads/:id', auth, async (req, res) => {
     }
 
     res.status(201).send(download);
+    startDownload();
   } catch (error) {
     console.log('error', error);
     res.sendStatus(500);

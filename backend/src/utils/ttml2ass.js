@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 // VERSION 2.0.0
-const fs = require('fs');
 const parser = require('fast-xml-parser');
 
 const HEADER = `[Script Info]

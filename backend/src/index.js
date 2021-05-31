@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs-extra');
 const express = require('express');
 const cors = require('cors');
 require('./db/mongoose');
@@ -11,6 +11,7 @@ const _ = require('lodash');
 const app = express();
 const port = process.env.PORT || 3000;
 global.currentDownload = null;
+global.downloadInterval = 1000 * 60 * process.env.DOWNLOAD_INTERVAL;
 
 app.use(express.json());
 app.use(cors());
@@ -22,8 +23,10 @@ app.listen(port, () => {
   console.log('Server runnnig on port', port);
 });
 
-startNextDownload();
+console.log(`Checking for downloads every ${downloadInterval/1000/60} minutes.`);
 setInterval(() => {
-  // check for downloads every five minutes
+  // check for downloads every x minutes
   startNextDownload();
-}, 1000 * 60 * 5);
+}, downloadInterval);
+
+startNextDownload();
