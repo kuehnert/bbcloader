@@ -6,7 +6,7 @@ function shareAvailable(share) {
   return fs.existsSync(share);
 }
 
-const moveVideo = (sourceDir, destination, filename, ext) => {
+const moveVideo = async (sourceDir, destination, filename, ext) => {
   if (!fs.existsSync(destination)) {
     console.log(`Creating folder '${destination}'`);
     fs.mkdirSync(destination, { recursive: true });
@@ -16,10 +16,17 @@ const moveVideo = (sourceDir, destination, filename, ext) => {
   const toFile = path.join(destination, `${filename}.${ext}`);
 
   try {
-    fs.moveSync(fromFile, toFile);
-    console.log('Moved file successfully', toFile);
+    await fs.copy(fromFile, toFile);
+    console.log('Copied file successfully', toFile);
   } catch (error) {
-    console.error("Error moving file", error);
+    return console.error("Error copying file", error);
+  }
+
+  try {
+    await fs.remove(fromFile);
+    console.log('Removed source file successfully', fromFile);
+  } catch (error) {
+    return console.error("Error removing file", error);
   }
 };
 

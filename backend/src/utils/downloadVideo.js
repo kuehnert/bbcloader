@@ -59,8 +59,8 @@ process.on('message', async ({ messageType, video: video }) => {
     const ttml = fs.readFileSync(subFile).toString();
     const ass = ttml2ass(ttml, video.filename);
     fs.writeFileSync(convertedSubFile, ass);
-    moveVideo(process.env.DOWNLOAD_DIR, finalDestination, video.filename, 'en.ttml');
-    moveVideo(process.env.DOWNLOAD_DIR, finalDestination, video.filename, 'en.ass');
+    await moveVideo(process.env.DOWNLOAD_DIR, finalDestination, video.filename, 'en.ttml');
+    await moveVideo(process.env.DOWNLOAD_DIR, finalDestination, video.filename, 'en.ass');
   }
 
   console.log(`DOWNLOADED ${video.url} -> ${path.join(finalDestination, video.filename)}`);
