@@ -29,7 +29,7 @@ router.get('/status', auth, async (req, res) => {
 router.post('/toggleDownloads', auth, async (req, res) => {
   global.downloadsActive = !global.downloadsActive;
   res.send(global.downloadsActive);
-  if (gloabal.downloadsActive) {
+  if (global.downloadsActive) {
     startDownload();
   }
 });
