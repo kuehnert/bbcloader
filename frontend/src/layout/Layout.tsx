@@ -3,9 +3,8 @@ import 'primeicons/primeicons.css';
 import 'primereact/resources/primereact.min.css';
 import 'primereact/resources/themes/nova/theme.css';
 import React from 'react';
-import Alerts from '../components/Alerts';
 import Routes from '../app/Routes';
-import Header from './Header';
+import Alerts from '../components/Alerts';
 import './layout.scss';
 
 const Layout: React.FC = () => {

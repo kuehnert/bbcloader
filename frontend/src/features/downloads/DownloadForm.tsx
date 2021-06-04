@@ -1,9 +1,8 @@
 import MyInput from 'components/MyInput';
-import { Field, Form, Formik, useFormikContext } from 'formik';
+import { Form, Formik, useFormikContext } from 'formik';
 import myhistory from 'myhistory';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
-import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 import { RadioButton } from 'primereact/radiobutton';
 import React, { useEffect } from 'react';
@@ -63,7 +62,7 @@ const DownloadForm: React.FC<Props> = ({ download, handleSubmit }) => {
   return (
     <Formik
       enableReinitialize
-      initialValues={download}
+      initialValues={{ ...{ series: 0, episodeNumber: 0, episodeTitle: "" }, ...download }}
       onSubmit={handleSubmit}
       validationSchema={DownloadSchema}>
       {({ values, setFieldValue }) => (
@@ -107,13 +106,15 @@ const DownloadForm: React.FC<Props> = ({ download, handleSubmit }) => {
                 id='series'
                 name='series'
                 label='Series'
-                as={InputNumber}
+                type='number'
+                as={InputText}
               />
               <MyInput
                 id='episodeNumber'
                 name='episodeNumber'
                 label='Episode'
-                as={InputNumber}
+                type='number'
+                as={InputText}
               />
               <MyInput
                 id='episodeTitle'
@@ -133,25 +134,13 @@ const DownloadForm: React.FC<Props> = ({ download, handleSubmit }) => {
             as={InputText}
           />
 
-          {/* <MyInput
+          <MyInput
             id='attempts'
             name='attempts'
             label='Attempts'
-            component={InputNumber}
-          /> */}
-
-          <label htmlFor='attempts' className='p-col-2'>
-            Attempts
-          </label>
-          <div className='p-col-10'>
-            <Field
-              id='attempts'
-              name='attempts'
-              label='Attempts'
-              type="number"
-              as={InputText}
-            />
-          </div>
+            type='number'
+            as={InputText}
+          />
 
           <label htmlFor='isFilm' className='p-col-2'>
             Ready?

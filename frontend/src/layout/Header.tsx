@@ -94,11 +94,10 @@ const Header: React.FC = () => {
         onClick={handletoggleDownloads}
       />
       <AuthenticatedLink url='/downloads.txt' filename='downloads.txt'>
-        <ToolbarButton
-          icon='mdi mdi-download'
-          label='Download'
-          className='download'
-        />
+        <button className='toolbarButton download'>
+          <span className={"icon mdi mdi-download"}></span>
+          <span className='label'>Download List as txt</span>
+        </button>
       </AuthenticatedLink>
     </>
   );
