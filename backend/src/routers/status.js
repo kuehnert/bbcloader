@@ -27,9 +27,11 @@ router.get('/status', auth, async (req, res) => {
 });
 
 router.post('/toggleDownloads', auth, async (req, res) => {
-  console.log('Huhu!');
   global.downloadsActive = !global.downloadsActive;
   res.send(global.downloadsActive);
+  if (gloabal.downloadsActive) {
+    startDownload();
+  }
 });
 
 module.exports = router;

@@ -26,7 +26,6 @@ router.get('/downloads.txt', auth, async (req, res) => {
     const txt = downloads.map(d => d.url).join("\n");
     res.writeHead(200, { 'Content-Type': 'application/force-download', 'Content-disposition': 'attachment; filename=downloads.txt' });
     res.end(txt);
-    res.send(downloads);
   } catch (error) {
     res.sendStatus(500);
   }
