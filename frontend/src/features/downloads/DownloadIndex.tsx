@@ -5,10 +5,13 @@ import DownloadList from './DownloadList';
 import FavLinks from '../favourites/FavLinks';
 import styles from './DownloadIndex.module.scss';
 import DebugCard from 'components/DebugCard';
+import Header from 'layout/Header';
 
 export default function DownloadsPage() {
   return (
     <div className={styles.page}>
+      <Header />
+
       <h2>Status</h2>
       <Status />
 

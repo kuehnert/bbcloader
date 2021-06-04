@@ -5,28 +5,34 @@ import './ToolbarButton.scss';
 import classnames from 'classnames';
 
 interface Props {
-  label: string | JSX.Element;
-  icon: string;
-  to?: string;
-  external?: string;
+  className?: string;
   download?: boolean;
-  tooltip?: string;
+  external?: string;
+  icon: string;
+  label: string | JSX.Element;
   onClick?: () => void;
+  to?: string;
+  tooltip?: string;
 }
 
 const ToolbarButton: React.FC<Props> = ({
+  className,
   download,
   external,
-  label,
   icon,
-  to,
+  label,
   onClick,
+  to,
 }) => {
   const makeButton = (external?: boolean) => (
     <button
-      className={classnames('toolbarButton', {
-        'toolbarButton-external': external,
-      })}>
+      className={classnames(
+        'toolbarButton',
+        {
+          'toolbarButton-external': external,
+        },
+        className
+      )}>
       <span className={`icon mdi mdi-${icon}`}></span>
       <span className='label'>{label}</span>
     </button>

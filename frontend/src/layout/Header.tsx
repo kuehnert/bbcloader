@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { deleteQueue } from '../features/downloads/downloadSlice';
 import { confirmDialog } from 'primereact/confirmdialog'; // To use confirmDialog method
 import { toggleDownloads } from 'features/status/statusSlice';
+import AuthenticatedLink from 'components/AuthenticatedLink';
 
 const Header: React.FC = () => {
   const dispatch = useDispatch();
@@ -22,11 +23,16 @@ const Header: React.FC = () => {
   const handletoggleDownloads = () => {
     console.log('Toggling downloading');
     dispatch(toggleDownloads());
-  }
+  };
+
+  // const handleDownloadBatch = () => {
+  //   window.location = '/download.txt';
+  // };
 
   const confirmDeleteQueue = () => {
     confirmDialog({
-      message: 'Are you sure you want to remove outstanding downloads from queue?',
+      message:
+        'Are you sure you want to remove outstanding downloads from queue?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: handleDeleteQueue,
@@ -35,7 +41,8 @@ const Header: React.FC = () => {
 
   const confirmDeleteAll = () => {
     confirmDialog({
-      message: 'Are you sure you want to remove ALL downloads, including finished ones?',
+      message:
+        'Are you sure you want to remove ALL downloads, including finished ones?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: handleDeleteAll,
@@ -73,17 +80,26 @@ const Header: React.FC = () => {
           </>
         }
         onClick={confirmDeleteAll}
+        className='warning'
       />
       <ToolbarButton
         icon='mdi mdi-delete'
         label='Remove Queue'
         onClick={confirmDeleteQueue}
+        className='warning'
       />
       <ToolbarButton
         icon='mdi mdi-hammer'
         label='Toggle Downloading'
         onClick={handletoggleDownloads}
       />
+      <AuthenticatedLink url='/downloads.txt' filename='downloads.txt'>
+        <ToolbarButton
+          icon='mdi mdi-download'
+          label='Download'
+          className='download'
+        />
+      </AuthenticatedLink>
     </>
   );
 

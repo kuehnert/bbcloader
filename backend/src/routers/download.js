@@ -19,6 +19,19 @@ router.get('/downloads', auth, async (req, res) => {
   }
 });
 
+// FETCH BATCH.TXT
+router.get('/downloads.txt', auth, async (req, res) => {
+  try {
+    const downloads = await Download.find({ downloaded: false }).sort('orderIndex');
+    const txt = downloads.map(d => d.url).join("\n");
+    res.writeHead(200, { 'Content-Type': 'application/force-download', 'Content-disposition': 'attachment; filename=downloads.txt' });
+    res.end(txt);
+    res.send(downloads);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+});
+
 // CREATE
 router.post('/downloads', auth, async (req, res) => {
   const { url } = req.body;
@@ -98,9 +111,7 @@ router.delete('/downloads/:id', auth, async (req, res) => {
 });
 
 router.delete('/downloads', auth, async (req, res) => {
-  console.log('req.query', req.query);
   const deleteAll = req.query.all;
-  console.log('deleteAll', deleteAll);
   let result;
 
   try {

@@ -12,7 +12,6 @@ const Layout: React.FC = () => {
   return (
     <div className="layout-main">
       <Alerts />
-      <Header />
       <Routes />
     </div>
   );
