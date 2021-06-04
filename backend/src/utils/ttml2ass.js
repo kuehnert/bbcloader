@@ -79,19 +79,29 @@ const convertColor = colorStr => {
   }
 };
 
+const formatStyle = (style) => {
+  // if (style['@_xml:id'].length > 5) {
+  //   return "";
+  // }
+
+  const primColor = (style['@_tts:color']) ? convertColor(style['@_tts:color']) : '&H00FFFFFF';
+  const backColor = (style['@_tts:backgroundColor']) ? convertColor(style['@_tts:backgroundColor']) : '&H02000000';
+  STYLE_DICT[style['@_xml:id']] = primColor;
+
+  return `Style: ${style['@_xml:id'] || style['@_id']},Arial,20,${primColor},&H0300FFFF,&H00000000,${backColor},0,0,0,0,100,100,0,0,1,2,1,2,10,10,10,1\n`;
+};
+
 const formatStyles = (styles, title) => {
   let out = HEADER.replace("{{TITLE}}", title);
 
-  styles.forEach(style => {
-    // if (style['@_xml:id'].length > 5) {
-    //   return;
-    // }
-
-    const primColor = (style['@_tts:color']) ? convertColor(style['@_tts:color']) : '&H00FFFFFF';
-    const backColor = (style['@_tts:backgroundColor']) ? convertColor(style['@_tts:backgroundColor']) : '&H02000000';
-    STYLE_DICT[style['@_xml:id']] = primColor;
-    out += `Style: ${style['@_xml:id'] || style['@_id']},Arial,20,${primColor},&H0300FFFF,&H00000000,${backColor},0,0,0,0,100,100,0,0,1,2,1,2,10,10,10,1\n`;
-  });
+  console.log('styles', JSON.stringify(styles, null, 4));
+  if (Array.isArray(styles)) {
+    styles.forEach(style => {
+      out += formatStyle(style);
+    });
+  } else {
+    out += formatStyle(styles);
+  }
 
   return out;
 };
