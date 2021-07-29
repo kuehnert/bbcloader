@@ -107,6 +107,17 @@ const formatStyles = (styles, title) => {
 };
 
 const formatLine = (line) => {
+  if (!line['@_begin']) {
+    // if there is no timecode in the line, copy it from first nested span
+    if (line['span'] && line['span'][0] && line['span'][0]['@_begin']) {
+      line['@_begin'] = line['span'][0]['@_begin'];
+      line['@_end'] = line['span'][0]['@_end'];
+    } else {
+      // error, no timecode in nested span, skip line
+      return "";
+    }
+  }
+
   const begin = convertTimestamp(line['@_begin']);
   const end = convertTimestamp(line['@_end']);
 
